@@ -1,0 +1,108 @@
+@import '@/app/globals.scss';
+
+html{
+  scroll-behavior: smooth;
+}
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background-color: $second-color;
+  box-shadow: 0 1px 10px #cecaca;
+  .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .logo {
+      color: $main-color;
+      font-size: 1.4rem;
+      font-weight: bold;
+      //text-shadow: 1px 1px 1px#cecaca;
+    }
+    .list {
+      display: none;
+      margin-right: 10px;
+    }
+    ul {
+      display: flex;
+      gap: 1.5rem;
+      font-weight: 600;
+      position: relative;
+      a {
+        text-transform: capitalize;
+        &:hover {
+          color: $main-color;
+        }
+      }
+    }
+    .right{
+      display: flex;
+      gap: 3rem;
+      justify-content: space-between;
+      font-weight: 400;
+      position: relative;
+      #btnlogin{
+        text-align: center;
+        border-radius: .5rem;
+          width: 5rem;
+          transition: .1s ease-in-out;
+        border: 2px solid $main-color;
+        font-size: .9rem;
+          text-transform: capitalize;
+          font-weight: 500;
+          padding: .35rem .8rem;
+          color: $second-color;
+          background-color: $main-color;
+          &:hover {
+            font-weight: bold;
+          }
+      }
+      .tools {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+      }
+    }
+  }
+  @media (max-width: 768px) {
+    .container {
+      position: relative;
+      .list {
+        display: block;
+        position: absolute;
+        right: 1rem;
+        margin-right: 50px;
+      }
+      ul {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 4rem;
+        right: 0rem;
+        width: 100%;
+        background-color: transparentize($black-color, 0.2);
+        color: $second-color;
+        padding: 1rem 3rem 1rem 1rem;
+        box-shadow: 0px 2px 4px $black-color;
+      }
+      .right{
+        #btnlogin{
+          display: none;
+        }
+      }
+    }
+  }
+}
+
+@layer base {
+  .navbar {
+    @apply bg-gray-50 text-gray-900 dark:bg-gray-800 dark:text-gray-100;
+  }
+
+  ::selection {
+    @apply text-white bg-blue-600
+  }
+}

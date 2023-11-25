@@ -1,0 +1,36 @@
+@import '@/app/globals.scss';
+
+.companies .container {
+  .slider {
+    width: 100%;
+    overflow: hidden;
+    margin-top: 5rem;
+    position: relative;
+    box-shadow: -1px 3px 5px rgb(211, 211, 211);
+    border-radius: .5rem;
+    .slide-track {
+      display: flex;
+      gap: 2rem;
+      padding: 0 1rem;
+      position: relative;
+      animation: slider 40s infinite linear;
+      &:hover {
+        animation-play-state: paused;
+      }
+    }
+  }
+  @media (max-width: 786px) {
+    // .slider {
+    //   display: none;
+    // }
+  }
+}
+
+@keyframes slider {
+  0% {
+    transform: translateX(0px);
+  }
+  100% {
+    transform: translateX(calc(-140px * 14 - 2rem * 13 + 50%));
+  }
+}

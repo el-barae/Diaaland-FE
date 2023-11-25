@@ -1,0 +1,96 @@
+@import '@/app/globals.scss';
+
+.services-page {
+  margin-top: 5rem;
+  margin-bottom: 5rem;
+  .container {
+    .services-list {
+      display: flex;
+      flex-direction: column;
+      gap: 4rem;
+      .service-card {
+        display: flex;
+        justify-content: space-between;
+        gap: 4rem;
+        padding: 1rem;
+        &:nth-child(odd) {
+          flex-direction: row-reverse;
+          background-color: $card-bg;
+          border-radius: 1rem;
+        }
+        .img {
+          img {
+            border-radius: 1rem;
+          }
+        }
+        .serv-content {
+          display: flex;
+          flex-direction: column;
+          gap: 2rem;
+          h2 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+          }
+          .desc {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            font-size: .8rem;
+            font-weight: 500;
+            .logo {
+              width: 50px;
+            }
+            h3 {
+              font-size: .9rem;
+              font-weight: 700;
+              color: $main-color;
+              margin-bottom: .5rem;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 992px) {
+  .services-page {
+    .container {
+      .services-list {
+        .service-card {
+          flex-direction: column;
+          align-items: center;
+          background-color: $card-bg;
+          border-radius: 1rem;
+          text-align: center;   
+          gap: 2rem;     
+          &:nth-child(odd) {
+            flex-direction: column;
+            background-color: $card-bg;
+            border-radius: 1rem;
+          }
+          .img {
+            img {
+              width: 100%;
+            }
+          }
+          .serv-content {
+            gap: 1rem;
+            h2 {
+              margin-bottom: 0;
+            }
+            .desc {
+              flex-direction: column;
+              padding: 0 1rem;
+              .logo {
+                width: 3rem;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

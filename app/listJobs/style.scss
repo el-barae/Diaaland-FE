@@ -1,0 +1,133 @@
+@import '@/app/globals.scss';
+
+.listJobs{
+    padding: 1.5rem 0;
+    min-height: 75vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .container{
+        margin: 40px 15px 20px 15px;
+        padding: 30px;
+        .header{
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+
+            h1{
+                margin-left: 50px;
+                margin-top: 100px;
+                font-size: 50px;
+                font-weight: 450;
+                text-shadow: 1.5px 1.5px 2px#cecaca;
+                color: $main-color;
+            }
+            /*.list-image{
+                //padding-bottom: 30px;    
+            }*/
+            .search{
+                margin-top: 200px;
+                //margin-left: 100px;
+                display: flex;
+                flex-direction: column;
+                text-align: center;
+                align-items: center;
+                label{
+                    font-size: 30px;
+                    margin-bottom: 20px;
+                }
+                input {
+                    width: 20rem;
+                    outline: none;
+                    border: 1px solid $footer-bg;
+                    border-radius: 1rem;
+                    padding: .4rem;
+                    margin-bottom: 1rem;
+                  }
+            }
+        }
+        
+        .lists{
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin: 20px 30px 20px 30px;
+            box-shadow: 0 1px 10px #cecaca;
+            padding: 30px;
+            border-radius: 20px;
+            align-items: center;
+            justify-items: center;
+            //flex-direction: column;
+            text-align: center;
+            .list{
+                position: relative;
+                
+                text-align: left;
+                //display: flex;
+                gap: 2rem;
+                margin: 20px 40px 20px 40px;
+                box-shadow: 0 1px 10px #cecaca;
+                padding: 30px;
+                padding-bottom: 100px;
+                border-radius: 20px;
+                //flex-direction: column;
+                h1{
+                    font-size: 40px;
+                    font-weight: 350;
+                    color: $primary;
+                }
+                p{
+                    font-size: 20px;
+                }
+                button{
+                    right: 0px;
+                    bottom: 30px;
+                    //bottom: 80px;
+                    position: absolute;
+                    font-size: 20px;
+                    font-weight: 300;
+                    text-align: center;
+                    padding: 10px 20px 10px 20px;
+                    background-color: $main-color;
+                    color: $second-color;
+                    border-radius: 20px;
+                    margin-right: 100px;
+                    margin-left: 100px;
+                    transition: .3s ease-in-out;
+                    &:hover {
+                        font-size: 25px;
+                        font-weight: 400;
+                        background-color: darken($main-color, 10%);
+                    }
+                }
+                #btn{
+                    text-align: center;
+                }
+            }
+        }
+        @media (max-width: 992px) {
+            .header{
+                display: flex;
+                flex-direction: column;
+                text-align: center;
+                .list-image{
+                    display: none;
+                }
+                .search{
+                    margin: 30px 0px 20px 0px;
+                    margin-top: 40px;
+                }
+            }
+            .lists{
+                display: flex;
+                flex-direction: column;
+                margin: 0px;
+                box-shadow: none;
+                padding: 0px;
+                .list{
+                    margin: 0px;
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,55 @@
+@import '@/app/globals.scss';
+
+.founder {
+  margin: 2rem 0;
+  .container {
+    h3 {
+      font-size: 2rem;
+      color: $main-color;
+      text-align: center;
+      text-transform: capitalize;
+      margin-bottom: 1rem;
+    }
+    .founder-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 2rem;
+      .biographie {
+        padding: 2rem;
+        width: 60%;
+        background-color: #C4CFE7;
+        border-radius: .5rem;
+        h4 {
+          color: $main-color;
+          font-weight: 700;
+        }
+      }
+      .img {
+        border-radius: 50%;
+        margin-right: auto;
+        margin-left: auto;
+        overflow: hidden;
+        box-shadow: 0px 0px 10px $main-color;
+        img {
+          width: 100%;
+          height: 100%;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width:768px) {
+  .founder {
+    .container {
+      .founder-content {
+        margin-top: 2rem;
+        flex-direction: column-reverse;
+        .biographie {
+          width: 90%;
+        }
+      }
+    }
+  }
+}

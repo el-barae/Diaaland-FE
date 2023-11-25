@@ -1,0 +1,57 @@
+@import '@/app/globals.scss';
+
+.goals {
+  .container {
+    background-color: #C4CFE71A;
+    padding: 2rem .5rem;
+    margin-bottom: 2rem;
+    border-radius: 1rem;
+    h3 {
+      font-size: 2rem;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+    .goals-list {
+      display: flex;
+      gap: 2rem;
+      .goal {
+        display: flex;
+        gap: 1rem;
+        width: 30%;
+        .img {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          img {
+            width: 4rem;
+            height: 4rem;
+          }
+        }
+        .goal-content {
+          width: 80%;
+          h4 {
+            font-size: 1.2rem;
+            font-weight: 600;
+          }
+        }
+      }
+    }
+  }
+  @media (max-width: 1400px) {
+    .container {
+      .goals-list {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        .goal {
+          flex-direction: column;
+          width: 80%;
+          .goal-content {
+            width: 100%;
+          }
+        }
+      }
+    }
+  }
+}

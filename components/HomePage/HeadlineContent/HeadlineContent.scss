@@ -1,0 +1,81 @@
+@import '@/app/globals.scss';
+
+.content {
+  margin-top: 6rem;
+  .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .intro {
+      width: 40vw;
+      h2 {
+        font-size: 3.2rem;
+        text-transform: capitalize;
+        font-weight: bold;
+        span {
+          color: $third-color;
+        }
+      }
+      p {
+        margin: 1rem 0;
+        font-size: .8rem;
+        font-weight: bold;
+      }
+      .links {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 1rem;
+        margin-top: 3rem;
+        a {
+          font-size: .9rem;
+          text-transform: capitalize;
+          font-weight: 500;
+          padding: .8rem 1rem;
+          border: 2px solid $main-color;
+          border-radius: .5rem;
+          width: 12rem;
+          transition: .1s ease-in-out;
+          &:hover {
+            font-weight: bold;
+          }
+        }
+        .post a {
+          background-color: $main-color;
+          color: $second-color;
+        }
+        .find a {
+          color: $main-color;
+          background-color: $second-color;
+        }
+      }
+    }
+    .img img {
+      animation: up-and-down 2s infinite linear;
+    }
+  }
+  @media (max-width: 1024px) {
+    .container {
+      justify-content: center;
+      .intro {
+        width: 90%;
+        text-align: center;
+        .links {
+          justify-content: center;
+        }
+      }
+      .img {
+        display: none;
+      }
+    }
+  }
+}
+
+@keyframes up-and-down {
+  0%, 100%{
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}

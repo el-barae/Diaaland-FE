@@ -1,0 +1,72 @@
+@import '@/app/globals.scss';
+
+.reset-password {
+  .reset {
+    .info-side {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 2rem;
+      flex-basis: 40%;
+    }
+    .forgot-box {
+      border-radius: 1rem 0 0 1rem;
+      flex-basis: 60%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+      .logo {
+        display: none;
+      }
+      h3 {
+        font-size: 2rem;
+        font-weight: 500;
+        letter-spacing: .1rem;
+      }
+      p {
+        font-size: .9rem;
+        font-weight: 500;
+        letter-spacing: .05rem;
+      }
+      input {
+        min-width: 25rem;
+        outline: none;
+        border: none;
+        border-radius: .5rem;
+      }
+      input[type="email"] {
+        padding: .5rem;
+      }
+      input[type="submit"] {
+        padding: .5rem 1rem;
+        text-align: center;
+        font-weight: 600;
+        border: 1px solid $black-color;
+        transition: all .2s ease-in-out;
+        cursor: pointer;
+        &:hover {
+          background-color: $black-color;
+          color: $second-color;
+        }
+      }
+    }
+  }
+  @media (max-width: 992px) {
+    .reset {
+      .info-side {
+        display: none;
+      }
+      .forgot-box {
+        border-radius: 0;
+        flex-basis: 100%;
+        .logo {
+          display: block;
+          color: $main-color;
+        }
+      }
+    }
+  }
+}

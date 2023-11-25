@@ -1,0 +1,92 @@
+@import '@/app/globals.scss';
+
+.services {
+  padding: 5rem 0;
+  .container {
+    h2 {
+      font-size: 2rem;
+      text-align: center;
+      text-transform: capitalize;
+      font-weight: bold;
+      margin-bottom: 1rem;
+    }
+    .services-desc {
+      text-align: center;
+      font-weight: 600;
+      margin-bottom: 4rem;
+    }
+    .services-list {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      .service {
+        padding: 1rem;
+        position: relative;
+        height: 18rem;
+        border-radius: 1rem;
+        box-shadow: 0px 5px 5px $main-color;
+
+        h3 {
+          font-size: 1.1rem;
+          font-weight: bold;
+          margin-bottom: 1rem;
+        }
+        .service-desc {
+          font-size: .8rem;
+          font-weight: 500;
+          margin-bottom: 1rem;
+        }
+        img {
+          position: absolute;
+          right: 1rem;
+        }
+        button {
+          text-transform: capitalize;
+          font-size: .9rem;
+          font-weight: 500;
+          background-color: $main-color;
+          color: $second-color;
+          padding: .5rem 1rem;
+          border-radius: .3rem;
+          position: absolute;
+          bottom: 1rem;
+          border: 1px solid $main-color;
+          transition: .2s ease-in-out;
+          &:hover {
+            color: $main-color;
+            background-color: $second-color;
+          }
+        }
+      }
+    }
+    @media (max-width: 1024px) {
+      .services-list {
+        .service {
+          height: 24rem;
+          text-align: center;
+          img {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -5%);
+          }
+          button {
+            width: 80%;
+            left: 50%;
+            transform: translate(-50%);
+          }
+        }
+      }
+    }
+    @media (max-width: 769px) {
+      .services-list {
+        grid-template-columns: 1fr;
+        .service {
+          height: 20rem;
+          width: 20rem;
+          place-self: center;
+        }
+      }
+    }
+  }
+}

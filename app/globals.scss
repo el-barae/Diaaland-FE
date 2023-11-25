@@ -1,0 +1,57 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Start General Rules */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+$primary: rgb(108, 162, 209);
+$main-color: 
+#0c58a4;
+//#004D99;
+$second-color: #fff;
+$black-color: #333;
+$third-color: #f58859;
+$footer-bg: #536db2;
+$error-color: #D43A48; // for error messages
+$card-bg: #C4CFE7;
+$correct-message: #129b20; // same cards need diff bg
+
+.container {
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@media (max-width: 786px) {
+  html {
+    font-size: 14px;
+  }
+  .container {
+    width: 100%;
+    padding: 1rem;
+  }
+}
+
+body {
+  background-color: $second-color;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+
+@layer base {
+  body {
+    @apply bg-gray-50 text-gray-900 dark:bg-gray-800 dark:text-gray-100;
+  }
+
+  ::selection {
+    @apply text-white bg-blue-600
+  }
+}
+

@@ -1,0 +1,126 @@
+@import '@/app/globals.scss';
+
+.footer {
+  background-color: $footer-bg;
+  padding: 1rem 0;
+  border-radius: 1rem 1rem 0 0;
+  margin-top: auto;
+  .container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    .newsletter {
+      display: flex;
+      justify-content: space-evenly;
+      gap: 2rem;
+      width: 100%;
+      padding-bottom: 2rem;
+      position: relative;
+      &::after {
+        content: '';
+        width: 60%;
+        height: 1px;
+        background-color: $second-color;
+        opacity: .8;
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        border-radius: 1px;
+      }
+      .social {
+        color: $second-color;
+        p {
+          font-size: .9rem;
+          line-height: 1.5rem;
+          font-weight: 600;
+        }
+        .links {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          gap: 1rem;
+          div {
+            transition: .2s ease-in-out;
+            &:hover {
+              opacity: .8;
+              transform: scale(1.1);
+            }
+          }
+        }
+      }
+      .subscription {
+        p {
+          font-size: .9rem;
+          line-height: 1.5rem;
+          font-weight: 600;
+          color: $second-color;
+        }
+        .input {
+          margin: .5rem 0;
+          position: relative;
+          input {
+            padding: .5rem 1rem;
+            outline: none;
+            border: none;
+            font-size: .9rem;
+            border-radius: .5rem;
+            width: 25rem;
+            height: 2.5rem;
+            font-size: .9rem;
+            width: 100%;
+            &::placeholder {
+              text-transform: capitalize;
+            }
+          }
+          .send {
+            width: 3.5rem;
+            height: 2.5rem;
+            background-color: $third-color;
+            border-radius: 0 .5rem .5rem 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: .1s ease-in-out;
+            cursor: pointer;
+            &:hover {
+              opacity: .9;
+            }
+          }
+        }
+        .error {
+          font-size: .9;
+          font-weight: 500;
+          color: $error-color;
+          width: 22rem;
+        }
+      }
+    }
+    @media only screen and (max-width: 992px) {
+      .newsletter {
+        flex-direction: column;
+        .social {
+          p {
+            text-align: center;
+          }
+          .links {
+            margin-top: .5rem;
+            display: flex;
+            justify-content: space-evenly;
+            gap: .5rem;
+          }
+        }
+        .subscription {
+          p {
+            text-align: center;
+          }
+        }
+      }
+    }
+  }
+}
