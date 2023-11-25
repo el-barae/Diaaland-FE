@@ -5,6 +5,7 @@ import Image from 'next/image'
 import Contact from '@/public/images/contactus.png'
 import { MdMail, MdTimer, MdPhone, MdLocationPin } from 'react-icons/md'
 import './ContactUs.scss'
+// console.log()
 
 export default function ContactUs() {
 
