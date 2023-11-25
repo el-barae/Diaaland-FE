@@ -43,33 +43,40 @@ $gray: #9E9E9E;
          box-shadow: 0 1px 10px #cecaca;
          border-radius: 1.5rem 1.5rem 1.5rem 1.5rem;
          height: fit-content;
-         margin-top: 80px;
+         margin-top: 70px;
 
          .options {
             display: flex !important;
             gap: 10px;
-            padding-left: 25px;
-            input {
-               outline: none;
-                border: 1px solid $footer-bg;
-                border-radius: .5rem;
-                padding: .5rem;
-                margin-bottom: 1rem;
+            padding-left: 15px;
+            #jobType{
+               margin-left: 60px;
+               //text-align: left;
             }
             label{
                font-size: 1.2rem;
                font-weight: 400;
                text-transform: capitalize;
+               margin-bottom: 10px;
             }
          }
 
          .job-date{
-
+            display: flex;
+            label{
+               margin-top: 10px;
+            }
+            input{
+               width: max-content;
+               margin: 0px 120px 10px 20px;
+            }
+            
          }
 
          select{
             max-width: 200px;
             height: 40px;
+            margin-right: 120px;
          }
          .salary{
             display: flex;
@@ -85,6 +92,7 @@ $gray: #9E9E9E;
                display: inline-block;
                vertical-align: middle;
                height: 40px;
+               margin-right: 10px;
             }
             }
 
@@ -121,22 +129,95 @@ $gray: #9E9E9E;
             height: 100px;
          }
 
-         button {
-            width: 60%;
-            margin-left: 20%  !important;
-            margin-top: 15px;
-            background-color: $primary !important;
-            color: #ffffff;
-            font-size: 1.5rem;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-
-            &:hover {
-               background-color: darken($primary, 10%);
+         .foot{
+            display: flex;
+            input{
+               width: 6rem;
+            }
+            button {
+               width: 60%;
+               margin-left: 20%;
+               margin-bottom: 15px;
+               background-color: $main-color ;
+               color: $second-color;
+               font-size: 1.5rem;
+               border: none;
+               border-radius: 5px;
+               cursor: pointer;
+               transition: background-color 0.3s;
+   
+               &:hover {
+                  background-color: darken($main-color, 10%);
+                  font-size: 30px;
+                  font-weight: 500;
+               }
             }
          }
+
+         }
+         @media(max-width: 1200px){
+            display: flex;
+            flex-direction: column;
+            .info-side{
+               margin-top: 80px;
+               gap: 20px;
+               #img{
+                  display: none;
+               } h1{
+                  margin-bottom: 20px;
+               }
+               p{
+                  width: 30rem;
+               }
+            }
+            .from-description{
+               margin-top: 0px;
+               position: relative;
+               .job-date{
+                  flex-direction: column;
+               }
+               .options{
+                  flex-direction: column;
+               }
+               .salary{
+                  flex-direction: column;
+               }
+               .JobTitle{
+                  display: flex;
+                  flex-direction: column;
+                  width: 25rem;
+                  margin-bottom: 6px;
+                  margin-right: 6px;
+               }
+               .Adress{
+                  display: flex;
+                  flex-direction: column;
+                  width: 20rem;
+               }
+               .salary{
+                  width: 42rem;
+                  input{
+                     width: 16rem;
+                     margin-right: 2rem;
+                  }
+               }
+               .JobDesc{
+                  display: flex;
+                  flex-direction: column;
+                  width: 25rem;
+               }
+               /*input{
+                  max-width: 50rem;
+               }*/
+               .foot{
+                  flex-direction: column;
+                  button {
+                     width: 10rem;
+                     margin-left: 50px;
+                  }
+               }
+               
+            }
          }
       }
 

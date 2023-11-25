@@ -75,7 +75,7 @@ const Navbar = () => {
             <Link href="/#about-section" >about us</Link>
           </ul>
           <div className='right'>
-            <button id='btnlogin' onClick={handleClick}>{buttonText}</button>
+            {/*<button id='btnlogin' onClick={handleClick}>{buttonText}</button>*/}
             <SigninButton/>
             <NavbarTools />
             <button>

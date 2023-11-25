@@ -15,6 +15,7 @@ const SigninButton = () => {
     }
     return (
         <button onClick={() => signIn()} className='ml-auto'>sign In</button>
+        //console.log
     )
   
 }
