@@ -6,6 +6,7 @@ import Logo from './../Logo/Logo';
 import ImageP from '@/public/images/profile.png'
 import Image from 'next/image';
 import { useState } from 'react';
+import SigninButton from './SigninButton';
 import './Navbar.scss'
 
 const Navbar = () => {
@@ -75,6 +76,7 @@ const Navbar = () => {
           </ul>
           <div className='right'>
             <button id='btnlogin' onClick={handleClick}>{buttonText}</button>
+            <SigninButton/>
             <NavbarTools />
             <button>
             <Image
