@@ -159,6 +159,7 @@ $gray: #9E9E9E;
             display: flex;
             flex-direction: column;
             .info-side{
+               width: 100%;
                margin-top: 80px;
                gap: 20px;
                #img{
@@ -173,6 +174,9 @@ $gray: #9E9E9E;
             .from-description{
                margin-top: 0px;
                position: relative;
+               input{
+                  width:80%
+               }
                .job-date{
                   flex-direction: column;
                }
@@ -185,26 +189,27 @@ $gray: #9E9E9E;
                .JobTitle{
                   display: flex;
                   flex-direction: column;
-                  width: 25rem;
+                  //width: 25rem;
                   margin-bottom: 6px;
                   margin-right: 6px;
                }
                .Adress{
                   display: flex;
                   flex-direction: column;
-                  width: 20rem;
+                  //width: 20rem;
                }
                .salary{
-                  width: 42rem;
+                  //width: 42rem;
                   input{
-                     width: 16rem;
+                     //width: 16rem;
                      margin-right: 2rem;
                   }
                }
                .JobDesc{
                   display: flex;
                   flex-direction: column;
-                  width: 25rem;
+                  width: 80%;
+                  height: 150px;
                }
                /*input{
                   max-width: 50rem;
