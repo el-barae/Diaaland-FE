@@ -168,14 +168,16 @@ $gray: #9E9E9E;
                   margin-bottom: 20px;
                }
                p{
-                  width: 30rem;
+                  width: 27rem;
                }
             }
             .from-description{
+               display: flex;
+               flex-direction: column;
                margin-top: 0px;
                position: relative;
                input{
-                  width:80%
+                  width:100%
                }
                .job-date{
                   flex-direction: column;
@@ -208,7 +210,7 @@ $gray: #9E9E9E;
                .JobDesc{
                   display: flex;
                   flex-direction: column;
-                  width: 80%;
+                  //width: 80%;
                   height: 150px;
                }
                /*input{
@@ -218,12 +220,17 @@ $gray: #9E9E9E;
                   flex-direction: column;
                   button {
                      width: 10rem;
-                     margin-left: 50px;
+                     margin-top: 10px;
+                     align-items: center;
                   }
                }
                
             }
          }
+         @media(max-width: 1200px){
+
+         }
+
       }
 
    }

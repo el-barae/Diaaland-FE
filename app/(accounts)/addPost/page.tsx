@@ -72,7 +72,7 @@ export default function AddPost() {
           </div>
         </div>
         <div className="from-description">
-          <form onSubmit={handleSubmit} className="from">
+          <form onSubmit={handleSubmit} >
           <div className='JobTitle'>
             <label htmlFor="jobTitle">Job Title:</label>
             <input
