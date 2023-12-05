@@ -11,6 +11,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import LoginImage from '@/public/images/login-info.svg'
 import { FaEye, FaEyeSlash } from 'react-icons/fa'
+import { signIn } from 'next-auth/react';
 
 export default function Login() {
 
@@ -115,6 +116,9 @@ export default function Login() {
 										<label className='inline-block checkbox-label mt-6 mb-2' htmlFor="remember-me">remember me</label>
 										<div className="submit-btn">
 											<button type="submit">Sign in</button>
+											<button onClick={()=>signIn("google" , {callbackUrl:'/#home-section'})}>
+												Login with Google
+											</button>
 										</div>
 										<div ref={SubmitErrorRef} className="email-error error"></div>
 										<div className="register-link">
