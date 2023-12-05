@@ -32,7 +32,7 @@ export default function Login() {
 			"password": password
 		  })
 		  .then(function (response) {
-			console.log(response);
+			
 			Cookies.set("loggedin", "true");
 			router.push('/addPost')
 		  })
