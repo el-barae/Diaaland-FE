@@ -59,6 +59,12 @@ html{
             font-weight: bold;
           }
       }
+      li{
+        list-style: none;
+        display: flex;
+        padding-top: 8px; 
+        font-weight: 600;
+      }
       .tools {
         display: flex;
         justify-content: space-between;
@@ -92,6 +98,7 @@ html{
         #btnlogin{
           display: none;
         }
+        
       }
     }
   }

@@ -6,11 +6,13 @@ import Logo from './../Logo/Logo';
 import ImageP from '@/public/images/profile.png'
 import Image from 'next/image';
 import { useState } from 'react';
-import SigninButton from './SigninButton';
 import './Navbar.scss'
+import SigninButton from './SigninButton';
+import { useSession, signIn, signOut } from 'next-auth/react';
 
 const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { data: session } = useSession();
 
   // Fonction pour gérer le clic sur le bouton
   const handleClick = () => {
@@ -75,17 +77,24 @@ const Navbar = () => {
             <Link href="/#about-section" >about us</Link>
           </ul>
           <div className='right'>
-            {/*<button id='btnlogin' onClick={handleClick}>{buttonText}</button>*/}
-            <SigninButton/>
-            <NavbarTools />
-            <button>
-            <Image
-                      src={ImageP}
-                      width={38}
-                      height={36}
-                      alt='image of profile'
-                    />
-            </button>
+            {session ? (
+              <li>
+                <button onClick={() => signOut()}>Logout</button>
+              </li>
+            ) : (
+              <li>
+                <a href="/login">Sign In</a>
+              </li>
+            )}
+              <NavbarTools />
+              <button>
+              <Image
+                        src={ImageP}
+                        width={38}
+                        height={36}
+                        alt='image of profile'
+                      />
+              </button>
           </div>
         </div>
       </div>
