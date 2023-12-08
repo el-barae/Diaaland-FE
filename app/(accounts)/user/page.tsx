@@ -44,21 +44,29 @@ export default function Register() {
 
 	const passwordMessageRef = useRef<HTMLDivElement>(null);
 
-	const [firstname, setFirstname] = useState('')
-	const [lastname, setLastname] = useState('')
+	const [name, setName] = useState('')
 	const [password, setPassword] = useState('')
 	const [email, setEmail] = useState('')
+	const [city, setCity] = useState('')
+	const [country, setCountry] = useState('')
+	const [url, setUrl] = useState('')
+	const [adress, setAdress] = useState('')
+	const [logo, setLogo] = useState('')
 
 	const [passState, setPassState] = useState('hide');
 	
 	const handleSubmit = async (e:any)  =>{
 		e.preventDefault()
 		axios.post('http://localhost:7777/api/v1/auth/register', {
-			"firstName": firstname,
-			"lastName": lastname,
+			"name": name,
 			"email":email,
 			"password": password,
-			"role": "USER"
+			"city": city,
+			"country": country,
+			"url": url,
+			"adress": adress,
+			"logo": logo,
+			"role": "CLIENT"
 		  })
 		  .then(function (response) {
 			console.log(response);
@@ -114,14 +122,7 @@ export default function Register() {
 		}
 	}
 
-	const invalidLastname = (e: any) => {
-		e.preventDefault();
-		if (lastnameErrorRef.current) {
-			lastnameErrorRef.current.innerText = 'lastname must be at least 6 characters long';
-		}
-	}
-
-
+	
 	const invalidEmail = (e: any) => {
 		e.preventDefault();
 		if (emailErrorRef.current) {
@@ -167,26 +168,35 @@ export default function Register() {
 							<div className="form">
 								<form >
 									<div className="form-group">
-										<label htmlFor="firstname">Firstname</label>
-										<input type="text" name="firstname" id="firstname" placeholder="Enter your firstname" autoFocus required onInvalid={invalidFirstname} onChange={(e) => setFirstname(e.target.value)} />
+										<label htmlFor="firstname">Name</label>
+										<input type="text" name="firstname" id="firstname" placeholder="Enter your company name " autoFocus required onInvalid={invalidFirstname} onChange={(e) => setName(e.target.value)} />
 										<p ref={firstnameErrorRef} className="error username-error"></p>
-										<label htmlFor="lastname">Lastname</label>
-										<input type="text" name="lastname" id="lastname" placeholder="Enter your lastname" autoFocus required onInvalid={invalidLastname} onChange={(e) => setLastname(e.target.value)} />
-										<p ref={lastnameErrorRef} className="error username-error"></p>
 										<label htmlFor="email">Email</label>
 										<input type="email" name="email" id="email" placeholder="Enter your email" required onInvalid={invalidEmail} onChange={(e) => setEmail(e.target.value)} />
 										<p ref={emailErrorRef} className="error email-error"></p>
+										<div className="nation">
+											<label htmlFor="city">City:</label>
+											<input type="text" name="city" id="city" required onChange={(e) => setCity(e.target.value)}  />
+											<label htmlFor="country">Country:</label>
+											<input type="text" name="country" id="country" required onChange={(e) => setCountry(e.target.value)}  />
+										</div>
+										<div className="url-adress">
+											<label htmlFor="adress">Adress:</label>
+											<input type="text" name="adress" id="adress" required onChange={(e) => setAdress(e.target.value)}  />
+											<label htmlFor="url">Company URL:</label>
+											<input type="text" name="url" id="url" required onChange={(e) => setUrl(e.target.value)}  />
+										</div>
+											<label htmlFor="logo">Select a file to upload:</label>
+											<input type="file" id="fileInput" name="fileInput" required onChange={(e) => setLogo(e.target.value)}/>
 										<label htmlFor="password">Password</label>
 										<div className="password-input">
 											<input type={passState === 'show' ? 'text' : 'password'} name="password" id="password" placeholder="Enter your password" onChange={handlePasswordChange} required onInvalid={invalidPassword} />
 											<div className="icon" onClick={handleIconClick}>
 												{passState === 'hide' ? <FaEyeSlash /> : <FaEye />}
 											</div>
-										</div>
-										<p ref={passwordErrorRef} className="error password-error"></p>
+										</div>										<p ref={passwordErrorRef} className="error password-error"></p>
 										<div className="password-strength">
 											<div ref={passwordMessageRef} className="message hidden">
-
 											</div>
 										</div>
 										<input className='inline checkbox' type="checkbox" name="term-of-use" id="term-of-use" required onInvalid={invalidTerms} />
@@ -194,7 +204,7 @@ export default function Register() {
 										<p ref={termsErrorRef} className='error terms-error'></p>
 										<button className='block' type="submit" onClick={handleSubmit}>Register</button>
 										<p className='have-account'>
-											Already have an account? <Link href="/login">Login</Link>
+											Already have an account? <Link href="/login">Login</Link> OR <Link href="/register">Register as a user</Link>
 										</p>
 									</div>
 								</form>

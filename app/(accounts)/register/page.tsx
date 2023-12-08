@@ -194,7 +194,7 @@ export default function Register() {
 										<p ref={termsErrorRef} className='error terms-error'></p>
 										<button className='block' type="submit" onClick={handleSubmit}>Register</button>
 										<p className='have-account'>
-											Already have an account? <Link href="/login">Login</Link>
+											Already have an account? <Link href="/login">Login</Link>Or <Link href='/user'>Register as a client</Link>
 										</p>
 									</div>
 								</form>
