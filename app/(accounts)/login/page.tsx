@@ -33,7 +33,7 @@ export default function Login() {
 			"password": password
 		  })
 		  .then(function (response) {
-			
+			localStorage.setItem('token',response.data.token)
 			Cookies.set("loggedin", "true");
 			router.push('/addPost')
 		  })
@@ -96,7 +96,7 @@ export default function Login() {
 						<div className="form-side">
 							<div className="form">
 								<h3 className='text-3xl capitalize text-medium'>Weclome back :&#41; </h3>
-								<form onSubmit={handleSubmit}>
+								<form>
 									<div className="form-group">
 										<label htmlFor="email">Email</label>
 										<input type="email" name="email" id="email" placeholder="Enter your email" required onChange={(e) => setEmail(e.target.value)} onInvalid={invalidEmail} />
@@ -115,7 +115,7 @@ export default function Login() {
 										<input className='inline checkbox' type="checkbox" name="remember-me" id="remember-me" />
 										<label className='inline-block checkbox-label mt-6 mb-2' htmlFor="remember-me">remember me</label>
 										<div className="submit-btn">
-											<button type="submit">Sign in</button>
+											<button type="submit" onClick={handleSubmit}>Sign in</button>
 											<button onClick={()=>signIn("google" , {callbackUrl:'/#home-section'})}>
 												Login with Google
 											</button>

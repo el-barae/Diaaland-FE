@@ -15,11 +15,23 @@ interface Job {
   description: string;
   numberOfPositions: number;
   closeDate: string;
-  //location: string;
-  // Ajoutez d'autres propriétés au besoin
 }
 
+var c=0;
+
 const ListJobs = () => {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filteredJobs, setFilteredJobs] = useState<Job[]>([]);
+
+  // Fonction de recherche
+  const handleSearch = () => {
+    c=1;
+    const filtered = jobsData.filter((job) =>
+      job.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      job.description.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setFilteredJobs(filtered);
+  };
   const [jobsData, setJobsData] = useState<Job[]>([]);
   useEffect(() => {
     const fetchData = async () => {
@@ -41,35 +53,68 @@ const ListJobs = () => {
   }
 
   const RepeatClassNTimes: React.FC<RepeatClassNTimesProps> = ({ className, n, jobsData }) => {
-    return (
+    if(c==0){
+      return(
+        <>
+        {jobsData.map((job) => (
+          <div key={job.id} className={className}>
+          <h1>{job.name} :</h1>
+          <p>
+            Description: {job.description} <br/> Number of positions: {job.numberOfPositions} 
+          </p>
+          <p>Close Date: {job.closeDate}</p>
+          <button onClick={handleApplyClick}>Apply</button>
+          {showPanel && (
+      <div className="job-panel">
+        <h2>{jobDetails.name}</h2>
+        <p>{jobDetails.description}</p>
+        <button onClick={handleClosePanel}>Close</button>
+      </div>
+    )}
+        </div>
+        ))}
+        </>
+      )
+    }
+    else{
+      return (
       <>
-        {jobsData.map((job, index) => (
+        {filteredJobs.map((job) => (
           <div key={job.id} className={className}>
             <h1>{job.name} :</h1>
             <p>
               Description: {job.description} <br/> Number of positions: {job.numberOfPositions} 
             </p>
             <p>Close Date: {job.closeDate}</p>
-            <button>Apply</button>
+            <button onClick={handleApplyClick}>Apply</button>
+            {showPanel && (
+        <div className="job-panel">
+          <h2>{jobDetails.name}</h2>
+          <p>{jobDetails.description}</p>
+          <button onClick={handleClosePanel}>Close</button>
+        </div>
+      )}
           </div>
         ))}
       </>
-    );
+      );
+    }
   };
-  //const [data, setData] = useState<Job[]>([]);
-  /*const handleSubmit = async (e:any)  =>{
-		e.preventDefault()
-		axios.get('http://localhost:7777/api/v1/jobs', {
-		  })
-		  .then(function (response) {
-      setJobsData(response.data);
-			console.log(response);
-      alert("Your post had been sent to admin ")
-		  })
-		  .catch(function (error) {
-			alert(error.message);
-		  });
-	}*/
+  
+  const [showPanel, setShowPanel] = useState(false);
+
+  const jobDetails = {
+    name: 'Titre de l\'emploi',
+    description: 'Description détaillée de l\'emploi...'
+  };
+
+  const handleApplyClick = () => {
+    setShowPanel(true);
+  };
+
+  const handleClosePanel = () => {
+    setShowPanel(false);
+  };
     return (
     <ThemeProvider enableSystem={true} attribute="class">
         <Navbar/>
@@ -78,8 +123,17 @@ const ListJobs = () => {
                   <div className='header'>
                     <h1>List Jobs</h1>
                     <div className='search'>
-                      <label htmlFor="email">Search</label>
-                      <input type="search" name="search" id="search" placeholder="search jobs" required  />
+                    <label htmlFor='search'>Search</label>
+        <input
+          type='search'
+          name='search'
+          id='search'
+          placeholder='search jobs'
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          required
+          onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+        />
                     </div>
                     <div className='list-image'>
                     <Image

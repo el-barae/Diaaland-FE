@@ -9,7 +9,7 @@ const HeadlineContent = () => {
   const router = useRouter();
   const onclick = (e:any) =>{
     e.preventDefault()
-    Cookies.set("loggedin", "true");
+    //Cookies.set("loggedin", "true");
     router.push('/addPost')
   }
   return (
@@ -20,7 +20,7 @@ const HeadlineContent = () => {
           <p>DiaaLand is a recruitment and IT services platform. We assist companies in finding suitable candidates and empower individuals to secure the best opportunities based on their technical and general skills. We provide a range of services for both candidates and recrtuiters.</p>
           <div className="links">
             <div className="post">
-              <Link href='/addPost' onClick={onclick}>post opportunity</Link>
+              <Link href='/' onClick={onclick}>post opportunity</Link>
             </div>
             <div className="find">
               <Link href='/listJobs' >find opportunity</Link>

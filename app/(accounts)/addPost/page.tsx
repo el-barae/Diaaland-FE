@@ -22,6 +22,8 @@ export default function AddPost() {
  const [Experience, setExperience] = useState('InterShip');
  const [jobType, setJobType] = useState('remote');
  const router = useRouter();  
+
+ const authToken = localStorage.getItem('token');
  
   const handleSubmit = async (e:any)  =>{
 		e.preventDefault()
@@ -36,7 +38,11 @@ export default function AddPost() {
       "numberOfPositions": positionNumber,
       "address": adress,
       "remoteStatus": true
-		  })
+		  }, {
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+      })
 		  .then(function (response) {
 			console.log(response);
       alert("Your post had been sent to admin ")
