@@ -1,6 +1,8 @@
 'use client'
 import Image from 'next/image'
 import ListImage from '@/public/images/listjobs.png'
+import SearchImage from '@/public/images/search1.png'
+import Search2Image from '@/public/images/search.png'
 import service2 from '@/public/images/service2.svg'
 import { useState ,useEffect} from "react"
 import axios from 'axios'
@@ -36,7 +38,7 @@ const ListJobs = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:7777/api/v1/jobs');
+        const response = await axios.get('http://localhost:7777/api/v1/jobs/list');
 
         setJobsData(response.data);
       } catch (error) {
@@ -124,6 +126,7 @@ const ListJobs = () => {
                     <h1>List Jobs</h1>
                     <div className='search'>
                     <label htmlFor='search'>Search</label>
+        <div className='search-input'>
         <input
           type='search'
           name='search'
@@ -134,6 +137,15 @@ const ListJobs = () => {
           required
           onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
         />
+        <button onClick={handleSearch}>
+        <Image
+                      src={SearchImage}
+                      width={45}
+                      height={45}
+                      alt='image of service'
+                    />
+        </button>
+        </div>
                     </div>
                     <div className='list-image'>
                     <Image

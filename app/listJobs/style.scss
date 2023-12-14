@@ -36,14 +36,19 @@
                     font-size: 30px;
                     margin-bottom: 20px;
                 }
-                input {
-                    width: 20rem;
-                    outline: none;
-                    border: 1px solid $footer-bg;
-                    border-radius: 1rem;
-                    padding: .4rem;
-                    margin-bottom: 1rem;
-                  }
+                .search-input{
+                    display: flex;
+                    input {
+                        width: 20rem;
+                        outline: none;
+                        border: 1px solid $footer-bg;
+                        border-radius: 1rem;
+                        padding: .4rem;
+                        margin-bottom: 1rem;
+                        margin-top: 15px;
+                        margin-right: 10px;
+                    }
+                }
             }
         }
         
