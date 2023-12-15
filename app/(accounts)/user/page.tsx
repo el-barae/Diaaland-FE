@@ -186,7 +186,7 @@ export default function Register() {
 											<label htmlFor="url">Company URL:</label>
 											<input type="text" name="url" id="url" required onChange={(e) => setUrl(e.target.value)}  />
 										</div>
-											<label htmlFor="logo">Select a file to upload:</label>
+											<label htmlFor="logo">Select the logo file:</label>
 											<input type="file" id="fileInput" name="fileInput" required onChange={(e) => setLogo(e.target.value)}/>
 										<label htmlFor="password">Password</label>
 										<div className="password-input">
