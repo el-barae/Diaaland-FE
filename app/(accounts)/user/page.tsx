@@ -5,6 +5,7 @@ import Cookies from 'js-cookie';
 import './style.scss';
 import Navbar from '@/components/HomePage/Navbar/Navbar'
 import Image from 'next/image'
+import {ThemeProvider} from 'next-themes'
 import Link from 'next/link'
 import RegisterImg from '@/public/images/register-info.svg'
 import { FaEyeSlash, FaEye } from 'react-icons/fa';
@@ -146,6 +147,7 @@ export default function Register() {
 
 	return (
 		<>
+		<ThemeProvider enableSystem={true} attribute="class" >
 			<Navbar />
 			<div className="register">
 				<div className="container">
@@ -213,6 +215,7 @@ export default function Register() {
 					</div>
 				</div>
 			</div>
+			</ThemeProvider>
 		</>
 	)
 }

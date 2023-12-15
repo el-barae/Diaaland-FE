@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
 import './style.scss';
 import Navbar from '@/components/HomePage/Navbar/Navbar'
+import {ThemeProvider} from 'next-themes'
 import Image from 'next/image'
 import Link from 'next/link'
 import RegisterImg from '@/public/images/register-info.svg'
@@ -145,6 +146,7 @@ export default function Register() {
 
 	return (
 		<>
+		<ThemeProvider enableSystem={true} attribute="class" >
 			<Navbar />
 			<div className="register">
 				<div className="container">
@@ -203,6 +205,7 @@ export default function Register() {
 					</div>
 				</div>
 			</div>
+		</ThemeProvider>
 		</>
 	)
 }
