@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import NavbarTools from './../NavbarTools/NavbarTools';
+import { useRouter } from 'next/navigation';
 import Logo from './../Logo/Logo';
 import ImageP from '@/public/images/profile.png'
 import Image from 'next/image';
@@ -13,6 +14,7 @@ import { useSession, signIn, signOut } from 'next-auth/react';
 const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const { data: session } = useSession();
+  const router = useRouter();
 
   // Fonction pour gérer le clic sur le bouton
   const handleClick = () => {
@@ -20,6 +22,9 @@ const Navbar = () => {
     setIsLoggedIn(!isLoggedIn);
   };
   const buttonText = isLoggedIn ? 'Logout' : 'Login';
+  const toProfile = (e:any) =>{
+    router.push('/profile');
+  }
 
 
   /*
@@ -87,7 +92,7 @@ const Navbar = () => {
               </li>
             )}
               <NavbarTools />
-              <button>
+              <button onClick={toProfile}>
               <Image
                         src={ImageP}
                         width={38}
