@@ -1,0 +1,30 @@
+@import '@/app/globals.scss';
+
+.lists{
+    padding: 1.5rem 0;
+    min-height: 75vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .list{
+        position: relative;
+        
+        text-align: left;
+        //display: flex;
+        gap: 2rem;
+        margin: 20px 40px 20px 40px;
+        box-shadow: 0 1px 10px #cecaca;
+        padding: 30px;
+        padding-bottom: 100px;
+        border-radius: 20px;
+        //flex-direction: column;
+        h1{
+            font-size: 40px;
+            font-weight: 350;
+            color: $primary;
+        }
+        p{
+            font-size: 20px;
+        }
+    }
+}

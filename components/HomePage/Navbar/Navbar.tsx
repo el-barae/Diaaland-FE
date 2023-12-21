@@ -23,7 +23,7 @@ const Navbar = () => {
   };
   const buttonText = isLoggedIn ? 'Logout' : 'Login';
   const toProfile = (e:any) =>{
-    router.push('/profile');
+    router.push('/Dashboards/Customer');
   }
 
 
