@@ -34,6 +34,26 @@ const ListJobs = () => {
     );
     setFilteredJobs(filtered);
   };
+
+  const handleApply = async (e:any, id:number)  =>{
+		e.preventDefault()
+		axios.post('http://localhost:7777/api/v1/candidate-jobs', {
+			"status": "en attends",
+      "candidate": {
+        "id": 1
+      },
+      "job": {
+        "id": id
+      }
+		  })
+		  .then(function (response) {
+			console.log(response);
+      setShowPanel(false);
+		  })
+		  .catch(function (error) {
+			console.log(error);
+		  });
+	}
   const [jobsData, setJobsData] = useState<Job[]>([]);
   useEffect(() => {
     const fetchData = async () => {
@@ -65,12 +85,13 @@ const ListJobs = () => {
             Description: {job.description} <br/> Number of positions: {job.numberOfPositions} 
           </p>
           <p>Close Date: {job.closeDate}</p>
-          <button onClick={handleApplyClick}>Apply</button>
+          <button onClick={handleApplyClick}>View</button>
           {showPanel && (
       <div className="job-panel">
         <h2>{jobDetails.name}</h2>
         <p>{jobDetails.description}</p>
         <button onClick={handleClosePanel}>Close</button>
+        <button onClick={(e) => handleApply(e, job.id)}>Apply</button>
       </div>
     )}
         </div>
@@ -88,12 +109,13 @@ const ListJobs = () => {
               Description: {job.description} <br/> Number of positions: {job.numberOfPositions} 
             </p>
             <p>Close Date: {job.closeDate}</p>
-            <button onClick={handleApplyClick}>Apply</button>
+            <button onClick={handleApplyClick}>View</button>
             {showPanel && (
         <div className="job-panel">
           <h2>{jobDetails.name}</h2>
           <p>{jobDetails.description}</p>
           <button onClick={handleClosePanel}>Close</button>
+          <button onClick={(e) => handleApply(e, job.id)}>Apply</button>
         </div>
       )}
           </div>
