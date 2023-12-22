@@ -3,6 +3,7 @@ import Image from 'next/image'
 import { useState ,useEffect} from "react"
 import axios from 'axios'
 import React from 'react';
+import Cookies from 'js-cookie';
 import './style.scss';
 import {ThemeProvider} from 'next-themes'
 import Navbar from '@/components/HomePage/Navbar/Navbar'
@@ -42,8 +43,9 @@ const Profile = () => {
     useEffect(() => {
         const fetchData = async () => {
           try {
-            const response = await axios.get('http://localhost:7777/api/v1/candidate-jobs/byCandidate/1');
-            
+            //Cookies.set("id","1")
+            const id = Cookies.get("id");
+            const response = await axios.get('http://localhost:7777/api/v1/candidate-jobs/byCandidate/'+String(id));         
             setJobsData(response.data);
           } catch (error) {
             console.error('Erreur lors de la récupération des données :', error);

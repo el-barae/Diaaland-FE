@@ -25,9 +25,19 @@ export default function Login() {
 	const [passState, setPassState] = useState('hide');
 	const router = useRouter();
 
+	const fetchID = async () => {
+		try {
+			const resp = await axios.get('http://localhost:7777/api/v1/candidates/findIdByEmail/'+String(email)); 
+			const ID = JSON.stringify(resp.data);
+			console.log(String(ID));
+			  Cookies.set("id", String(ID));
+		  } catch (error) {
+			console.error('Erreur lors de la récupération des données :', error);
+		  }
+		}
+
 	const handleSubmit = async (e:any)  =>{
 		e.preventDefault()
-		Cookies.set("loggedin", "true");
 		axios.post('http://localhost:7777/api/v1/auth', {
 			"email": email,
 			"password": password
@@ -35,6 +45,7 @@ export default function Login() {
 		  .then(function (response) {
 			localStorage.setItem('token',response.data.token)
 			Cookies.set("loggedin", "true");
+			fetchID();
 			router.push('/addPost')
 		  })
 		  .catch(function (error) {
