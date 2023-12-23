@@ -43,7 +43,7 @@ const Profile = () => {
     useEffect(() => {
         const fetchData = async () => {
           try {
-            //Cookies.set("id","1")
+            Cookies.set("id","1")
             const id = Cookies.get("id");
             const response = await axios.get('http://localhost:7777/api/v1/candidate-jobs/byCandidate/'+String(id));         
             setJobsData(response.data);
@@ -56,8 +56,24 @@ const Profile = () => {
     return (
         <ThemeProvider enableSystem={true} attribute="class">
             <Navbar/>
-            <div className='lists'>
-                        <RepeatClassNTimes className="list" n={jobsData.length} jobsData={jobsData} />
+            <div className='Candidate'>
+              <div className='header'>
+                <h1>Candidate</h1>
+              </div>
+              <div className='content'>
+              <div className='Menu'>
+              <li>
+                <ul>profile</ul>
+                <ul>settings</ul>
+              </li>
+              </div>
+              <div className='Candidate-box'>
+                <h1>My jobs:</h1>
+                <div className='lists'>
+                  <RepeatClassNTimes className="list" n={jobsData.length} jobsData={jobsData} />
+                </div>
+              </div>
+              </div>
             </div>
         </ThemeProvider>
     );
