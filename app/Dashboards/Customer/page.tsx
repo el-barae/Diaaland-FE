@@ -15,6 +15,12 @@ interface Candidate {
     description: string;
     email: string;
   }
+  interface Customer {
+    id: number;
+    name: string;
+    description: string;
+    email: string;
+  }
 
   interface RepeatClassNTimesProps {
     className: string;
@@ -39,8 +45,9 @@ interface Candidate {
 
 const Profile = () => {
     const [candidatesData, setCandidatesData] = useState<Candidate[]>([]);
+    const [customersData, setCustomersData] = useState<Customer[]>([]);
     useEffect(() => {
-        const fetchData = async () => {
+        const fetchCandidateData = async () => {
           try {
             const response = await axios.get('http://localhost:7777/api/v1/candidate-jobs/byJob/2');
             
@@ -49,16 +56,41 @@ const Profile = () => {
             console.error('Erreur lors de la récupération des données :', error);
           }
         };
-        fetchData();
+        const fetchCustomerData = async () => {
+          try {
+            const response = await axios.get('http://localhost:7777/api/v1/jobs/byCustomer/2');
+            
+            setCustomersData(response.data);
+          } catch (error) {
+            console.error('Erreur lors de la récupération des données :', error);
+          }
+        };
+        fetchCandidateData();
   }, []);
     return (
-        <ThemeProvider enableSystem={true} attribute="class">
-            <Navbar/>
-            <div className='lists'>
-                        <RepeatClassNTimes className="list" n={candidatesData.length} candidatesData={candidatesData} />
-            </div>
-        </ThemeProvider>
-    );
+      <ThemeProvider enableSystem={true} attribute="class">
+      <Navbar/>
+      <div className='Customer'>
+        <div className='header'>
+          <h1>Customer</h1>
+        </div>
+        <div className='content'>
+        <div className='Menu'>
+        <li>
+          <ul>profile</ul>
+          <ul>settings</ul>
+        </li>
+        </div>
+        <div className='Customer-box'>
+          <h1>My jobs:</h1>
+          <div className='lists'>
+            <RepeatClassNTimes className="list" n={candidatesData.length} candidatesData={candidatesData} />
+          </div>
+        </div>
+        </div>
+      </div>
+  </ThemeProvider>
+  )
   }
   
   export default Profile;
