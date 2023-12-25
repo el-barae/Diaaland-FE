@@ -7,6 +7,8 @@ import Logo from './../Logo/Logo';
 import ImageP from '@/public/images/profile.png'
 import Image from 'next/image';
 import { useState } from 'react';
+import Cookies from 'js-cookie';
+import axios from 'axios';
 import './Navbar.scss'
 import SigninButton from './SigninButton';
 import { useSession, signIn, signOut } from 'next-auth/react';
@@ -24,6 +26,21 @@ const Navbar = () => {
   const buttonText = isLoggedIn ? 'Logout' : 'Login';
   const toProfile = (e:any) =>{
     router.push('/Dashboards/Candidate');
+  }
+
+  const logout = async ()=>{
+    const token = localStorage.getItem('token')
+		axios.post('http://localhost:7777/api/v1/auth/logout', {
+			"token" : token
+		  })
+		  .then(function (response) {
+			Cookies.set("loggedin", "false");
+			router.push('/login')
+		  })
+		  .catch(function (error) {
+			console.log(error);
+		  });
+    localStorage.removeItem('token');
   }
 
 
@@ -84,7 +101,7 @@ const Navbar = () => {
           <div className='right'>
             {session ? (
               <li>
-                <button onClick={() => signOut()}>Logout</button>
+                <button onClick={() => { signOut(); logout();}}>Logout</button>
               </li>
             ) : (
               <li>

@@ -11,13 +11,13 @@ import Image from 'next/image'
 import Link from 'next/link'
 import LoginImage from '@/public/images/login-info.svg'
 import { FaEye, FaEyeSlash } from 'react-icons/fa'
-import { signIn } from 'next-auth/react';
+import { signIn, useSession } from 'next-auth/react';
 
 export default function Login() {
 
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
-
+	const { data: session } = useSession();
 	const emailErrorRef = useRef<HTMLDivElement>(null);
 	const passwordErrorRef = useRef<HTMLDivElement>(null);
 	const SubmitErrorRef = useRef<HTMLDivElement>(null);
