@@ -15,11 +15,12 @@ interface Candidate {
     description: string;
     email: string;
   }
-  interface Customer {
+  interface Job {
     id: number;
     name: string;
     description: string;
-    email: string;
+    numberOfPositions: number;
+    closeDate: string;
   }
 
   interface RepeatClassNTimesProps {
@@ -42,10 +43,33 @@ interface Candidate {
         </>
       )
     }
+  
+    interface RepeatClassJobNTimesProps {
+      className: string;
+      n: number;
+      jobsData: Job[];
+    }
+  
+    const RepeatClassJobNTimes: React.FC<RepeatClassJobNTimesProps> = ({ className, n, jobsData }) => {
+        return(
+          <>
+          {jobsData.map((job) => (
+            <div key={job.id} className={className}>
+            <h1>{job.name} :</h1>
+            <p>
+              Description: {job.description} <br/> Number of positions: {job.numberOfPositions} 
+            </p>
+            <p>Close Date: {job.closeDate}</p>
+
+          </div>
+          ))}
+          </>
+        )
+      }
 
 const Profile = () => {
     const [candidatesData, setCandidatesData] = useState<Candidate[]>([]);
-    const [customersData, setCustomersData] = useState<Customer[]>([]);
+    const [jobsData, setJobsData] = useState<Job[]>([]);
     useEffect(() => {
         const fetchCandidateData = async () => {
           try {
@@ -56,16 +80,17 @@ const Profile = () => {
             console.error('Erreur lors de la récupération des données :', error);
           }
         };
-        const fetchCustomerData = async () => {
+        const fetchJobData = async () => {
           try {
-            const response = await axios.get('http://localhost:7777/api/v1/jobs/byCustomer/2');
-            
-            setCustomersData(response.data);
+            Cookies.set("id","1")
+            const id = Cookies.get("id");
+            const response = await axios.get('http://localhost:7777/api/v1/jobs/byCustomer/'+String(id));         
+            setJobsData(response.data);
           } catch (error) {
             console.error('Erreur lors de la récupération des données :', error);
           }
         };
-        fetchCandidateData();
+        fetchJobData();
   }, []);
     return (
       <ThemeProvider enableSystem={true} attribute="class">
@@ -84,7 +109,7 @@ const Profile = () => {
         <div className='Customer-box'>
           <h1>My jobs:</h1>
           <div className='lists'>
-            <RepeatClassNTimes className="list" n={candidatesData.length} candidatesData={candidatesData} />
+            <RepeatClassJobNTimes className="list" n={jobsData.length} jobsData={jobsData} />
           </div>
         </div>
         </div>
