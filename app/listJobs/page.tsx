@@ -1,4 +1,5 @@
 'use client'
+
 import Image from 'next/image'
 import ListImage from '@/public/images/listjobs.png'
 import SearchImage from '@/public/images/search1.png'
@@ -12,30 +13,30 @@ import {ThemeProvider} from 'next-themes'
 import Navbar from '@/components/HomePage/Navbar/Navbar'
 
 interface Job {
-  id: number;
-  name: string;
-  description: string;
-  numberOfPositions: number;
-  closeDate: string;
+ id: number;
+ name: string;
+ description: string;
+ numberOfPositions: number;
+ closeDate: string;
 }
 
 var c=0;
 
 const ListJobs = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filteredJobs, setFilteredJobs] = useState<Job[]>([]);
+ const [searchTerm, setSearchTerm] = useState('');
+ const [filteredJobs, setFilteredJobs] = useState<Job[]>([]);
 
-  // Fonction de recherche
-  const handleSearch = () => {
+ // Fonction de recherche
+ const handleSearch = () => {
     c=1;
     const filtered = jobsData.filter((job) =>
       job.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       job.description.toLowerCase().includes(searchTerm.toLowerCase())
     );
     setFilteredJobs(filtered);
-  };
+ };
 
-  const handleApply = async (e:any, id:number)  =>{
+ const handleApply = async (e:any, id:number) =>{
 		e.preventDefault()
 		axios.post('http://localhost:7777/api/v1/candidate-jobs', {
 			"status": "en attends",
@@ -45,17 +46,17 @@ const ListJobs = () => {
       "job": {
         "id": id
       }
-		  })
-		  .then(function (response) {
+		 })
+		 .then(function (response) {
 			console.log(response);
       setShowPanel(false);
-		  })
-		  .catch(function (error) {
+		 })
+		 .catch(function (error) {
 			console.log(error);
-		  });
+		 });
 	}
-  const [jobsData, setJobsData] = useState<Job[]>([]);
-  useEffect(() => {
+ const [jobsData, setJobsData] = useState<Job[]>([]);
+ useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get('http://localhost:7777/api/v1/jobs/list');
@@ -67,14 +68,14 @@ const ListJobs = () => {
     };
 
     fetchData();
-  }, []);
-  interface RepeatClassNTimesProps {
+ }, []);
+ interface RepeatClassNTimesProps {
     className: string;
     n: number;
     jobsData: Job[];
-  }
+ }
 
-  const RepeatClassNTimes: React.FC<RepeatClassNTimesProps> = ({ className, n, jobsData }) => {
+ const RepeatClassNTimes: React.FC<RepeatClassNTimesProps> = ({ className, n, jobsData }) => {
     if(c==0){
       return(
         <>
@@ -123,28 +124,28 @@ const ListJobs = () => {
       </>
       );
     }
-  };
+ };
   
-  const [showPanel, setShowPanel] = useState(false);
+ const [showPanel, setShowPanel] = useState(false);
 
-  const jobDetails = {
+ const jobDetails = {
     name: 'Titre de l\'emploi',
     description: 'Description détaillée de l\'emploi...'
-  };
+ };
 
-  const handleApplyClick = () => {
+ const handleApplyClick = () => {
     setShowPanel(true);
-  };
+ };
 
-  const handleClosePanel = () => {
+ const handleClosePanel = () => {
     setShowPanel(false);
-  };
+ };
     return (
     <ThemeProvider enableSystem={true} attribute="class">
         <Navbar/>
             <div className='listJobs'>
                 <div className='container'>
-                  <div className='header'>
+                 <div className='header'>
                     <h1>List Jobs</h1>
                     <div className='search'>
                     <label htmlFor='search'>Search</label>
@@ -177,7 +178,7 @@ const ListJobs = () => {
                       alt='image of service'
                     />
                     </div>
-                  </div>
+                 </div>
                     <div className='lists'>
                         <RepeatClassNTimes className="list" n={jobsData.length} jobsData={jobsData} />
                     </div>
@@ -185,6 +186,6 @@ const ListJobs = () => {
             </div>
     </ThemeProvider>
     );
-  }
+ }
   
-  export default ListJobs;
+ export default ListJobs;
