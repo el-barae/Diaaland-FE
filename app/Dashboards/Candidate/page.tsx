@@ -7,52 +7,11 @@ import Cookies from 'js-cookie';
 import './style.scss';
 import {ThemeProvider} from 'next-themes'
 import Navbar from '@/components/HomePage/Navbar/Navbar'
+import Jobs from '@/components/Candidate/Jobs/Jobs'
 
-interface Job {
-    id: number;
-    name: string;
-    description: string;
-    numberOfPositions: number;
-    closeDate: string;
-  }
 
-  interface RepeatClassNTimesProps {
-    className: string;
-    n: number;
-    jobsData: Job[];
-  }
-
-  const RepeatClassNTimes: React.FC<RepeatClassNTimesProps> = ({ className, n, jobsData }) => {
-      return(
-        <>
-        {jobsData.map((job) => (
-          <div key={job.id} className={className}>
-          <h1>{job.name} :</h1>
-          <p>
-            Description: {job.description} <br/> Number of positions: {job.numberOfPositions} 
-          </p>
-          <p>Close Date: {job.closeDate}</p>
-        </div>
-        ))}
-        </>
-      )
-    }
 
 const Profile = () => {
-    const [jobsData, setJobsData] = useState<Job[]>([]);
-    useEffect(() => {
-        const fetchData = async () => {
-          try {
-            Cookies.set("id","1")
-            const id = Cookies.get("id");
-            const response = await axios.get('http://localhost:7777/api/v1/candidate-jobs/byCandidate/'+String(id));         
-            setJobsData(response.data);
-          } catch (error) {
-            console.error('Erreur lors de la récupération des données :', error);
-          }
-        };
-        fetchData();
-  }, []);
     return (
         <ThemeProvider enableSystem={true} attribute="class">
             <Navbar/>
@@ -69,10 +28,7 @@ const Profile = () => {
               </li>
               </div>
               <div className='Candidate-box'>
-                <h1>My jobs:</h1>
-                <div className='lists'>
-                  <RepeatClassNTimes className="list" n={jobsData.length} jobsData={jobsData} />
-                </div>
+                <Jobs/>
                 <h1>My favorites:</h1>
                 <div className='favories'>
                   <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptates laborum ex velit doloremque officia. Commodi doloremque inventore magnam tempora exercitationem earum blanditiis. Optio earum aliquam soluta minima velit. Reiciendis, aperiam?
