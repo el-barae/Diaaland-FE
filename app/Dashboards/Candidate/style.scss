@@ -2,7 +2,7 @@
 
 .Candidate{
     padding: 1.5rem 0;
-    padding-bottom: 0;
+    padding-bottom: 0px;
     min-height: 75vh;
     align-items: center;
     margin-top: 48px;
@@ -19,6 +19,7 @@
         flex-direction: column;
         border-top: 1px solid #cecaca; /* Ajoutez une bordure en haut */
         box-shadow: 0 1px 10px #cecaca;
+        position: relative;
         .Menu{
             padding: 2rem 0;
             display: flex;
@@ -44,11 +45,10 @@
         .Candidate-box{
             align-items: center;
             justify-content: center;
+            position: right;
             min-height: 80vh;
-            padding-left: 12rem;
-            height: 250px;
-            margin-left: 30rem;
-            h1{
+            height: 100%;
+            /*h1{
                 font-size: 2.8rem;
                 color: $primary;
             }
@@ -95,5 +95,6 @@
         /*.Candidate-box > *{
             
         }*/
+        }
     }
 }

@@ -43,9 +43,9 @@ const Profile = () => {
                   <button onClick={() => handleClick("Profile")}>Profile</button>
                   <button onClick={() => handleClick("Jobs")}>My jobs</button>
                   <button onClick={() => handleClick("Favoris")}>My favoris</button>
-                  <div className='Candidate-box'>
+                </div>
+                <div className='Candidate-box'>
                     {y()}
-                  </div>
                 </div>
               </div>
             </div>
