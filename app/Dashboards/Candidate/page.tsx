@@ -1,40 +1,52 @@
 'use client'
-import Image from 'next/image'
-import { useState ,useEffect} from "react"
-import axios from 'axios'
 import React from 'react';
-import { useRouter } from 'next/navigation';
-import Cookies from 'js-cookie';
 import './style.scss';
+import { useState } from 'react';
 import {ThemeProvider} from 'next-themes'
 import Navbar from '@/components/HomePage/Navbar/Navbar'
 import Jobs from '@/components/Candidate/Jobs/Jobs'
+import Favoris from '@/components/Candidate/Favoris/Favoris';
 
-const router = useRouter();
-
-const toJobs = () =>{
   
-}
-
-let x = 1;
 
 const Profile = () => {
+  var [x,setX] = useState("Favoris"); 
+
+  const handleClick = (value : string) => {
+    setX(value);
+    y();
+  };
+
+  const y = () => {
+    if (x === "Profile"){ 
+      return <Profile />;
+      console.log(x);
+    }
+    if (x === "Jobs") {
+      return <Jobs />;
+      console.log(x);
+    }
+    if (x === "Favoris") {
+      return <Favoris />;
+      console.log(x);
+    }
+  };
     return (
         <ThemeProvider enableSystem={true} attribute="class">
-            <Navbar/>
+          <Navbar/>
             <div className='Candidate'>
               <div className='header'>
                 <h1>Candidate</h1>
               </div>
               <div className='content'>
                 <div className='Menu'>
-                  <button>Profile</button>
-                  <button>My jobs</button>
-                  <button>My favoris</button>
-              </div>
-              <div className='Candidate-box'>
-                <Jobs/>
-              </div>
+                  <button onClick={() => handleClick("Profile")}>Profile</button>
+                  <button onClick={() => handleClick("Jobs")}>My jobs</button>
+                  <button onClick={() => handleClick("Favoris")}>My favoris</button>
+                  <div className='Candidate-box'>
+                    {y()}
+                  </div>
+                </div>
               </div>
             </div>
         </ThemeProvider>
