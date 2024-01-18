@@ -38,8 +38,11 @@
                 background-color: white;
                 border-radius: 18px;
                 margin-top: 20px;
+                &:hover {
+                    color: white;
+                    background-color: darken($main-color, 10%);
+                }
             }
-            
         }
         .Candidate-box{
             align-items: center;
@@ -64,10 +67,11 @@
                 margin-top: 12px;
                 padding: 0rem;
                 font-size: 1.5rem;
-                align-items: center;
+                align-items: center bottom;
                 button{
                     width: 9rem;
                     margin: 2px;
+                    margin-bottom: 0px;
                 }
             }
         }
