@@ -38,3 +38,13 @@
                 }
             }
 }
+@media(max-width: 800px){
+    .jobs{
+        margin-top: 60px;
+        padding: 1rem;
+        .lists{
+            display: flex;
+            flex-direction: column;
+        }
+    }
+}
