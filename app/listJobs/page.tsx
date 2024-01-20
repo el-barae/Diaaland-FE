@@ -94,6 +94,7 @@ const ListJobs = () => {
 
  const RepeatClassNTimes: React.FC<RepeatClassNTimesProps> = ({ className, n, jobsData }) => {
     if(c==0){
+      if(jobsData.length != 0)
       return(
         <>
         {jobsData.map((job) => (
@@ -119,6 +120,7 @@ const ListJobs = () => {
       )
     }
     else{
+      if(jobsData.length != 0)
       return (
       <>
         {filteredJobs.map((job) => (

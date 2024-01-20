@@ -19,7 +19,34 @@ interface Job {
     jobsData: Job[];
   }
 
+  const handleApply = async (e:any, id:number) =>{
+		e.preventDefault()
+		axios.post('http://localhost:7777/api/v1/candidate-jobs', {
+			"status": "en attends",
+      "candidate": {
+        "id": 1
+      },
+      "job": {
+        "id": id
+      }
+		 })
+		 .then(function (response) {
+		 })
+		 .catch(function (error) {
+			console.log(error);
+		 });
+	}
+
+  const handleDelFavoris = async (e:any, id:number) =>{
+		e.preventDefault()
+		axios.delete('http://localhost:7777/api/v1/favoris/11')
+		 .catch(function (error) {
+			console.log(error);
+		 });
+	}
+
   const RepeatClassNTimes: React.FC<RepeatClassNTimesProps> = ({ className, n, jobsData }) => {
+    if(jobsData.length != 0)
       return(
         <>
         {jobsData.map((job) => (
@@ -29,6 +56,8 @@ interface Job {
             Description: {job.description} <br/> Number of positions: {job.numberOfPositions} 
           </p>
           <p>Close Date: {job.closeDate}</p>
+          <button onClick={(e) => handleDelFavoris(e, job.id)}>Delete</button>
+          <button onClick={(e) => handleApply(e, job.id)}>Apply</button>
         </div>
         ))}
         </>
@@ -49,6 +78,7 @@ const Favoris = () =>{
           }
         };
         fetchData();
+        console.log(jobsData)
   }, []);
   return(
     <>

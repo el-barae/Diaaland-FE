@@ -19,6 +19,7 @@ interface Job {
   }
 
   const RepeatClassNTimes: React.FC<RepeatClassNTimesProps> = ({ className, n, jobsData }) => {
+    if(jobsData.length != 0)
       return(
         <>
         {jobsData.map((job) => (
