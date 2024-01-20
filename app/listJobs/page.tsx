@@ -55,6 +55,23 @@ const ListJobs = () => {
 			console.log(error);
 		 });
 	}
+
+  const handleAddFavoris = async (e:any, id:number) =>{
+		e.preventDefault()
+		axios.post('http://localhost:7777/api/v1/favoris', {
+      "candidate": {
+        "id": 1
+      },
+      "job": {
+        "id": id
+      }
+		 })
+		 .then(function (response) {
+		 })
+		 .catch(function (error) {
+			console.log(error);
+		 });
+	}
  const [jobsData, setJobsData] = useState<Job[]>([]);
  useEffect(() => {
     const fetchData = async () => {
@@ -92,6 +109,7 @@ const ListJobs = () => {
         <h2>{jobDetails.name}</h2>
         <p>{jobDetails.description}</p>
         <button onClick={handleClosePanel}>Close</button>
+        <button onClick={(e) => handleAddFavoris(e, job.id)}>Add favoris</button>
         <button onClick={(e) => handleApply(e, job.id)}>Apply</button>
       </div>
     )}

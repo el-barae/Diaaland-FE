@@ -56,9 +56,9 @@
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 2rem;
-            margin: 20px 30px 20px 30px;
+            margin: 20px;
             box-shadow: 0 1px 10px #cecaca;
-            padding: 30px;
+            padding: 20px;
             border-radius: 20px;
             align-items: center;
             justify-items: center;
@@ -107,6 +107,10 @@
                 }
                 #btn{
                     text-align: center;
+                }
+                .job-panel{
+                    align-items: center;
+                    gap: 5px;
                 }
             }
         }
