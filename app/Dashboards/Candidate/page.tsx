@@ -7,6 +7,10 @@ import Navbar from '@/components/HomePage/Navbar/Navbar'
 import Jobs from '@/components/Candidate/Jobs/Jobs'
 import Favoris from '@/components/Candidate/Favoris/Favoris';
 import Profile from '@/components/Candidate/Profile/Profile';
+import Skills from '@/components/Candidate/Skills/Skills';
+import Projects from '@/components/Candidate/Projects/Projects';
+import Ex from '@/components/Candidate/Experiances/Ex';
+import Links from '@/components/Candidate/Links/Links';
   
 
 const Candidate = () => {
@@ -30,6 +34,22 @@ const Candidate = () => {
       return <Favoris />;
       console.log(x);
     }
+    if (x === "Skills") {
+      return <Skills />;
+      console.log(x);
+    }
+    if (x === "Projects") {
+      return <Projects />;
+      console.log(x);
+    }
+    if (x === "Ex") {
+      return <Ex />;
+      console.log(x);
+    }
+    if (x === "Links") {
+      return <Links />;
+      console.log(x);
+    }
   };
     return (
         <ThemeProvider enableSystem={true} attribute="class">
@@ -43,6 +63,10 @@ const Candidate = () => {
                   <button onClick={() => handleClick("Profile")}>Profile</button>
                   <button onClick={() => handleClick("Jobs")}>My jobs</button>
                   <button onClick={() => handleClick("Favoris")}>My favoris</button>
+                  <button onClick={() => handleClick("Skills")}>Skills</button>
+                  <button onClick={() => handleClick("Projects")}>Projects</button>
+                  <button onClick={() => handleClick("Ex")}>Ex</button>
+                  <button onClick={() => handleClick("Links")}>Links</button>
                 </div>
                 <div className='Candidate-box'>
                     {y()}
