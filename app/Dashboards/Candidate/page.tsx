@@ -6,10 +6,10 @@ import {ThemeProvider} from 'next-themes'
 import Navbar from '@/components/HomePage/Navbar/Navbar'
 import Jobs from '@/components/Candidate/Jobs/Jobs'
 import Favoris from '@/components/Candidate/Favoris/Favoris';
-
+import Profile from '@/components/Candidate/Profile/Profile';
   
 
-const Profile = () => {
+const Candidate = () => {
   var [x,setX] = useState("Favoris"); 
 
   const handleClick = (value : string) => {
@@ -53,5 +53,5 @@ const Profile = () => {
     );
   }
   
-  export default Profile;
+  export default Candidate;
 
