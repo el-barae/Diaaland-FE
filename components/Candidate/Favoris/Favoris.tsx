@@ -1,5 +1,4 @@
 import './favoris.scss'
-
 import { useState ,useEffect} from "react"
 import axios from 'axios'
 import React from 'react';
@@ -83,7 +82,7 @@ const Favoris = () =>{
   return(
     <>
     <div className='jobs'>
-        <h1>My favoris:</h1>
+        <h1>My favoris</h1>
                 <div className='lists'>
                   <RepeatClassNTimes className="list" n={jobsData.length} jobsData={jobsData} />
                 </div>

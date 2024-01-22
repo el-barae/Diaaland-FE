@@ -53,7 +53,7 @@ const Jobs = () =>{
   return(
     <>
     <div className='jobs'>
-        <h1>My jobs:</h1>
+        <h1>My jobs</h1>
                 <div className='lists'>
                   <RepeatClassNTimes className="list" n={jobsData.length} jobsData={jobsData} />
                 </div>
