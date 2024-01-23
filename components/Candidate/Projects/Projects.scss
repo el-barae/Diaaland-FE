@@ -1,10 +1,46 @@
 @import '@/app/globals.scss';
 
-.Projects{
-    align-items: center;
-            justify-content: center;
-            min-height: 80vh;
-            padding: 1rem 1rem 0rem 13rem;
-            height: 100%;
-    margin-left: 30px;
+#add{
+    font-size: 30px;
+    font-weight: 300;
+    color: $primary;
+    margin-left: 220px;
+} 
+
+.addProject{
+    display: flex;
+    align-items: left;
+    justify-content: left;
+    padding: 1rem 1rem 0rem 13rem;
+    height: 100%;
+    margin-left: 25px;
+    box-shadow: 0 1px 10px #cecaca;
+                    border-radius: 20px;
+    button{
+        font-size: 16px;
+        font-weight: 250;
+        text-align: center;
+        padding: 10px;
+        background-color: $main-color;
+        color: $second-color;
+        border-radius: 20px;
+        margin: 10px;
+        transition: .3s ease-in-out;
+        &:hover {
+            font-size: 20px;
+            font-weight: 300;
+            background-color: darken($main-color, 10%);
+        }
+    }
+    .part1{
+        display: flex;
+        flex-direction: column;
+        margin-right: 50px;
+    }
+    .part2{
+        display: flex;
+        flex-direction: column;
+        margin-left: 50px;
+    }
+
 }

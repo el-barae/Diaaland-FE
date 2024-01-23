@@ -95,12 +95,40 @@ const Projects = () => {
     }
 
     return(
+      <>
+        <h1 id='add'>Add Project</h1>
+        <div className='addProject'>
+            <div className="part1">
+              <label htmlFor="name">Name:</label>
+              <input type="text" placeholder='Enter name project' value={name} onChange={(e) => setName(e.target.value)}/>
+              <label htmlFor="startDate">Start Date:</label>
+              <input 
+              type="date" 
+              id="startDate" 
+              value={startDate} 
+              onChange={(e) => setStartDate(e.target.value)}
+              />
+              <label htmlFor="CloseDate">End Date:</label>
+              <input 
+              type="date" 
+              id="CloseDate" 
+              value={endDate} 
+              onChange={(e) => setEndDate(e.target.value)}
+              />
+          </div>
+          <div className='part2'>
+            <label htmlFor="decription">description:</label>
+            <input type="text" placeholder='Enter description' value={desc} onChange={(e) => setDesc(e.target.value)}/>
+            <button onClick={handleAddProject}>add project</button>
+          </div>
+        </div>
         <div className="jobs">
             <h1>Projects</h1>
             <div className='lists'>
                   <RepeatClassNTimes className="list" n={projectsData.length} projectsData={projectsData} />
             </div>
         </div>
+      </>
     )
 }
 

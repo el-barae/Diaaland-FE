@@ -65,7 +65,7 @@ const Candidate = () => {
                   <button onClick={() => handleClick("Favoris")}>My favoris</button>
                   <button onClick={() => handleClick("Skills")}>Skills</button>
                   <button onClick={() => handleClick("Projects")}>Projects</button>
-                  <button onClick={() => handleClick("Ex")}>Ex</button>
+                  <button onClick={() => handleClick("Ex")}>Xp</button>
                   <button onClick={() => handleClick("Links")}>Links</button>
                 </div>
                 <div className='Candidate-box'>
