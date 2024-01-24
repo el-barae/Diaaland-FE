@@ -4,7 +4,6 @@ import { useState,useEffect } from 'react';
 import Cookies from 'js-cookie';
 import axios from 'axios';
 import { describe } from 'node:test';
-import Link from 'next/link';
 
 interface project{
     id: number;
@@ -97,11 +96,33 @@ const Projects = () => {
 
     return(
       <>
-        <div className="container">
-          <div className="addProject">
-            <Link href="/Projects/addProjects" >addProject</Link>
+        <h1 id='add'>Add Project</h1>
+        <div className='addProject'>
+            <div className="part1">
+              <label htmlFor="name">Name:</label>
+              <input type="text" placeholder='Enter name project' value={name} onChange={(e) => setName(e.target.value)}/>
+              <label htmlFor="startDate">Start Date:</label>
+              <input 
+              type="date" 
+              id="startDate" 
+              value={startDate} 
+              onChange={(e) => setStartDate(e.target.value)}
+              />
+              <label htmlFor="CloseDate">End Date:</label>
+              <input 
+              type="date" 
+              id="CloseDate" 
+              value={endDate} 
+              onChange={(e) => setEndDate(e.target.value)}
+              />
+          </div>
+          <div className='part2'>
+            <label htmlFor="decription">description:</label>
+            <input type="text" placeholder='Enter description' value={desc} onChange={(e) => setDesc(e.target.value)}/>
+            <button onClick={handleAddProject}>add project</button>
           </div>
         </div>
+        
       </>
     )
 }
