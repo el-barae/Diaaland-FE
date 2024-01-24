@@ -142,8 +142,9 @@ const Profile = () =>{
 	}
 
     return(
-        <div className="form">
-					<label htmlFor="firstname">Name</label>
+        <div className="form-candidate">
+					<div className='part1'>
+										<label htmlFor="firstname">Name</label>
 										<input type="text" name="firstname" id="firstname" placeholder="Enter your company name " autoFocus required onInvalid={invalidFirstname} onChange={(e) => setName(e.target.value)} />
 										<p ref={firstnameErrorRef} className="error username-error"></p>
 										<label htmlFor="email">Email</label>
@@ -158,6 +159,8 @@ const Profile = () =>{
 										<div className="url-adress">
 											<label htmlFor="adress">Adress:</label>
 											<input type="text" name="adress" id="adress" required onChange={(e) => setAdress(e.target.value)}  />
+					</div>
+					<div className='part2'>									
 											<label htmlFor="url">Company URL:</label>
 											<input type="text" name="url" id="url" required onChange={(e) => setUrl(e.target.value)}  />
 										</div>
@@ -178,7 +181,8 @@ const Profile = () =>{
 										<label className='inline-block checkbox-label mb-4' htmlFor="term-of-use">i accept the term of use</label>
 										<p ref={termsErrorRef} className='error terms-error'></p>
 										<button className='block' type="submit" onClick={handleSubmit}>Register</button>
-									</div>
+					</div>
+		</div>
     )
 }
 export default Profile;

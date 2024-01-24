@@ -30,13 +30,14 @@ const Projects = () => {
 
     const handleAddProject = async (e:any)  =>{
       e.preventDefault()
+      const id = Cookies.get("id");
       axios.post('http://localhost:7777/api/v1/projects', {
         "name": name,
         "startDate": startDate,
         "endDate": endDate,
         "description": desc,
         "candidate": {
-          "id": 1
+          "id": id
         }
         }/*, {
           headers: {

@@ -1,12 +1,126 @@
 'use client'
+import './Ex.scss';
+import { useState,useEffect } from 'react';
+import Cookies from 'js-cookie';
+import axios from 'axios';
 
+interface xp{
+    id: number;
+    name : string;
+    startDate : string;
+    endDate : string;
+}
 
-const Ex = () => {
-    return(
+interface RepeatClassNTimesProps {
+    className: string;
+    n: number;
+    xpData: xp[];
+  }
+
+const Xp = () => {
+  const [name,setName] = useState('')
+  const [startDate,setStartDate] = useState('')
+  const [endDate,setEndDate] = useState('')
+  const [xpData,setXpData] = useState<xp[]>([])
+
+    const handleAddXp = async (e:any)  =>{
+      e.preventDefault()
+      const id = Cookies.get("id");
+      axios.post('http://localhost:7777/api/v1/experiences', {
+        "name": name,
+        "startDate": startDate,
+        "endDate": endDate,
+        "candidate": {
+          "id": id
+        }
+        }/*, {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+        }*/)
+        .then(function (response) {
+        console.log(response);
+        alert("Your post had been sent to admin ")
+        })
+        .catch(function (error) {
+        alert(error.message);
+        });
+    }
+
+    const handleDelete = async (e:any, id:number) =>{
+      e.preventDefault()
+      axios.delete('http://localhost:7777/api/v1/experiences')
+       .catch(function (error) {
+        console.log(error);
+       });
+    }
+
+    useEffect(() => {
+        const fetchData = async () => {
+          try {
+            Cookies.set("id","1")
+            const id = Cookies.get("id");
+            const response = await axios.get('http://localhost:7777/api/v1/experiences/byCandidate/'+String(id));         
+            setXpData(response.data);
+          } catch (error) {
+            console.error('Erreur lors de la récupération des données :', error);
+          }
+        };
+        fetchData();
+  }, []);
+
+  const RepeatClassNTimes: React.FC<RepeatClassNTimesProps> = ({ className, n, xpData }) => {
+    if(xpData.length != 0)
+      return(
         <>
-            Experiances
+        {xpData.map((xp) => (
+          <div key={xp.id} className={className}>
+          <h1>{xp.name} :</h1>
+          <p>
+            startDate: {xp.startDate}
+          </p>
+          <p>Close Date: {xp.endDate}</p>
+          <button onClick={(e) => handleDelete(e, xp.id)}>Delete</button>
+        </div>
+        ))}
         </>
+      )
+    }
+
+    return(
+      <>
+        <h1 id='add'>Add Experience</h1>
+        <div className='addProject'>
+            <div className="part1">
+              <label htmlFor="name">Name:</label>
+              <input type="text" placeholder='Enter name project' value={name} onChange={(e) => setName(e.target.value)}/>
+              <label htmlFor="startDate">Start Date:</label>
+              <input 
+              type="date" 
+              id="startDate" 
+              value={startDate} 
+              onChange={(e) => setStartDate(e.target.value)}
+              />
+              <label htmlFor="CloseDate">End Date:</label>
+              <input 
+              type="date" 
+              id="CloseDate" 
+              value={endDate} 
+              onChange={(e) => setEndDate(e.target.value)}
+              />
+          </div>
+          <div className='part2'>
+            <button onClick={handleAddXp}>add xp</button>
+          </div>
+        </div>
+        <div className="jobs">
+            <h1>Experiences</h1>
+            <div className='lists'>
+                  <RepeatClassNTimes className="list" n={xpData.length} xpData={xpData} />
+            </div>
+        </div>
+      </>
     )
 }
 
-export default Ex;
+export default Xp;
