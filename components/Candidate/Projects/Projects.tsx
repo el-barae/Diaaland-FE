@@ -3,7 +3,6 @@ import './Projects.scss';
 import { useState,useEffect } from 'react';
 import Cookies from 'js-cookie';
 import axios from 'axios';
-import { describe } from 'node:test';
 import Link from 'next/link';
 
 interface project{

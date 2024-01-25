@@ -96,8 +96,8 @@ const Projects = () => {
 
     return(
       <>
-        <h1 id='add'>Add Project</h1>
-        <div className='addProject'>
+        <h1 id='addProject'>Add Project</h1>
+        <div className='add'>
             <div className="part1">
               <label htmlFor="name">Name:</label>
               <input type="text" placeholder='Enter name project' value={name} onChange={(e) => setName(e.target.value)}/>
