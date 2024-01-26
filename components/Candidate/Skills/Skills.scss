@@ -1,0 +1,22 @@
+@import '@/app/globals.scss';
+.jobs{
+    .add{
+    padding: 1.5rem;
+    margin: 1rem;
+    gap: 3.5rem;
+    width: max-content;
+    h2{
+        font-size: 27px;
+        font-weight: 300;
+        color: rgb(65, 19, 214);
+    }
+    select{
+        height: 3rem;
+        border-radius: 10px;
+        box-shadow: 0 1px 10px #cecaca;
+        font-size: 20px;
+        min-width: 10rem;
+    }
+    
+    }
+}

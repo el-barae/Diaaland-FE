@@ -1,4 +1,5 @@
 'use client'
+import './Skills.scss'
 import { useState, useEffect } from "react"
 import Cookies from "js-cookie";
 import axios from "axios";
@@ -85,18 +86,23 @@ const Skills = () => {
 
     return(
         <>
-            <div className="add">
-                <h1>Add skills</h1>
+            <div className="jobs">
+                <h1>My skills</h1>
+                <div className="add">
+                <h2>Add skills</h2>
                 <select id="skills" name="skills" value={skill} onChange={(e) => setSkill(e.target.value)}>
                     <option value="java">Java</option>  
                     <option value="c">C/C++</option>
                     <option value="python">Python </option>
-                    <option value="php">PHP </option>
+                    <option value="spring">Spring-boot </option>
+                    <option value="laravel">Laravel </option>  
+                    <option value="react">React </option>
+                    <option value="Vue">vue </option>
+                    <option value="Angular">Angular </option>
+                    <option value=".net">.Net </option>
                 </select>
-                <button onClick={(e) => handleAddSkill(e, 1)}>Add</button>
+                <button onClick={(e) => handleAddSkill(e, 1)}>Add skill</button>
             </div>
-            <div className="jobs">
-                <h1>My skills</h1>
                 <div className='lists'>
                   <RepeatClassNTimes className="list" n={skillsData.length} skillsData={skillsData} />
                 </div>
