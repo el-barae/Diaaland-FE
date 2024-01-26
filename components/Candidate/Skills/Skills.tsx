@@ -77,6 +77,7 @@ const Skills = () => {
           {skillsData.map((skill) => (
             <div key={skill.id} className={className}>
             <h1>{skill.name} :</h1>
+            <p>type: {skill.type} </p>
             <button onClick={(e) => handleDelete(e, skill.id)}>Delete</button>
           </div>
           ))}
