@@ -89,9 +89,10 @@ const Xp = () => {
 
     return(
       <>
-        <h1 id='add'>Add Experience</h1>
-        <div className='add'>
-            <div className="part1">
+        
+        <div className="jobs">
+          <h1 id='add'>Add Experience</h1>
+        <div className='add' id='addEx'>
               <label htmlFor="name">Name:</label>
               <input type="text" placeholder='Enter name project' value={name} onChange={(e) => setName(e.target.value)}/>
               <label htmlFor="startDate">Start Date:</label>
@@ -108,12 +109,8 @@ const Xp = () => {
               value={endDate} 
               onChange={(e) => setEndDate(e.target.value)}
               />
-          </div>
-          <div className='part2'>
             <button onClick={handleAddXp}>add xp</button>
-          </div>
         </div>
-        <div className="jobs">
             <h1>Experiences</h1>
             <div className='lists'>
                   <RepeatClassNTimes className="list" n={xpData.length} xpData={xpData} />
