@@ -22,9 +22,10 @@ const Skills = () => {
     const [skill,setSkill] = useState('')
     const [skillsData,setSkillsData] = useState<skill[]>([])
 
-    const handleAddSkill = async (e:any, sid:number)  =>{
+    const handleAddSkill = async (e:any, sname:string)  =>{
         e.preventDefault()
         const id = Cookies.get("id");
+        const response = await axios.get('http://localhost:7777/api/v1/skills/id/'+sname);
         axios.post('http://localhost:7777/api/v1/candidate-skills', {
           "name": name,
           "score": score,
@@ -32,7 +33,7 @@ const Skills = () => {
             "id": id
           },
           "skill": {
-            "id": sid
+            "id": response.data
           }
           }/*, {
             headers: {
@@ -50,7 +51,7 @@ const Skills = () => {
   
       const handleDelete = async (e:any, id:number) =>{
         e.preventDefault()
-        axios.delete('http://localhost:7777/api/v1/candidate-skills')
+        axios.delete('http://localhost:7777/api/v1/candidate-skills'+String(id))
          .catch(function (error) {
           console.log(error);
          });
@@ -92,7 +93,9 @@ const Skills = () => {
                 <div className="add">
                 <h2>Add skills</h2>
                 <select id="skills" name="skills" value={skill} onChange={(e) => setSkill(e.target.value)}>
-                    <option value="java">Java</option>  
+                    <option value="java">Strategist</option>
+                    <option value="java">Facilitator</option> 
+                    <option value="java">Specialist</option>  
                     <option value="c">C/C++</option>
                     <option value="python">Python </option>
                     <option value="spring">Spring-boot </option>
@@ -102,7 +105,7 @@ const Skills = () => {
                     <option value="Angular">Angular </option>
                     <option value=".net">.Net </option>
                 </select>
-                <button onClick={(e) => handleAddSkill(e, 1)}>Add skill</button>
+                <button onClick={(e) => handleAddSkill(e, skill)}>Add skill</button>
             </div>
                 <div className='lists'>
                   <RepeatClassNTimes className="list" n={skillsData.length} skillsData={skillsData} />
