@@ -1,20 +1,24 @@
 @import '@/app/globals.scss';
 .form-candidate{
+  h1{
+    font-size: 2.8rem;
+    color: $primary;
+}
       display: flex;
-      flex-direction: row;
             align-items: center;
             justify-content: center;
             min-height: 80vh;
+            width: 100%;
             padding: 1rem 1rem 0rem 13rem;
             height: 100%;
-            margin-left: 200px;
-            .part1{
-              display: flex;
+            .div1{
               flex-direction: column;
+              margin-right: 10rem;
+              margin-left: 1rem;
             }
-            .part2{
-              display: flex;
+            .div2{
               flex-direction: column;
+              margin-left: 10rem;
             }
             label:not(.inline),
             input:not(.inline) {
@@ -32,6 +36,7 @@
               border-radius: .5rem;
               padding: .5rem;
               margin-bottom: 1rem;
+              width: 12rem;
             }
             .password-input {
               position: relative;

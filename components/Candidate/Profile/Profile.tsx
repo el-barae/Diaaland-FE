@@ -143,7 +143,10 @@ const Profile = () =>{
 
     return(
         <div className="form-candidate">
-					<div className='part1'>
+					<div className='div1'>
+					<h1>Profile</h1>
+
+					<br></br>
 										<label htmlFor="firstname">Name</label>
 										<input type="text" name="firstname" id="firstname" placeholder="Enter your company name " autoFocus required onInvalid={invalidFirstname} onChange={(e) => setName(e.target.value)} />
 										<p ref={firstnameErrorRef} className="error username-error"></p>
@@ -159,11 +162,11 @@ const Profile = () =>{
 										<div className="url-adress">
 											<label htmlFor="adress">Adress:</label>
 											<input type="text" name="adress" id="adress" required onChange={(e) => setAdress(e.target.value)}  />
+										</div>
 					</div>
-					<div className='part2'>									
+					<div className='div2'>									
 											<label htmlFor="url">Company URL:</label>
 											<input type="text" name="url" id="url" required onChange={(e) => setUrl(e.target.value)}  />
-										</div>
 											<label htmlFor="logo">Select the logo file:</label>
 											<input type="file" id="fileInput" name="fileInput" required onChange={(e) => setLogo(e.target.value)}/>
 										<label htmlFor="password">Password</label>
