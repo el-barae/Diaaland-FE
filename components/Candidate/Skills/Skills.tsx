@@ -89,9 +89,9 @@ const Skills = () => {
     return(
         <>
             <div className="jobs">
-                <h1>My skills</h1>
-                <div className="add">
-                <h2>Add skills</h2>
+            <h1>Add skills</h1>
+              <div className="add">
+                
                 <select id="skills" name="skills" value={skill} onChange={(e) => setSkill(e.target.value)}>
                     <option value="java">Strategist</option>
                     <option value="java">Facilitator</option> 
@@ -107,6 +107,7 @@ const Skills = () => {
                 </select>
                 <button onClick={(e) => handleAddSkill(e, skill)}>Add skill</button>
             </div>
+                <h1>My skills</h1>
                 <div className='lists'>
                   <RepeatClassNTimes className="list" n={skillsData.length} skillsData={skillsData} />
                 </div>
