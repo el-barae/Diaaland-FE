@@ -13,12 +13,8 @@
     select{
         height: 3rem;
         border-radius: 10px;
-        box-shadow: 0 1px 10px #cecaca;
+        border: 1px solid $footer-bg;
         font-size: 20px;
-        min-width: 10rem;
-    }
-    input{
-        height: 2.5rem;
         min-width: 10rem;
     }
 

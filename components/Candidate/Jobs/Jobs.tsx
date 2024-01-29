@@ -29,10 +29,18 @@ interface Job {
             Description: {job.description} <br/> Number of positions: {job.numberOfPositions} 
           </p>
           <p>Close Date: {job.closeDate}</p>
+          <button onClick={(e) => handleDelete(e, job.id)}>Delete</button>
         </div>
         ))}
         </>
       )
+    }
+    const handleDelete = async (e:any, id:number) =>{
+      e.preventDefault()
+      axios.delete('http://localhost:7777/api/v1/candidate-jobs'+String(id))
+       .catch(function (error) {
+        console.log(error);
+       });
     }
 
 const Jobs = () =>{
@@ -50,6 +58,7 @@ const Jobs = () =>{
         };
         fetchData();
   }, []);
+
   return(
     <>
     <div className='jobs'>

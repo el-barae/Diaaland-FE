@@ -14,7 +14,7 @@ import Links from '@/components/Candidate/Links/Links';
   
 
 const Candidate = () => {
-  var [x,setX] = useState("Favoris"); 
+  var [x,setX] = useState("Jobs"); 
 
   const handleClick = (value : string) => {
     setX(value);
