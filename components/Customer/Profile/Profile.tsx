@@ -163,30 +163,11 @@ const Profile = () =>{
 											<label htmlFor="adress">Adress:</label>
 											<input type="text" name="adress" id="adress" required onChange={(e) => setAdress(e.target.value)}  />
 										</div>
-										<label htmlFor="url">Account statut:</label>
-											<input type="text" name="url" id="url" required onChange={(e) => setUrl(e.target.value)}  />
-											<label htmlFor="url">Phone:</label>
-											<input type="text" name="url" id="url" required onChange={(e) => setUrl(e.target.value)}  />
-											<label htmlFor="url">Job statut:</label>
-											<input type="text" name="url" id="url" required onChange={(e) => setUrl(e.target.value)}  />
-											<label htmlFor="url">Expected salary:</label>
-											<input type="text" name="url" id="url" required onChange={(e) => setUrl(e.target.value)}  />
 					</div>
 					<div className='div2'>									
-								
-											<label htmlFor="url">Linkedin:</label>
+											<label htmlFor="url">Company URL:</label>
 											<input type="text" name="url" id="url" required onChange={(e) => setUrl(e.target.value)}  />
-											<label htmlFor="url">Github:</label>
-											<input type="text" name="url" id="url" required onChange={(e) => setUrl(e.target.value)}  />
-											<label htmlFor="url">Portofolio:</label>
-											<input type="text" name="url" id="url" required onChange={(e) => setUrl(e.target.value)}  />
-											<label htmlFor="url">Blog:</label>
-											<input type="text" name="url" id="url" required onChange={(e) => setUrl(e.target.value)}  />
-											<label htmlFor="url">Resume:</label>
-											<input type="text" name="url" id="url" required onChange={(e) => setUrl(e.target.value)}  />
-											<label htmlFor="logo">Image:</label>
-											<input type="file" id="fileInput" name="fileInput" required onChange={(e) => setLogo(e.target.value)}/>
-											<label htmlFor="logo">Diplome:</label>
+											<label htmlFor="logo">Select the logo file:</label>
 											<input type="file" id="fileInput" name="fileInput" required onChange={(e) => setLogo(e.target.value)}/>
 										<label htmlFor="password">Password</label>
 										<div className="password-input">

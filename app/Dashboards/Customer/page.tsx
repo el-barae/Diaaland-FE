@@ -5,6 +5,8 @@ import axios from 'axios'
 import React from 'react';
 import Cookies from 'js-cookie';
 import './style.scss';
+import Profile from '@/components/Customer/Profile/Profile';
+import Jobs from '@/components/Candidate/Jobs/Jobs'
 import {ThemeProvider} from 'next-themes'
 import Navbar from '@/components/HomePage/Navbar/Navbar'
 
@@ -67,9 +69,28 @@ interface Candidate {
         )
       }
 
-const Profile = () => {
+const Customer = () => {
     const [candidatesData, setCandidatesData] = useState<Candidate[]>([]);
     const [jobsData, setJobsData] = useState<Job[]>([]);
+
+    var [x,setX] = useState("Profile"); 
+
+  const handleClick = (value : string) => {
+    setX(value);
+    y();
+  };
+
+    const y = () => {
+      if (x === "Profile"){ 
+        return <Profile />;
+        console.log(x);
+      }
+      if (x === "Jobs") {
+        return <Jobs />;
+        console.log(x);
+      }
+    }
+
     useEffect(() => {
         const fetchCandidateData = async () => {
           try {
@@ -96,27 +117,22 @@ const Profile = () => {
       <ThemeProvider enableSystem={true} attribute="class">
       <Navbar/>
       <div className='Customer'>
-        <div className='header'>
-          <h1>Customer</h1>
+              <div className='header'>
+                <h1>Customer</h1>
+              </div>
+              <div className='content'>
+                <div className='Menu'>
+                  <button onClick={() => handleClick("Profile")}>Profile</button>
+                  <button onClick={() => handleClick("Jobs")}>My jobs</button>
+                </div>
+                <div className='Customer-box'>
+                   {y()} 
+                </div>
+              </div>
         </div>
-        <div className='content'>
-        <div className='Menu'>
-        <li>
-          <ul>profile</ul>
-          <ul>settings</ul>
-        </li>
-        </div>
-        <div className='Customer-box'>
-          <h1>My jobs:</h1>
-          <div className='lists'>
-            <RepeatClassJobNTimes className="list" n={jobsData.length} jobsData={jobsData} />
-          </div>
-        </div>
-        </div>
-      </div>
   </ThemeProvider>
   )
   }
   
-  export default Profile;
+  export default Customer;
 

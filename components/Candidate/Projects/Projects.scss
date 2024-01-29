@@ -35,6 +35,8 @@
     }
     input{
         border-radius: 10px;
+        border: 1px solid $footer-bg;
+        padding: .5rem;
     }
     .part1{
         display: flex;
@@ -51,7 +53,8 @@
         input{
             width: 34rem;
             height: 7rem;
-
+            border: 1px solid $footer-bg;
+            padding: .5rem;
         }
     }
 
