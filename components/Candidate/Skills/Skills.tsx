@@ -15,11 +15,17 @@ interface RepeatClassNTimesProps {
     n: number;
     skillsData: skill[];
   }
+  interface RepeatClassNTimesProps1 {
+    className: string;
+    n: number;
+    skills1: skill[];
+  }
 
 const Skills = () => {
     const [name,setName] = useState('')
     const [score,setScore] = useState(0)
     const [skill,setSkill] = useState('')
+    const [skills1,setSkills1] = useState<skill[]>([])
     const [skillsData,setSkillsData] = useState<skill[]>([])
 
     const handleAddSkill = async (e:any, sname:string)  =>{
@@ -62,8 +68,10 @@ const Skills = () => {
             try {
               Cookies.set("id","1")
               const id = Cookies.get("id");
-              const response = await axios.get('http://localhost:7777/api/v1/candidate-skills/byCandidate/'+String(id));         
+              const response = await axios.get('http://localhost:7777/api/v1/candidate-skills/byCandidate/'+String(id));
+              const res = await axios.get('http://localhost:7777/api/v1/skills');         
               setSkillsData(response.data);
+              setSkills1(res.data)
             } catch (error) {
               console.error('Erreur lors de la récupération des données :', error);
             }
@@ -71,20 +79,31 @@ const Skills = () => {
           fetchData();
     }, []);
   
-    const RepeatClassNTimes: React.FC<RepeatClassNTimesProps> = ({ className, n, skillsData }) => {
-      if(skillsData.length != 0)
-        return(
-          <>
-          {skillsData.map((skill) => (
-            <div key={skill.id} className={className}>
-            <h1>{skill.name} :</h1>
-            <p>type: {skill.type} </p>
-            <button onClick={(e) => handleDelete(e, skill.id)}>Delete</button>
-          </div>
-          ))}
-          </>
-        )
-      }
+      const RepeatClassNTimes: React.FC<RepeatClassNTimesProps> = ({ className, n, skillsData }) => {
+        if(skillsData.length != 0)
+          return(
+            <>
+            {skillsData.map((skill) => (
+              <div key={skill.id} className={className}>
+              <h1>{skill.name} :</h1>
+              <p>type: {skill.type} </p>
+              <button onClick={(e) => handleDelete(e, skill.id)}>Delete</button>
+            </div>
+            ))}
+            </>
+          )
+        }
+
+        const RepeatClassNTimes1: React.FC<RepeatClassNTimesProps1> = ({ className, n, skills1 }) => {
+          if(skills1.length != 0)
+            return(
+              <>
+              {skills1.map((skill) => (
+                <option value="skill">{skill.name}</option>
+              ))}
+              </>
+            )
+          }
 
     return(
         <>
@@ -93,17 +112,7 @@ const Skills = () => {
               <div className="add">
                 
                 <select id="skills" name="skills" value={skill} onChange={(e) => setSkill(e.target.value)}>
-                    <option value="java">Strategist</option>
-                    <option value="java">Facilitator</option> 
-                    <option value="java">Specialist</option>  
-                    <option value="c">C/C++</option>
-                    <option value="python">Python </option>
-                    <option value="spring">Spring-boot </option>
-                    <option value="laravel">Laravel </option>  
-                    <option value="react">React </option>
-                    <option value="Vue">vue </option>
-                    <option value="Angular">Angular </option>
-                    <option value=".net">.Net </option>
+                    <RepeatClassNTimes1 className="list" n={skills1.length} skills1={skills1} />
                 </select>
                 <button onClick={(e) => handleAddSkill(e, skill)}>Add skill</button>
             </div>
