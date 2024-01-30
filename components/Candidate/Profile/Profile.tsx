@@ -202,7 +202,7 @@ const Profile = () =>{
 										<input className='inline checkbox' type="checkbox" name="term-of-use" id="term-of-use" required onInvalid={invalidTerms} />
 										<label className='inline-block checkbox-label mb-4' htmlFor="term-of-use">i accept the term of use</label>
 										<p ref={termsErrorRef} className='error terms-error'></p>
-										<button className='block' type="submit" onClick={handleSubmit}>Register</button>
+										<button className='block' type="submit" onClick={handleSubmit}>Modify</button>
 					</div>
 		</div>
     )

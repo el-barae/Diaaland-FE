@@ -1,0 +1,15 @@
+.links{
+    display: flex;
+    height: 10rem;
+    position: relative;
+    .education{
+        margin-right: 20px;
+        position: left;
+    }
+    .certificats{
+        position: right;
+    }
+}
+.others{
+    display: flex;
+}
