@@ -50,7 +50,7 @@ const Jobs = () =>{
           try {
             Cookies.set("id","1")
             const id = Cookies.get("id");
-            const response = await axios.get('http://localhost:7777/api/v1/jobs/byCustomer'+String(id));         
+            const response = await axios.get('http://localhost:7777/api/v1/jobs/byCustomer/'+String(id));         
             setJobsData(response.data);
           } catch (error) {
             console.error('Erreur lors de la récupération des données :', error);

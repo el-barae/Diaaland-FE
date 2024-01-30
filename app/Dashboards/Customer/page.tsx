@@ -6,7 +6,8 @@ import React from 'react';
 import Cookies from 'js-cookie';
 import './style.scss';
 import Profile from '@/components/Customer/Profile/Profile';
-import Jobs from '@/components/Candidate/Jobs/Jobs'
+import Jobs from '@/components/Customer/Jobs/Jobs'
+import Candidates from '@/components/Customer/Candidates/Candidates'
 import {ThemeProvider} from 'next-themes'
 import Navbar from '@/components/HomePage/Navbar/Navbar'
 
@@ -89,6 +90,10 @@ const Customer = () => {
         return <Jobs />;
         console.log(x);
       }
+      if (x === "Candidates") {
+        return <Candidates />;
+        console.log(x);
+      }
     }
 
     useEffect(() => {
@@ -124,6 +129,7 @@ const Customer = () => {
                 <div className='Menu'>
                   <button onClick={() => handleClick("Profile")}>Profile</button>
                   <button onClick={() => handleClick("Jobs")}>My jobs</button>
+                  <button onClick={() => handleClick("Candidates")}>Candidates</button>
                 </div>
                 <div className='Customer-box'>
                    {y()} 
