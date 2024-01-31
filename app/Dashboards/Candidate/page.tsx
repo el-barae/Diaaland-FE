@@ -62,7 +62,7 @@ const Candidate = () => {
                 <div className='Menu'>
                   <button onClick={() => handleClick("Profile")}>Profile</button>
                   <button onClick={() => handleClick("Jobs")}>My jobs</button>
-                  <button onClick={() => handleClick("Favoris")}>My favoris</button>
+                  <button onClick={() => handleClick("Favoris")}>Favoris</button>
                   <button onClick={() => handleClick("Skills")}>Skills</button>
                   <button onClick={() => handleClick("Projects")}>Projects</button>
                   <button onClick={() => handleClick("Ex")}>Xp</button>
