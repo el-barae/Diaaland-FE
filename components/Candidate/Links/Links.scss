@@ -1,15 +1,14 @@
-.links{
-    display: flex;
-    height: 10rem;
-    position: relative;
+
     .education{
         margin-right: 20px;
-        position: left;
+        #ls{
+            grid-template-columns: auto;
+            padding: 0px;
+        }
     }
     .certificats{
-        position: right;
+        margin-left: 20px;
     }
-}
 .others{
     display: flex;
 }
