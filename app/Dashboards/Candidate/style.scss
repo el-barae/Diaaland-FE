@@ -77,6 +77,8 @@
                     margin-bottom: 0px;
                 }
             }
+            .Menu::-webkit-scrollbar {
+                display: none; }
             .Candidate-box{
                 margin-top: 30px;
             }

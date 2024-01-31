@@ -58,6 +58,7 @@
         }
         .content{
             flex-direction: column;
+            margin-top: 10px;
             .Menu{
                 flex-direction: row;
                 position: fixed;
@@ -65,15 +66,19 @@
                 height: 20px;
                 min-height: 10vh;
                 margin-top: 12px;
-                padding: 0rem;
+                padding: 0.5rem;
                 font-size: 1.5rem;
                 align-items: center bottom;
+                overflow: auto;
+                white-space: nowrap;
                 button{
                     width: 9rem;
                     margin: 2px;
                     margin-bottom: 0px;
                 }
             }
+            .Menu::-webkit-scrollbar {
+                display: none; }
         }
     }
 }

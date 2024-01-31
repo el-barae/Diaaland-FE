@@ -130,3 +130,16 @@
               }
             }
 }
+@media(max-width: 1000px){
+  .form-candidate{
+    flex-direction: column;
+    margin-top: 40px;
+    padding-left: 5px;
+    .div1{
+      margin: 0px;
+    }
+    .div2{
+      margin:0px;
+    }
+  }
+}
