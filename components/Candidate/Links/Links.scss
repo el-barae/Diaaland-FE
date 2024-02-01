@@ -1,14 +1,80 @@
 
-    .education{
+.education{
         margin-right: 20px;
-        #ls{
-            grid-template-columns: auto;
+        .part1{
+            margin-right: 0px;
+        }
+        .part2{
+            margin-left: 0px;
+            #ls1{
+                display: grid;
+                grid-template-columns: repeat(3,1fr);
+                padding: 0px;
+            }
+            @media (max-width: 1450px) {
+                #ls1{
+                    display: grid;
+                    grid-template-columns: repeat(2,1fr);
+                }
+            }
+            @media (max-width: 1140px) {
+                #ls1{
+                    display: grid;
+                    grid-template-columns: auto;
+                }
+            }
+        }
+}
+.certificats{
+        margin-left: 20px;
+        margin-right: 20px;
+        .part1{
+            margin-right: 0px;
+        }
+        .part2{
+            margin-left: 0px;
+            #ls2{
+                display: grid;
+                grid-template-columns: repeat(3,1fr);
+                padding: 0px;
+            }
+            @media (max-width: 1450px) {
+                #ls2{
+                    display: grid;
+                    grid-template-columns: repeat(2,1fr);
+                }
+            }
+            @media (max-width: 1140px) {
+                #ls2{
+                    display: grid;
+                    grid-template-columns: auto;
+                }
+            }         
+        }
+}
+.others{
+    margin-right: 20px;
+    .part1{
+        margin-right: 0px;
+    }
+    .part2{
+        margin-left: 0px;
+        #ls3{
+            display: grid;
+            grid-template-columns: repeat(3,1fr);
             padding: 0px;
         }
+        @media (max-width: 1450px) {
+            #ls3{
+                display: grid;
+                grid-template-columns: repeat(2,1fr);
+            }
+        }
+        @media (max-width: 1140px) {
+            #ls3{
+                display: grid;
+                grid-template-columns: auto;
+            }
+        }
     }
-    .certificats{
-        margin-left: 20px;
-    }
-.others{
-    display: flex;
 }

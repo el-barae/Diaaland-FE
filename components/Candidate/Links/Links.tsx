@@ -11,7 +11,17 @@ interface education{
     endDate : string;
 }
 
-interface RepeatClassNTimesProps {
+interface certificate{
+    id: number;
+    name: string;
+}
+
+interface link{
+    id: number;
+    url: string;
+}
+
+interface RepeatClassNTimesProps1 {
     className: string;
     n: number;
     educationsData: education[];
@@ -53,7 +63,7 @@ const Links = () => {
     const [endDate, setEndDate] = useState('')
     const [educationsData,setEducationsData] = useState<education[]>([])
 
-    const RepeatClassNTimes: React.FC<RepeatClassNTimesProps> = ({ className, n, educationsData }) => {
+    const RepeatClassNTimes: React.FC<RepeatClassNTimesProps1> = ({ className, n, educationsData }) => {
         if(educationsData.length != 0)
           return(
             <>
@@ -92,36 +102,61 @@ const Links = () => {
                         <h1>Education</h1>
                         <div className='add'>
                             <div className='part1'>
-              <label htmlFor="name">Name:</label>
-              <input type="text" placeholder='Enter name project' value={name} onChange={(e) => setName(e.target.value)}/>
-              <label htmlFor="startDate">Start Date:</label>
-              <input 
-              type="date" 
-              id="startDate" 
-              value={startDate} 
-              onChange={(e) => setStartDate(e.target.value)}
-              />
-              <label htmlFor="CloseDate">End Date:</label>
-              <input 
-              type="date" 
-              id="CloseDate" 
-              value={endDate} 
-              onChange={(e) => setEndDate(e.target.value)}
-              />
-              <button onClick={handleAddEducation}>add education</button>
-              </div>
-              <div className='part2'>
-                <div className='lists' id='ls'>
-                  <RepeatClassNTimes className="list" n={educationsData.length} educationsData={educationsData} />
-                </div>
-              </div>
-        </div>
-                    <div className="certificats">
-                        <h1>Certificats</h1>
+                                <label htmlFor="name">Name:</label>
+                                <input type="text" placeholder='Enter name education' value={name} onChange={(e) => setName(e.target.value)}/>
+                                <label htmlFor="startDate">Start Date:</label>
+                                <input 
+                                    type="date" 
+                                    id="startDate" 
+                                    value={startDate} 
+                                    onChange={(e) => setStartDate(e.target.value)}
+                                />
+                                <label htmlFor="CloseDate">End Date:</label>
+                                <input 
+                                    type="date" 
+                                    id="CloseDate" 
+                                    value={endDate} 
+                                    onChange={(e) => setEndDate(e.target.value)}
+                                />
+                                <button onClick={handleAddEducation}>add education</button>
+                            </div>
+                            <div className='part2'>
+                                <div className='lists' id='ls1'>
+                                    <RepeatClassNTimes className="list" n={educationsData.length} educationsData={educationsData} />
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div className="others">
-                    <h1>Links</h1>
+                    <div className="certificats">
+                        <h1>Certificates</h1>
+                        <div className='add'>
+                            <div className='part1'>
+                                <label htmlFor="name">Name:</label>
+                                <input type="text" placeholder='Enter name certificate' value={name} onChange={(e) => setName(e.target.value)}/>
+
+                                <button onClick={handleAddEducation}>add certificate</button>
+                            </div>
+                            <div className='part2'>
+                                <div className='lists' id='ls2'>
+                                    <RepeatClassNTimes className="list" n={educationsData.length} educationsData={educationsData} />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="others">
+                        <h1>Other links</h1>
+                        <div className='add'>
+                            <div className='part1'>
+                                <label htmlFor="name">Url:</label>
+                                <input type="text" placeholder='Enter url' value={name} onChange={(e) => setName(e.target.value)}/>
+                                <button onClick={handleAddEducation}>add link</button>
+                            </div>
+                            <div className='part2'>
+                                <div className='lists' id='ls3'>
+                                    <RepeatClassNTimes className="list" n={educationsData.length} educationsData={educationsData} />
+                                </div>
+                            </div>
+                        </div>
                 </div>
             </div>
         </>

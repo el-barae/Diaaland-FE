@@ -8,6 +8,25 @@ import Link from 'next/link'
 import { FaEyeSlash, FaEye } from 'react-icons/fa';
 import axios from 'axios';
 
+interface candidate{
+	name:string;
+	email:string;
+	city:string;
+	country:string;
+	adress:string;
+	accountStatus:string;
+	phone:string;
+	jobStatus:string;
+	expectedSalary:number;
+	linkedin:string;
+	github:string;
+	portofolio:string;
+	blog:string;
+	resume:string;
+	image:string;
+	diplome:string;
+}
+
 const passwordStrength = (password: string) => {
 	let res = 0;
 
@@ -49,6 +68,7 @@ const Profile = () =>{
 	const [url, setUrl] = useState('')
 	const [adress, setAdress] = useState('')
 	const [logo, setLogo] = useState('')
+	const [candidateData,setCandidateData] = useState<candidate[]>([])
 
 	const [passState, setPassState] = useState('hide');
 	
@@ -86,6 +106,19 @@ const Profile = () =>{
 	useEffect(() => {
 		let messageColors = ['text-red-600', 'text-red-400', 'text-yellow-600', 'text-green-400', 'text-green-600', 'text-green-500', 'text-green-700'];
 		let res = passwordStrength(password);
+
+			const fetchData = async () => {
+			  try {
+				Cookies.set("id","1")
+				const id = Cookies.get("id");
+				const response = await axios.get('http://localhost:7777/api/v1/candidates/'+String(id));         
+				setCandidateData(response.data);
+			  } catch (error) {
+				console.error('Erreur lors de la récupération des données :', error);
+			  }
+			};
+			fetchData();
+
 		messageColors.map((color) => {
 			passwordMessageRef.current?.classList.remove(color);
 		})
