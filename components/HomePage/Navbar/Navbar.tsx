@@ -19,7 +19,7 @@ import { useSession, signIn, signOut } from 'next-auth/react';
 const Navbar = () => {
 
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState<string | null>(null);
+  const [selectedOption, setSelectedOption] = useState('');
 
   const options = ['Candidate', 'Customer', 'Admin'];
 
@@ -29,30 +29,18 @@ const Navbar = () => {
 
   const handleOptionClick = (option: string) => {
     setSelectedOption(option);
-    if (selectedOption=='Candidate'){
-      toCandidate;
+    if (option==='Candidate'){
+      router.push('/Dashboards/Candidate');
   }
-  else if (selectedOption=='Customer'){
-    toCustomer;
+  else if (option==='Customer'){
+      router.push('/Dashboards/Customer');
   }
-  else if (selectedOption=='Admin'){
-    toAdmin;
+  else if (option==='Admin'){
+      router.push('/Dashboards/Admin');
   }
-  setTimeout(() => {
-    console.log("Delayed for 1 second.");
-  }, 2000);
-  
+    console.log(option)
     setIsOpen(false);
   };
-  const toCandidate = (e:any) =>{
-    router.push('/Dashboards/Candidate');
-  }
-  const toCustomer = (e:any) =>{
-    router.push('/Dashboards/Customer');
-  }
-  const toAdmin = (e:any) =>{
-    router.push('/Dashboards/Admin');
-  }
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const { data: session } = useSession();
   const router = useRouter();
