@@ -8,12 +8,51 @@ import ImageP from '@/public/images/profile.png'
 import Image from 'next/image';
 import { useState } from 'react';
 import Cookies from 'js-cookie';
+import React, { useRef } from "react";
 import axios from 'axios';
 import './Navbar.scss'
 import SigninButton from './SigninButton';
 import { useSession, signIn, signOut } from 'next-auth/react';
 
+
+
 const Navbar = () => {
+
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedOption, setSelectedOption] = useState<string | null>(null);
+
+  const options = ['Candidate', 'Customer', 'Admin'];
+
+  const handleToggle = () => {
+    setIsOpen(!isOpen);
+  };
+
+  const handleOptionClick = (option: string) => {
+    setSelectedOption(option);
+    if (selectedOption=='Candidate'){
+      toCandidate;
+  }
+  else if (selectedOption=='Customer'){
+    toCustomer;
+  }
+  else if (selectedOption=='Admin'){
+    toAdmin;
+  }
+  setTimeout(() => {
+    console.log("Delayed for 1 second.");
+  }, 2000);
+  
+    setIsOpen(false);
+  };
+  const toCandidate = (e:any) =>{
+    router.push('/Dashboards/Candidate');
+  }
+  const toCustomer = (e:any) =>{
+    router.push('/Dashboards/Customer');
+  }
+  const toAdmin = (e:any) =>{
+    router.push('/Dashboards/Admin');
+  }
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const { data: session } = useSession();
   const router = useRouter();
@@ -24,9 +63,6 @@ const Navbar = () => {
     setIsLoggedIn(!isLoggedIn);
   };
   const buttonText = isLoggedIn ? 'Logout' : 'Login';
-  const toProfile = (e:any) =>{
-    router.push('/Dashboards/Candidate');
-  }
 
   const logout = async ()=>{
     const token = localStorage.getItem('token')
@@ -109,7 +145,7 @@ const Navbar = () => {
               </li>
             )}
               <NavbarTools />
-              <button onClick={toProfile}>
+              <button onClick={handleToggle}>
               <Image
                         src={ImageP}
                         width={38}
@@ -117,6 +153,15 @@ const Navbar = () => {
                         alt='image of profile'
                       />
               </button>
+              {isOpen && (
+        <ul className="dropdown-list">
+          {options.map((option) => (
+            <li key={option} onClick={() => handleOptionClick(option)}>
+              {option}
+            </li>
+          ))}
+        </ul>
+      )}
           </div>
         </div>
       </div>
