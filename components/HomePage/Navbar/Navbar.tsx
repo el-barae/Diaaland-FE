@@ -19,7 +19,6 @@ import { useSession, signIn, signOut } from 'next-auth/react';
 const Navbar = () => {
 
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState('');
 
   const options = ['Candidate', 'Customer', 'Admin'];
 
@@ -28,7 +27,6 @@ const Navbar = () => {
   };
 
   const handleOptionClick = (option: string) => {
-    setSelectedOption(option);
     if (option==='Candidate'){
       router.push('/Dashboards/Candidate');
   }
@@ -38,7 +36,6 @@ const Navbar = () => {
   else if (option==='Admin'){
       router.push('/Dashboards/Admin');
   }
-    console.log(option)
     setIsOpen(false);
   };
   const [isLoggedIn, setIsLoggedIn] = useState(false);

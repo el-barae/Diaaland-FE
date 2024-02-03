@@ -19,10 +19,13 @@
     }
 
     }
-    @media(max-width:1000px){
+    @media(max-width:650px){
         .add{
             display: flex;
             flex-direction: column;
+            select{
+                max-width: 60px;
+            }
         }
     }
 }

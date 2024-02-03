@@ -99,7 +99,7 @@ const Skills = () => {
             return(
               <>
               {skills1.map((skill) => (
-                <option value="skill">{skill.name}</option>
+                <option key={skill.name} value={skill.name} >{skill.name}</option>
               ))}
               </>
             )
