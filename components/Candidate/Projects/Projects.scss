@@ -59,3 +59,43 @@
     }
 
 }
+@media (max-width: 1250px){
+    .add{
+        flex-direction: column;
+    }
+}
+@media (max-width: 1000px){
+    .add{
+        .part1{
+            input{
+                width: 20rem;
+            }
+            
+        }
+        .part2{
+            margin-left: 0px;
+            input{
+                width: 30rem;
+            }
+        }
+    }
+}
+@media (max-width: 600px){
+    .add{
+        .part1{
+            input{
+                width: 20rem;
+            }
+            margin-right: 0px;
+        }
+        .part2{
+            margin-left: 0px;
+            button{
+                margin-left: 70px;
+            }
+            input{
+                width: 20rem;
+            }
+        }
+    }
+}
