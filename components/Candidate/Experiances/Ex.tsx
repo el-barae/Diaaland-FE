@@ -49,7 +49,7 @@ const Xp = () => {
 
     const handleDelete = async (e:any, id:number) =>{
       e.preventDefault()
-      axios.delete('http://localhost:7777/api/v1/experiences')
+      axios.delete('http://localhost:7777/api/v1/experiences/'+String(id))
        .catch(function (error) {
         console.log(error);
        });
