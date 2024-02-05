@@ -55,9 +55,11 @@ const Skills = () => {
           });
       }
   
-      const handleDelete = async (e:any, id:number) =>{
+      const handleDelete = async (e:any, idS:number) =>{
         e.preventDefault()
-        axios.delete('http://localhost:7777/api/v1/candidate-skills'+String(id))
+        Cookies.set("id","1")
+        const idC = Cookies.get("id");
+        axios.delete('http://localhost:7777/api/v1/candidate-skills/'+String(idC)+'/'+String(idS))
          .catch(function (error) {
           console.log(error);
          });
