@@ -36,9 +36,11 @@ interface Job {
 		 });
 	}
 
-  const handleDelFavoris = async (e:any, id:number) =>{
+  const handleDelFavoris = async (e:any, idJ:number) =>{
 		e.preventDefault()
-		axios.delete('http://localhost:7777/api/v1/favoris/11')
+    Cookies.set("id","1")
+    const idC = Cookies.get("id");
+		axios.delete('http://localhost:7777/api/v1/favoris/'+String(idC)+'/'+String(idJ))
 		 .catch(function (error) {
 			console.log(error);
 		 });
