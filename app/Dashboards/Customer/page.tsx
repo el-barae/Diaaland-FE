@@ -10,6 +10,7 @@ import Jobs from '@/components/Customer/Jobs/Jobs'
 import Candidates from '@/components/Customer/Candidates/Candidates'
 import {ThemeProvider} from 'next-themes'
 import Navbar from '@/components/HomePage/Navbar/Navbar'
+import Notif from '@/public/images/notif.png'
 
 interface Candidate {
     id: number;
@@ -124,6 +125,14 @@ const Customer = () => {
       <div className='Customer'>
               <div className='header'>
                 <h1>Customer</h1>
+                <button>
+                <Image 
+									src={Notif}
+									width={50}
+									height={50}
+									alt="login image"
+								/>
+                </button>
               </div>
               <div className='content'>
                 <div className='Menu'>
