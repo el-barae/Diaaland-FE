@@ -13,6 +13,8 @@ import Skills from '@/components/Candidate/Skills/Skills';
 import Projects from '@/components/Candidate/Projects/Projects';
 import Ex from '@/components/Candidate/Experiances/Ex';
 import Links from '@/components/Candidate/Links/Links';
+import Image from 'next/image'
+import Notif from '@/public/images/notif.png'
   
 interface candidate{
   id:number;
@@ -86,6 +88,14 @@ const Candidate = () => {
             <div className='Candidate'>
               <div className='header'>
                 {candidateData}
+                <button>
+                <Image 
+									src={Notif}
+									width={50}
+									height={50}
+									alt="login image"
+								/>
+                </button>
               </div>
               <div className='content'>
                 <div className='Menu'>
