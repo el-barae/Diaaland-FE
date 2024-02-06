@@ -34,6 +34,7 @@ const Links = () => {
         const id = Cookies.get("id");
         axios.post('http://localhost:7777/api/v1/educations', {
           "name": name,
+          "school": school,
           "startDate": startDate,
           "endDate": endDate,
           }/*, {
@@ -59,6 +60,9 @@ const Links = () => {
       }
 
     const [name,setName] = useState('')
+    const [school,setSchool] = useState('')
+    const [url,setUrl] = useState('')
+    const [desc,setDesc] = useState('')
     const [startDate, setStartDate] = useState('')
     const [endDate, setEndDate] = useState('')
     const [educationsData,setEducationsData] = useState<education[]>([])
@@ -104,6 +108,10 @@ const Links = () => {
                             <div className='part1'>
                                 <label htmlFor="name">Name:</label>
                                 <input type="text" placeholder='Enter name education' value={name} onChange={(e) => setName(e.target.value)}/>
+                                <label htmlFor="url">Url:</label>
+                                <input type="text" placeholder='Enter  url education' value={url} onChange={(e) => setUrl(e.target.value)}/>
+                                <label htmlFor="name">School:</label>
+                                <input type="text" placeholder='Enter school education' value={school} onChange={(e) => setSchool(e.target.value)}/>
                                 <label htmlFor="startDate">Start Date:</label>
                                 <input 
                                     type="date" 
@@ -118,6 +126,8 @@ const Links = () => {
                                     value={endDate} 
                                     onChange={(e) => setEndDate(e.target.value)}
                                 />
+                                <label htmlFor="description">Description:</label>
+                                <textarea className='desc' placeholder='Enter description' value={desc} onChange={(e) => setDesc(e.target.value)}/>
                                 <button onClick={handleAddEducation}>add education</button>
                             </div>
                             <div className='part2'>
@@ -133,7 +143,10 @@ const Links = () => {
                             <div className='part1'>
                                 <label htmlFor="name">Name:</label>
                                 <input type="text" placeholder='Enter name certificate' value={name} onChange={(e) => setName(e.target.value)}/>
-
+                                <label htmlFor="url">Url:</label>
+                                <input type="text" placeholder='Enter  url certificate' value={url} onChange={(e) => setUrl(e.target.value)}/>
+                                <label htmlFor="description">Description:</label>
+                                <textarea className='desc' placeholder='Enter description' value={desc} onChange={(e) => setDesc(e.target.value)}/>
                                 <button onClick={handleAddEducation}>add certificate</button>
                             </div>
                             <div className='part2'>
@@ -149,6 +162,8 @@ const Links = () => {
                             <div className='part1'>
                                 <label htmlFor="name">Url:</label>
                                 <input type="text" placeholder='Enter url' value={name} onChange={(e) => setName(e.target.value)}/>
+                                <label htmlFor="description">Description:</label>
+                                <textarea className='desc' placeholder='Enter description' value={desc} onChange={(e) => setDesc(e.target.value)}/>
                                 <button onClick={handleAddEducation}>add link</button>
                             </div>
                             <div className='part2'>

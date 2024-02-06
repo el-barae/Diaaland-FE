@@ -33,6 +33,15 @@
             background-color: darken($main-color, 10%);
         }
     }
+
+    textarea{
+        height: 140px;
+        border-radius: 10px;
+        box-shadow: 1px $footer-bg;
+        padding: 5px;
+        border: 1px solid $footer-bg;
+    }
+
     input{
         border-radius: 10px;
         border: 1px solid $footer-bg;

@@ -7,6 +7,7 @@ import './Profile.scss'
 import Link from 'next/link'
 import { FaEyeSlash, FaEye } from 'react-icons/fa';
 import axios from 'axios';
+import Candidate from '@/app/Dashboards/Candidate/page';
 
 interface candidate{
 	name:string;
@@ -68,7 +69,7 @@ const Profile = () =>{
 	const [url, setUrl] = useState('')
 	const [adress, setAdress] = useState('')
 	const [logo, setLogo] = useState('')
-	const [candidateData,setCandidateData] = useState<candidate[]>([])
+	const [candidateData,setCandidateData] = useState<string[]>([])
 
 	const [passState, setPassState] = useState('hide');
 	
@@ -118,6 +119,18 @@ const Profile = () =>{
 			  }
 			};
 			fetchData();
+
+			const fetchData1 = async () => {
+				try {
+				  Cookies.set("id","1")
+				  const id = Cookies.get("id");
+				  const response = await axios.get('http://localhost:7777/api/v1/candidates/name/'+String(id));         
+				  setName(response.data);
+				} catch (error) {
+				  console.error('Erreur lors de la récupération des données :', error);
+				}
+			  };
+			  fetchData1();
 
 		messageColors.map((color) => {
 			passwordMessageRef.current?.classList.remove(color);
@@ -181,7 +194,7 @@ const Profile = () =>{
 
 					<br></br>
 										<label htmlFor="firstname">Name</label>
-										<input type="text" name="firstname" id="firstname" placeholder="Enter your company name " autoFocus required onInvalid={invalidFirstname} onChange={(e) => setName(e.target.value)} />
+										<input type="text" name="firstname" id="firstname" placeholder="Enter your company name " value={name} autoFocus required onInvalid={invalidFirstname} onChange={(e) => setName(e.target.value)} />
 										<p ref={firstnameErrorRef} className="error username-error"></p>
 										<label htmlFor="email">Email</label>
 										<input type="email" name="email" id="email" placeholder="Enter your email" required onInvalid={invalidEmail} onChange={(e) => setEmail(e.target.value)} />

@@ -1,8 +1,11 @@
-
+@import '@/app/globals.scss';
 .education{
         margin-right: 20px;
         .part1{
             margin-right: 0px;
+            .desc{
+                height: 120px;
+            }
         }
         .part2{
             margin-left: 0px;
@@ -77,4 +80,7 @@
             }
         }
     }
+}
+label{
+    margin-top: 6px;
 }

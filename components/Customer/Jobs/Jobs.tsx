@@ -35,9 +35,11 @@ interface Job {
         </>
       )
     }
-    const handleDelete = async (e:any, id:number) =>{
+    const handleDelete = async (e:any, idJ:number) =>{
       e.preventDefault()
-      axios.delete('http://localhost:7777/api/v1/candidate-jobs'+String(id))
+      Cookies.set("id","1")
+      const idC = Cookies.get("id");
+      axios.delete('http://localhost:7777/api/v1/candidate-jobs/'+String(idC)+'/'+String(idJ))
        .catch(function (error) {
         console.log(error);
        });

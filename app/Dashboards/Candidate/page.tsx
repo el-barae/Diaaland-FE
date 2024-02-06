@@ -1,7 +1,9 @@
 'use client'
 import React from 'react';
 import './style.scss';
-import { useState } from 'react';
+import { useState ,useEffect} from 'react';
+import Cookies from 'js-cookie';
+import axios from 'axios';
 import {ThemeProvider} from 'next-themes'
 import Navbar from '@/components/HomePage/Navbar/Navbar'
 import Jobs from '@/components/Candidate/Jobs/Jobs'
@@ -12,10 +14,29 @@ import Projects from '@/components/Candidate/Projects/Projects';
 import Ex from '@/components/Candidate/Experiances/Ex';
 import Links from '@/components/Candidate/Links/Links';
   
+interface candidate{
+  id:number;
+	name:string;
+	email:string;
+	city:string;
+	country:string;
+	adress:string;
+	accountStatus:string;
+	phone:string;
+	jobStatus:string;
+	expectedSalary:number;
+	linkedin:string;
+	github:string;
+	portofolio:string;
+	blog:string;
+	resume:string;
+	image:string;
+	diplome:string;
+}
 
 const Candidate = () => {
   var [x,setX] = useState("Jobs"); 
-
+  const [candidateData,setCandidateData] = useState('');
   const handleClick = (value : string) => {
     setX(value);
     y();
@@ -24,39 +45,47 @@ const Candidate = () => {
   const y = () => {
     if (x === "Profile"){ 
       return <Profile />;
-      console.log(x);
     }
     if (x === "Jobs") {
       return <Jobs />;
-      console.log(x);
     }
     if (x === "Favoris") {
       return <Favoris />;
-      console.log(x);
     }
     if (x === "Skills") {
       return <Skills />;
-      console.log(x);
     }
     if (x === "Projects") {
       return <Projects />;
-      console.log(x);
     }
     if (x === "Ex") {
       return <Ex />;
-      console.log(x);
     }
     if (x === "Links") {
       return <Links />;
-      console.log(x);
     }
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        Cookies.set("id","1")
+        const id = Cookies.get("id");
+        const response = await axios.get('http://localhost:7777/api/v1/candidates/name/'+String(id));         
+        setCandidateData(response.data);
+      } catch (error) {
+        console.error('Erreur lors de la récupération des données :', error);
+      }
+    };
+    fetchData();
+}, []);
+
     return (
         <ThemeProvider enableSystem={true} attribute="class">
           <Navbar/>
             <div className='Candidate'>
               <div className='header'>
-                <h1>Candidate</h1>
+                {candidateData}
               </div>
               <div className='content'>
                 <div className='Menu'>
