@@ -10,7 +10,8 @@ import axios from 'axios';
 import Candidate from '@/app/Dashboards/Candidate/page';
 
 interface candidate{
-	name:string;
+	firstName:string;
+	lastName:string;
 	email:string;
 	city:string;
 	country:string;
@@ -60,7 +61,8 @@ const Profile = () =>{
 
 	const passwordMessageRef = useRef<HTMLDivElement>(null);
 
-	const [name, setName] = useState('')
+	const [firstName, setFirstName] = useState('')
+	const [lastName, setLastName] = useState('')
 	const [password, setPassword] = useState('')
 	const [email, setEmail] = useState('')
 	const [city, setCity] = useState('')
@@ -68,7 +70,20 @@ const Profile = () =>{
 	const [url, setUrl] = useState('')
 	const [adress, setAdress] = useState('')
 	const [logo, setLogo] = useState('')
-	const [candidateData,setCandidateData] = useState<candidate>();
+	const [candidate, setCandidate] = useState('')
+	const [candidateData,setCandidateData] = useState<string[]>([])
+const [address, setAddress] = useState<string>('');
+const [accountStatus, setAccountStatus] = useState<string>('');
+const [phone, setPhone] = useState<string>('');
+const [jobStatus, setJobStatus] = useState<string>('');
+const [expectedSalary, setExpectedSalary] = useState<number>(0);
+const [linkedin, setLinkedin] = useState<string>('');
+const [github, setGithub] = useState<string>('');
+const [portfolio, setPortfolio] = useState<string>('');
+const [blog, setBlog] = useState<string>('');
+const [resume, setResume] = useState<string>('');
+const [image, setImage] = useState<string>(''); // Je suppose que "image" est un lien URL
+
 
 	const [passState, setPassState] = useState('hide');
 	
@@ -111,8 +126,8 @@ const Profile = () =>{
 			  try {
 				Cookies.set("id","1")
 				const id = Cookies.get("id");
-				const response = await axios.get('http://localhost:7777/api/v1/candidates/'+String(id));         
-				setCandidateData(response.data);
+				const response = await axios.get('http://localhost:7777/api/v1/candidates/tostring/'+String(id));         
+				setCandidate(response.data);
 			  } catch (error) {
 				console.error('Erreur lors de la récupération des données :', error);
 			  }
@@ -124,7 +139,7 @@ const Profile = () =>{
 				  Cookies.set("id","1")
 				  const id = Cookies.get("id");
 				  const response = await axios.get('http://localhost:7777/api/v1/candidates/name/'+String(id));         
-				  setName(response.data);
+				  
 				} catch (error) {
 				  console.error('Erreur lors de la récupération des données :', error);
 				}
@@ -151,6 +166,28 @@ const Profile = () =>{
 			passwordMessageRef.current.innerText = 'very strong password';
 		}
 	}, [password])
+
+	useEffect(() => {
+		if (candidate) {
+			const candidateAttributes = candidate.split('|');
+			setFirstName(candidateAttributes[0]);
+			setLastName(candidateAttributes[0]);
+			setEmail(candidateAttributes[1]);
+			setCity(candidateAttributes[2]);
+			setCountry(candidateAttributes[3]);
+			setAddress(candidateAttributes[4]);
+			setAccountStatus(candidateAttributes[5]);
+			setPhone(candidateAttributes[6]);
+			setJobStatus(candidateAttributes[7]);
+			setExpectedSalary(parseFloat(candidateAttributes[8])); // Converting string to number
+			setLinkedin(candidateAttributes[9]);
+			setGithub(candidateAttributes[10]);
+			setPortfolio(candidateAttributes[11]);
+			setBlog(candidateAttributes[12]);
+			setResume(candidateAttributes[13]);
+			setImage(candidateAttributes[14]);
+		}
+	}, [candidate]);
 
 	const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setPassword(e.target.value);
@@ -193,14 +230,14 @@ const Profile = () =>{
 
 					<br></br>
 										<label htmlFor="firstname">Name</label>
-										<input type="text" name="firstname" id="firstname" placeholder="Enter your company name " value={name} autoFocus required onInvalid={invalidFirstname} onChange={(e) => setName(e.target.value)} />
+										<input type="text" name="firstname" id="firstname" placeholder="Enter your company name " value={firstName} autoFocus required onInvalid={invalidFirstname} onChange={(e) => setLastName(e.target.value)} />
 										<p ref={firstnameErrorRef} className="error username-error"></p>
 										<label htmlFor="email">Email</label>
-										<input type="email" name="email" id="email" placeholder="Enter your email" required onInvalid={invalidEmail} onChange={(e) => setEmail(e.target.value)} />
+										<input type="email" name="email" id="email" placeholder="Enter your email" value={email} required onInvalid={invalidEmail} onChange={(e) => setEmail(e.target.value)} />
 										<p ref={emailErrorRef} className="error email-error"></p>
 										<div className="nation">
 											<label htmlFor="city">City:</label>
-											<input type="text" name="city" id="city" required onChange={(e) => setCity(e.target.value)}  />
+											<input type="text" name="city" id="city" placeholder='Enter your city' value={city} required onChange={(e) => setCity(e.target.value)}  />
 											<label htmlFor="country">Country:</label>
 											<input type="text" name="country" id="country" required onChange={(e) => setCountry(e.target.value)}  />
 										</div>
@@ -209,27 +246,29 @@ const Profile = () =>{
 											<input type="text" name="adress" id="adress" required onChange={(e) => setAdress(e.target.value)}  />
 										</div>
 										<label htmlFor="url">Account statut:</label>
-											<input type="text" name="url" id="url" required onChange={(e) => setUrl(e.target.value)}  />
+											<input type="text" name="url" required onChange={(e) => setUrl(e.target.value)}  />
 											<label htmlFor="url">Phone:</label>
-											<input type="text" name="url" id="url" required onChange={(e) => setUrl(e.target.value)}  />
+											<input type="text" name="url" required onChange={(e) => setUrl(e.target.value)}  />
 											<label htmlFor="url">Job statut:</label>
-											<input type="text" name="url" id="url" required onChange={(e) => setUrl(e.target.value)}  />
+											<input type="text" name="url" required onChange={(e) => setUrl(e.target.value)}  />
 											<label htmlFor="url">Expected salary:</label>
-											<input type="text" name="url" id="url" required onChange={(e) => setUrl(e.target.value)}  />
+											<input type="text" name="url" required onChange={(e) => setUrl(e.target.value)}  />
 					</div>
 					<div className='div2'>									
 								
 											<label htmlFor="url">Linkedin:</label>
-											<input type="text" name="url" id="url" required onChange={(e) => setUrl(e.target.value)}  />
+											<input type="text" name="url" required onChange={(e) => setUrl(e.target.value)}  />
 											<label htmlFor="url">Github:</label>
-											<input type="text" name="url" id="url" required onChange={(e) => setUrl(e.target.value)}  />
+											<input type="text" name="url" required onChange={(e) => setUrl(e.target.value)}  />
 											<label htmlFor="url">Portofolio:</label>
-											<input type="text" name="url" id="url" required onChange={(e) => setUrl(e.target.value)}  />
+											<input type="text" name="url" required onChange={(e) => setUrl(e.target.value)}  />
 											<label htmlFor="url">Blog:</label>
-											<input type="text" name="url" id="url" required onChange={(e) => setUrl(e.target.value)}  />
+											<input type="text" name="url" required onChange={(e) => setUrl(e.target.value)}  />
 											<label htmlFor="url">Resume:</label>
-											<input type="text" name="url" id="url" required onChange={(e) => setUrl(e.target.value)}  />
+											<input type="text" name="url" required onChange={(e) => setUrl(e.target.value)}  />
 											<label htmlFor="logo">Image:</label>
+											<input type="file" id="fileInput" name="fileInput" required onChange={(e) => setLogo(e.target.value)}/>
+											<label htmlFor="logo">Diplome:</label>
 											<input type="file" id="fileInput" name="fileInput" required onChange={(e) => setLogo(e.target.value)}/>
 										<label htmlFor="password">New password</label>
 										<div className="password-input">
