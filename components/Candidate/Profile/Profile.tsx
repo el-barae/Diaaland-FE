@@ -25,7 +25,6 @@ interface candidate{
 	blog:string;
 	resume:string;
 	image:string;
-	diplome:string;
 }
 
 const passwordStrength = (password: string) => {
@@ -69,7 +68,7 @@ const Profile = () =>{
 	const [url, setUrl] = useState('')
 	const [adress, setAdress] = useState('')
 	const [logo, setLogo] = useState('')
-	const [candidateData,setCandidateData] = useState<string[]>([])
+	const [candidateData,setCandidateData] = useState<candidate>();
 
 	const [passState, setPassState] = useState('hide');
 	
@@ -231,8 +230,6 @@ const Profile = () =>{
 											<label htmlFor="url">Resume:</label>
 											<input type="text" name="url" id="url" required onChange={(e) => setUrl(e.target.value)}  />
 											<label htmlFor="logo">Image:</label>
-											<input type="file" id="fileInput" name="fileInput" required onChange={(e) => setLogo(e.target.value)}/>
-											<label htmlFor="logo">Diplome:</label>
 											<input type="file" id="fileInput" name="fileInput" required onChange={(e) => setLogo(e.target.value)}/>
 										<label htmlFor="password">New password</label>
 										<div className="password-input">

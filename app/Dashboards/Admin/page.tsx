@@ -17,13 +17,13 @@ const Admin = () =>{
         <ul>
             <li>
                 <a href="#">
-                    <span className="title">Brand Name</span>
+                    <span className="title">Dashboard</span>
                 </a>
             </li>
 
             <li>
                 <a href="#">
-                    <span className="title">Dashboard</span>
+                    <span className="title">Jobs</span>
                 </a>
             </li>
 
@@ -35,13 +35,13 @@ const Admin = () =>{
 
             <li>
                 <a href="#">
-                    <span className="title">Messages</span>
+                    <span className="title">Candidates</span>
                 </a>
             </li>
 
             <li>
                 <a href="#">
-                    <span className="title">Help</span>
+                    <span className="title">Matches</span>
                 </a>
             </li>
 
@@ -53,13 +53,13 @@ const Admin = () =>{
 
             <li>
                 <a href="#">
-                    <span className="title">Password</span>
+                    <span className="title">Messages</span>
                 </a>
             </li>
 
             <li>
                 <a href="#">
-                    <span className="title">Sign Out</span>
+                    <span className="title">Report</span>
                 </a>
             </li>
         </ul>
@@ -81,28 +81,21 @@ const Admin = () =>{
             <div className="card">
                 <div>
                     <div className="numbers">1,504</div>
-                    <div className="cardName">Daily Views</div>
+                    <div className="cardName">Candidates</div>
                 </div>
             </div>
 
             <div className="card">
                 <div>
                     <div className="numbers">80</div>
-                    <div className="cardName">Sales</div>
+                    <div className="cardName">Customers</div>
                 </div>
             </div>
 
             <div className="card">
                 <div>
                     <div className="numbers">284</div>
-                    <div className="cardName">Comments</div>
-                </div>
-            </div>
-
-            <div className="card">
-                <div>
-                    <div className="numbers">$7,842</div>
-                    <div className="cardName">Earning</div>
+                    <div className="cardName">Jobs</div>
                 </div>
             </div>
         </div>
@@ -110,7 +103,7 @@ const Admin = () =>{
         <div className="details">
             <div className="recentOrders">
                 <div className="cardHeader">
-                    <h2>Recent Orders</h2>
+                    <h2>Last applied candidates</h2>
                     <a href="#" className="btn">View All</a>
                 </div>
 
@@ -118,8 +111,8 @@ const Admin = () =>{
                     <thead>
                         <tr>
                             <td>Name</td>
-                            <td>Price</td>
-                            <td>Payment</td>
+                            <td>Job</td>
+                            <td>Customer</td>
                             <td>Status</td>
                         </tr>
                     </thead>
@@ -185,7 +178,7 @@ const Admin = () =>{
             </div>
             <div className="recentCustomers">
                 <div className="cardHeader">
-                    <h2>Recent Customers</h2>
+                    <h2>Last jobs</h2>
                 </div>
 
                 <table>

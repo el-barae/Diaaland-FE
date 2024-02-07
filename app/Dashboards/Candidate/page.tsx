@@ -33,7 +33,6 @@ interface candidate{
 	blog:string;
 	resume:string;
 	image:string;
-	diplome:string;
 }
 
 const Candidate = () => {
@@ -88,7 +87,6 @@ const Candidate = () => {
             <div className='Candidate'>
               <div className='header'>
                 {candidateData}
-                <h1>TEST name</h1>
                 <button>
                 <Image 
 									src={Notif}
