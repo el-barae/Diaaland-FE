@@ -21,9 +21,12 @@ interface appliedCandidates{
     status: string;
     candidate: {
         id: number;
+        firstName: string;
+        lastName: string;
     };
     job: {
         id: number;
+        name: string;
     };
 }
 
@@ -44,23 +47,14 @@ const Admin = () =>{
         setCountCandidates(countCa.data);
         const countCu = await axios.get('http://localhost:7777/api/v1/admin/customers');
         setCountCustomers(countCu.data);
-      } catch (error) {
-        console.error('Erreur lors de la récupération des données :', error);
-      }
-    };
-    fetchData();
- }, []);
- /*useEffect(() => {
-    const fetchData1 = async () => {
-      try {
         const response1 = await axios.get<appliedCandidates[]>('http://localhost:7777/api/v1/candidate-jobs');
         setAppliedCandidatesData(response1.data);
       } catch (error) {
         console.error('Erreur lors de la récupération des données :', error);
       }
     };
-    fetchData1();
- }, []);*/
+    fetchData();
+ }, []);
 
  interface LastJobs {
     n: number;
@@ -72,10 +66,11 @@ const Admin = () =>{
  }
 
     const ListJobs: React.FC<LastJobs> = ({ n, jobsData }) => {
-      if(jobsData.length != 0)
+        const lastjobsData = jobsData.slice(-4);
+      if(lastjobsData.length != 0)
       return(
         <>
-        {jobsData.map((job) => (
+        {lastjobsData.map((job) => (
             <div key={job.id} >
                     <tr>
                         <td width="60px">
@@ -92,21 +87,20 @@ const Admin = () =>{
     }
 
     const ListAppliedCandidates: React.FC<LastCandidates> = ({ n, appliedCandidatesData }) => {
-        if(appliedCandidatesData.length != 0)
-        return(
-          <>
-          {appliedCandidatesData.map((app) => (
-              <div key={app.id} >
-                      <tr>
-                            <td>{app.id}</td>
-                            <td>{app.job.id}</td>
-                            <td>{app.candidate.id}</td>
-                            <td><span className="status delivered">{app.status}</span></td>
-                        </tr>
-              </div>
-          ))}
-          </>
-        )
+        const lastFourCandidateJobs = appliedCandidatesData.slice(-4);
+
+        return (
+            <>
+                {lastFourCandidateJobs.map((candidateJob) => (
+                    <tr key={candidateJob.id}>
+                        <td>{candidateJob.candidate.firstName} {candidateJob.candidate.lastName}</td>
+                        <td>{candidateJob.job.name}</td>
+                        <td>{candidateJob.candidate.firstName}</td>
+                        <td><span className="status delivered">{candidateJob.status}</span></td>
+                    </tr>
+                ))}
+            </>
+        );
       }
 
     return (
