@@ -7,8 +7,99 @@ import Cookies from 'js-cookie';
 import './style.scss';
 import {ThemeProvider} from 'next-themes'
 import Navbar from '@/components/HomePage/Navbar/Navbar'
+import Candidate from '../Candidate/page';
+
+interface Job {
+    id: number;
+    name: string;
+    description: string;
+    numberOfPositions: number;
+    closeDate: string;
+   }
+interface appliedCandidates{
+    id: number;
+    status: string;
+    candidate: {
+        id: number;
+    };
+    job: {
+        id: number;
+    };
+}
 
 const Admin = () =>{
+    const [appliedCandidatesData, setAppliedCandidatesData] = useState<appliedCandidates[]>([]);
+    const [jobsData, setJobsData] = useState<Job[]>([]);
+ useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('http://localhost:7777/api/v1/jobs/list');
+        setJobsData(response.data);
+      } catch (error) {
+        console.error('Erreur lors de la récupération des données :', error);
+      }
+    };
+    fetchData();
+ }, []);
+ useEffect(() => {
+    const fetchData1 = async () => {
+      try {
+        const response1 = await axios.get<appliedCandidates[]>('http://localhost:7777/api/v1/candidate-jobs');
+        setAppliedCandidatesData(response1.data);
+      } catch (error) {
+        console.error('Erreur lors de la récupération des données :', error);
+      }
+    };
+    fetchData1();
+ }, []);
+
+ interface LastJobs {
+    n: number;
+    jobsData: Job[];
+ }
+ interface LastCandidates {
+    n: number;
+    appliedCandidatesData: appliedCandidates[];
+ }
+
+    const ListJobs: React.FC<LastJobs> = ({ n, jobsData }) => {
+      if(jobsData.length != 0)
+      return(
+        <>
+        {jobsData.map((job) => (
+            <div key={job.id} >
+                    <tr>
+                        <td width="60px">
+                            <div className="imgBx"></div>
+                        </td>
+                        <td>
+                            <h4>{job.name}<br/> <span>{job.numberOfPositions}</span></h4>
+                        </td>
+                    </tr>
+            </div>
+        ))}
+        </>
+      )
+    }
+
+    const ListAppliedCandidates: React.FC<LastCandidates> = ({ n, appliedCandidatesData }) => {
+        if(appliedCandidatesData.length != 0)
+        return(
+          <>
+          {appliedCandidatesData.map((app) => (
+              <div key={app.id} >
+                      <tr>
+                            <td>{app.id}</td>
+                            <td>{app.job.id}</td>
+                            <td>{app.candidate.id}</td>
+                            <td><span className="status delivered">{app.status}</span></td>
+                        </tr>
+              </div>
+          ))}
+          </>
+        )
+      }
+
     return (
         <ThemeProvider enableSystem={true} attribute="class">
             <Navbar/>
@@ -118,145 +209,20 @@ const Admin = () =>{
                     </thead>
 
                     <tbody>
-                        <tr>
-                            <td>Star Refrigerator</td>
-                            <td>$1200</td>
-                            <td>Paid</td>
-                            <td><span className="status delivered">Delivered</span></td>
-                        </tr>
-
-                        <tr>
-                            <td>Dell Laptop</td>
-                            <td>$110</td>
-                            <td>Due</td>
-                            <td><span className="status pending">Pending</span></td>
-                        </tr>
-
-                        <tr>
-                            <td>Apple Watch</td>
-                            <td>$1200</td>
-                            <td>Paid</td>
-                            <td><span className="status return">Return</span></td>
-                        </tr>
-
-                        <tr>
-                            <td>Addidas Shoes</td>
-                            <td>$620</td>
-                            <td>Due</td>
-                            <td><span className="status inProgress">In Progress</span></td>
-                        </tr>
-
-                        <tr>
-                            <td>Star Refrigerator</td>
-                            <td>$1200</td>
-                            <td>Paid</td>
-                            <td><span className="status delivered">Delivered</span></td>
-                        </tr>
-
-                        <tr>
-                            <td>Dell Laptop</td>
-                            <td>$110</td>
-                            <td>Due</td>
-                            <td><span className="status pending">Pending</span></td>
-                        </tr>
-
-                        <tr>
-                            <td>Apple Watch</td>
-                            <td>$1200</td>
-                            <td>Paid</td>
-                            <td><span className="status return">Return</span></td>
-                        </tr>
-
-                        <tr>
-                            <td>Addidas Shoes</td>
-                            <td>$620</td>
-                            <td>Due</td>
-                            <td><span className="status inProgress">In Progress</span></td>
-                        </tr>
+                        <ListAppliedCandidates n={appliedCandidatesData.length} appliedCandidatesData={appliedCandidatesData} />
                     </tbody>
                 </table>
             </div>
             <div className="recentCustomers">
-                <div className="cardHeader">
+            <div className="cardHeader">
                     <h2>Last jobs</h2>
-                </div>
-
+            </div>
                 <table>
-                    <tr>
-                        <td width="60px">
-                            <div className="imgBx"></div>
-                        </td>
-                        <td>
-                            <h4>David <br/> <span>Italy</span></h4>
-                        </td>
-                    </tr>
-
-<tr>
-    <td width="60px">
-        <div className="imgBx"></div>
-    </td>
-    <td>
-        <h4>Amit <br/> <span>India</span></h4>
-    </td>
-</tr>
-
-<tr>
-    <td width="60px">
-        <div className="imgBx"></div>
-    </td>
-    <td>
-        <h4>David <br/> <span>Italy</span></h4>
-    </td>
-</tr>
-
-<tr>
-    <td width="60px">
-        <div className="imgBx"></div>
-    </td>
-    <td>
-        <h4>Amit <br/> <span>India</span></h4>
-    </td>
-</tr>
-
-<tr>
-    <td width="60px">
-        <div className="imgBx"></div>
-    </td>
-    <td>
-        <h4>David <br/> <span>Italy</span></h4>
-    </td>
-</tr>
-
-<tr>
-    <td width="60px">
-        <div className="imgBx"></div>
-    </td>
-    <td>
-        <h4>Amit <br/> <span>India</span></h4>
-    </td>
-</tr>
-
-<tr>
-    <td width="60px">
-        <div className="imgBx"></div>
-    </td>
-    <td>
-        <h4>David <br/> <span>Italy</span></h4>
-    </td>
-</tr>
-
-<tr>
-    <td width="60px">
-        <div className="imgBx"></div>
-    </td>
-    <td>
-        <h4>Amit <br/> <span>India</span></h4>
-    </td>
-</tr>
-</table>
-</div>
-</div>
-</div>
+                    <ListJobs n={jobsData.length} jobsData={jobsData} />
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 
 
