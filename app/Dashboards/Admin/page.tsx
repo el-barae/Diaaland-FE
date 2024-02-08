@@ -30,18 +30,27 @@ interface appliedCandidates{
 const Admin = () =>{
     const [appliedCandidatesData, setAppliedCandidatesData] = useState<appliedCandidates[]>([]);
     const [jobsData, setJobsData] = useState<Job[]>([]);
+    const [countJobs, setCountJobs] = useState(0);
+    const [countCandidates, setCountCandidates] = useState(0);
+    const [countCustomers, setCountCustomers] = useState(0);
  useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get('http://localhost:7777/api/v1/jobs/list');
         setJobsData(response.data);
+        const countJ = await axios.get('http://localhost:7777/api/v1/admin/jobs');
+        setCountJobs(countJ.data);
+        const countCa = await axios.get('http://localhost:7777/api/v1/admin/candidates');
+        setCountCandidates(countCa.data);
+        const countCu = await axios.get('http://localhost:7777/api/v1/admin/customers');
+        setCountCustomers(countCu.data);
       } catch (error) {
         console.error('Erreur lors de la récupération des données :', error);
       }
     };
     fetchData();
  }, []);
- useEffect(() => {
+ /*useEffect(() => {
     const fetchData1 = async () => {
       try {
         const response1 = await axios.get<appliedCandidates[]>('http://localhost:7777/api/v1/candidate-jobs');
@@ -51,7 +60,7 @@ const Admin = () =>{
       }
     };
     fetchData1();
- }, []);
+ }, []);*/
 
  interface LastJobs {
     n: number;
@@ -171,21 +180,21 @@ const Admin = () =>{
         <div className="cardBox">
             <div className="card">
                 <div>
-                    <div className="numbers">1,504</div>
+                    <div className="numbers">{countCandidates}</div>
                     <div className="cardName">Candidates</div>
                 </div>
             </div>
 
             <div className="card">
                 <div>
-                    <div className="numbers">80</div>
+                    <div className="numbers">{countCustomers}</div>
                     <div className="cardName">Customers</div>
                 </div>
             </div>
 
             <div className="card">
                 <div>
-                    <div className="numbers">284</div>
+                    <div className="numbers">{countJobs}</div>
                     <div className="cardName">Jobs</div>
                 </div>
             </div>
