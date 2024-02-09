@@ -14,6 +14,8 @@ interface education{
 interface certificate{
     id: number;
     name: string;
+    url: string;
+    domain: string;
 }
 
 interface link{
@@ -21,10 +23,16 @@ interface link{
     url: string;
 }
 
-interface RepeatClassNTimesProps1 {
+interface Education {
     className: string;
     n: number;
     educationsData: education[];
+  }
+
+  interface Certificate {
+    className: string;
+    n: number;
+    certificatesData: certificate[];
   }
 
 const Links = () => {
@@ -50,10 +58,40 @@ const Links = () => {
           alert(error.message);
           });
       }
-  
-      const handleDelete = async (e:any, id:number) =>{
+
+      const handleAddCertificate = async (e:any)  =>{
         e.preventDefault()
-        axios.delete('http://localhost:7777/api/v1/educations')
+        const id = Cookies.get("id");
+        axios.post('http://localhost:7777/api/v1/certificates', {
+          "name": name,
+          "school": school,
+          "startDate": startDate,
+          "endDate": endDate,
+          }/*, {
+            headers: {
+              Authorization: `Bearer ${authToken}`,
+            },
+          }*/)
+          .then(function (response) {
+          console.log(response);
+          alert("Your post had been sent to admin ")
+          })
+          .catch(function (error) {
+          alert(error.message);
+          });
+      }
+  
+      const handleDeleteEducation = async (e:any, id:number) =>{
+        e.preventDefault()
+        axios.delete('http://localhost:7777/api/v1/educations/'+String(id))
+         .catch(function (error) {
+          console.log(error);
+         });
+      }
+
+      const handleDeleteCertificate = async (e:any, id:number) =>{
+        e.preventDefault()
+        axios.delete('http://localhost:7777/api/v1/certificates/'+String(id))
          .catch(function (error) {
           console.log(error);
          });
@@ -66,8 +104,9 @@ const Links = () => {
     const [startDate, setStartDate] = useState('')
     const [endDate, setEndDate] = useState('')
     const [educationsData,setEducationsData] = useState<education[]>([])
+    const [certificatesData,setCertificatesData] = useState<certificate[]>([])
 
-    const RepeatClassNTimes: React.FC<RepeatClassNTimesProps1> = ({ className, n, educationsData }) => {
+    const Educations: React.FC<Education> = ({ className, n, educationsData }) => {
         if(educationsData.length != 0)
           return(
             <>
@@ -78,13 +117,31 @@ const Links = () => {
                 startDate: {education.startDate}
               </p>
               <p>Close Date: {education.endDate}</p>
-              <button onClick={(e) => handleDelete(e, education.id)}>Delete</button>
+              <button onClick={(e) => handleDeleteEducation(e, education.id)}>Delete</button>
             </div>
             ))}
             </>
           )
         }
-
+        
+        const Certificates: React.FC<Certificate> = ({ className, n, certificatesData }) => {
+            if(certificatesData.length != 0)
+              return(
+                <>
+                {certificatesData.map((certificate) => (
+                  <div key={certificate.id} className={className}>
+                  <h1>{certificate.name} :</h1>
+                  <p>
+                    Url: {certificate.url}
+                  </p>
+                  <p>Domain: {certificate.domain}</p>
+                  <button onClick={(e) => handleDeleteEducation(e, certificate.id)}>Delete</button>
+                </div>
+                ))}
+                </>
+              )
+            }
+    
         useEffect(() => {
             const fetchData = async () => {
               try {
@@ -92,6 +149,8 @@ const Links = () => {
                 const id = Cookies.get("id");
                 const response = await axios.get('http://localhost:7777/api/v1/educations');         
                 setEducationsData(response.data);
+                const response1 = await axios.get('http://localhost:7777/api/v1/certificates');
+                setCertificatesData(response1.data);
               } catch (error) {
                 console.error('Erreur lors de la récupération des données :', error);
               }
@@ -132,7 +191,7 @@ const Links = () => {
                             </div>
                             <div className='part2'>
                                 <div className='lists' id='ls1'>
-                                    <RepeatClassNTimes className="list" n={educationsData.length} educationsData={educationsData} />
+                                    <Educations className="list" n={educationsData.length} educationsData={educationsData} />
                                 </div>
                             </div>
                         </div>
@@ -151,7 +210,7 @@ const Links = () => {
                             </div>
                             <div className='part2'>
                                 <div className='lists' id='ls2'>
-                                    <RepeatClassNTimes className="list" n={educationsData.length} educationsData={educationsData} />
+                                    <Certificates className="list" n={certificatesData.length} certificatesData={certificatesData} />
                                 </div>
                             </div>
                         </div>
@@ -168,7 +227,7 @@ const Links = () => {
                             </div>
                             <div className='part2'>
                                 <div className='lists' id='ls3'>
-                                    <RepeatClassNTimes className="list" n={educationsData.length} educationsData={educationsData} />
+                                    <Educations className="list" n={educationsData.length} educationsData={educationsData} />
                                 </div>
                             </div>
                         </div>

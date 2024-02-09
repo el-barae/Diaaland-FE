@@ -7,6 +7,8 @@ import './Profile.scss'
 import Link from 'next/link'
 import { FaEyeSlash, FaEye } from 'react-icons/fa';
 import axios from 'axios';
+import Image from 'next/image'
+import RegisterImg from '@/public/images/registeration.png'
 import Candidate from '@/app/Dashboards/Candidate/page';
 
 interface candidate{
@@ -243,7 +245,8 @@ const [image, setImage] = useState<string>(''); // Je suppose que "image" est un
 										</div>
 										<div className="url-adress">
 											<label htmlFor="adress">Adress:</label>
-											<input type="text" name="adress" id="adress" required onChange={(e) => setAdress(e.target.value)}  />
+											<div className="info-image">
+							</div>		<input type="text" name="adress" id="adress" required onChange={(e) => setAdress(e.target.value)}  />
 										</div>
 										<label htmlFor="url">Account statut:</label>
 											<input type="text" name="url" required onChange={(e) => setUrl(e.target.value)}  />
@@ -285,7 +288,16 @@ const [image, setImage] = useState<string>(''); // Je suppose que "image" est un
 										<p ref={termsErrorRef} className='error terms-error'></p>
 										<button className='block' type="submit" onClick={handleSubmit}>Modify</button>
 					</div>
+					<div className="div-image">
+								<Image 
+									src={RegisterImg}
+									width={400}
+									height={600}
+									alt="register image"
+								/>
+							</div>
 		</div>
+		
     )
 }
 export default Profile;
