@@ -11,6 +11,7 @@ import React from 'react';
 import './style.scss';
 import {ThemeProvider} from 'next-themes'
 import Navbar from '@/components/HomePage/Navbar/Navbar'
+import Modal from './Modal/Modal'
 
 interface Job {
  id: number;
@@ -36,42 +37,7 @@ const ListJobs = () => {
     setFilteredJobs(filtered);
  };
 
- const handleApply = async (e:any, id:number) =>{
-		e.preventDefault()
-		axios.post('http://localhost:7777/api/v1/candidate-jobs', {
-			"status": "en attends",
-      "candidate": {
-        "id": 1
-      },
-      "job": {
-        "id": id
-      }
-		 })
-		 .then(function (response) {
-			console.log(response);
-      setShowPanel(false);
-		 })
-		 .catch(function (error) {
-			console.log(error);
-		 });
-	}
-
-  const handleAddFavoris = async (e:any, id:number) =>{
-		e.preventDefault()
-		axios.post('http://localhost:7777/api/v1/favoris', {
-      "candidate": {
-        "id": 1
-      },
-      "job": {
-        "id": id
-      }
-		 })
-		 .then(function (response) {
-		 })
-		 .catch(function (error) {
-			console.log(error);
-		 });
-	}
+ 
  const [jobsData, setJobsData] = useState<Job[]>([]);
  useEffect(() => {
     const fetchData = async () => {
@@ -93,6 +59,14 @@ const ListJobs = () => {
  }
 
  const RepeatClassNTimes: React.FC<RepeatClassNTimesProps> = ({ className, n, jobsData }) => {
+  const [modalOpen, setModalOpen] = useState(false);
+  const [currentDescription, setCurrentDescription] = useState("");
+
+  const handleApplyClick = (description: string) => {
+    setCurrentDescription(description);
+    setModalOpen(true);
+  };
+
     if(c==0){
       if(jobsData.length != 0)
       return(
@@ -104,8 +78,9 @@ const ListJobs = () => {
             Description: {job.description} <br/> Number of positions: {job.numberOfPositions} 
           </p>
           <p>Close Date: {job.closeDate}</p>
-          <button onClick={handleApplyClick}>View</button>
-          {showPanel && (
+          <button onClick={() => handleApplyClick(job.description)}>View</button>
+          <Modal isOpen={modalOpen} id={job.id} name={job.name} description={currentDescription} onClose={() => setModalOpen(false)}/>
+          {/*showPanel && (
       <div className="job-panel">
         <h2>{jobDetails.name}</h2>
         <p>{jobDetails.description}</p>
@@ -113,7 +88,7 @@ const ListJobs = () => {
         <button onClick={(e) => handleAddFavoris(e, job.id)}>Add favoris</button>
         <button onClick={(e) => handleApply(e, job.id)}>Apply</button>
       </div>
-    )}
+          )*/}
         </div>
         ))}
         </>
@@ -130,13 +105,12 @@ const ListJobs = () => {
               Description: {job.description} <br/> Number of positions: {job.numberOfPositions} 
             </p>
             <p>Close Date: {job.closeDate}</p>
-            <button onClick={handleApplyClick}>View</button>
+            
             {showPanel && (
         <div className="job-panel">
           <h2>{jobDetails.name}</h2>
           <p>{jobDetails.description}</p>
           <button onClick={handleClosePanel}>Close</button>
-          <button onClick={(e) => handleApply(e, job.id)}>Apply</button>
         </div>
       )}
           </div>
