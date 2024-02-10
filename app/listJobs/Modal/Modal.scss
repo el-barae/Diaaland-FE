@@ -24,6 +24,8 @@ body.active-modal {
     background: rgba(49,49,49,0.8);
 }
 .modal-content {
+    display: flex;
+    flex-direction: column;
     position: absolute;
     top: 40%;
     left: 50%;
@@ -35,9 +37,23 @@ body.active-modal {
     max-width: 800px;
     min-width: 400px;
     min-height: 200px;
-    #appy-btn{
+    #apply-btn{
         position: absolute;
-        left: 50%;
+        margin: 0px;
+        top: 7rem;
+        right: 1rem;
+    }
+    #favoris-btn{
+        position: absolute;
+        margin: 0px;
+        top: 7rem;
+        right: 8rem;
+    }
+}
+#close-btn{
+    background-color: crimson;
+    &:hover {
+        background-color: darken(crimson, 5%);
     }
 }
 

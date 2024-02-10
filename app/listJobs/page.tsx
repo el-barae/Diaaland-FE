@@ -75,7 +75,7 @@ const ListJobs = () => {
           <div key={job.id} className={className}>
           <h1>{job.name} :</h1>
           <p>
-            Description: {job.description} <br/> Number of positions: {job.numberOfPositions} 
+            <br/> Number of positions: {job.numberOfPositions} 
           </p>
           <p>Close Date: {job.closeDate}</p>
           <button onClick={() => handleApplyClick(job.description)}>View</button>
@@ -102,17 +102,10 @@ const ListJobs = () => {
           <div key={job.id} className={className}>
             <h1>{job.name} :</h1>
             <p>
-              Description: {job.description} <br/> Number of positions: {job.numberOfPositions} 
+              <br/> Number of positions: {job.numberOfPositions} 
             </p>
             <p>Close Date: {job.closeDate}</p>
-            
-            {showPanel && (
-        <div className="job-panel">
-          <h2>{jobDetails.name}</h2>
-          <p>{jobDetails.description}</p>
-          <button onClick={handleClosePanel}>Close</button>
-        </div>
-      )}
+            <Modal isOpen={modalOpen} id={job.id} name={job.name} description={currentDescription} onClose={() => setModalOpen(false)}/>
           </div>
         ))}
       </>

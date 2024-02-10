@@ -69,13 +69,13 @@ export default function Modal({ isOpen, id, description, name, onClose }: ModalP
         {isOpen && (
           <div className="modal">
             <div onClick={toggleModal} className="overlay"></div>
-            <button id="close-btn" onClick={toggleModal}>CLOSE</button>
-            <div className="modal-content">
-            <h2>{name}</h2>
-            <p>{description}</p>
-            <button id="apply-btn" onClick={(e) => handleApply(e, id)}>Apply</button>
-            
-            </div>
+              <button id="close-btn" onClick={toggleModal}>CLOSE</button>
+              <div className="modal-content">
+                <h2>{name}</h2>
+                <p>{description}</p>
+                <button id="apply-btn" onClick={(e) => handleApply(e, id)}>Apply</button>
+                <button id="favoris-btn" onClick={(e) => handleAddFavoris(e, id)}>Add favoris</button>
+              </div>
           </div>
         )}
       </>
