@@ -36,15 +36,9 @@ interface Job {
 		 });
 	}
 
-  const handleDelFavoris = async (e:any, idJ:number) =>{
-		e.preventDefault()
-    Cookies.set("id","1")
-    const idC = Cookies.get("id");
-		axios.delete('http://localhost:7777/api/v1/favoris/'+String(idC)+'/'+String(idJ))
-		 .catch(function (error) {
-			console.log(error);
-		 });
-	}
+const Favoris = () =>{  
+
+  const [jobsData, setJobsData] = useState<Job[]>([]);
 
   const RepeatClassNTimes: React.FC<RepeatClassNTimesProps> = ({ className, n, jobsData }) => {
     if(jobsData.length != 0)
@@ -54,6 +48,7 @@ interface Job {
           <div key={job.id} className={className}>
           <h1>{job.name} :</h1>
           <p>
+            {job.id}
             Description: {job.description} <br/> Number of positions: {job.numberOfPositions} 
           </p>
           <p>Close Date: {job.closeDate}</p>
@@ -65,19 +60,30 @@ interface Job {
       )
     }
 
-const Favoris = () =>{ 
-    const [jobsData, setJobsData] = useState<Job[]>([]);
+    const handleDelFavoris = async (e:any, idJ:number) =>{
+      e.preventDefault()
+      try {
+      Cookies.set("id","1")
+      const idC = Cookies.get("id");
+      axios.delete('http://localhost:7777/api/v1/favoris/'+String(idC)+'/'+String(idJ))
+      const updatedJobsData = jobsData.filter(job => job.id !== idJ)
+      setJobsData(updatedJobsData)
+    } catch (error) {
+      console.error('Erreur lors de la modification des données :', error);
+    }
+    }
+
     useEffect(() => {
-        const fetchData = async () => {
-          try {
-            Cookies.set("id","1")
-            const id = Cookies.get("id");
-            const response = await axios.get('http://localhost:7777/api/v1/favoris/'+String(id));         
-            setJobsData(response.data);
-          } catch (error) {
-            console.error('Erreur lors de la récupération des données :', error);
-          }
-        };
+         const fetchData = async () => {
+    try {
+      Cookies.set("id","1")
+      const id = Cookies.get("id");
+      const response = await axios.get('http://localhost:7777/api/v1/favoris/'+String(id));         
+      setJobsData(response.data);
+    } catch (error) {
+      console.error('Erreur lors de la récupération des données :', error);
+    }
+  };
         fetchData();
         console.log(jobsData)
   }, []);
