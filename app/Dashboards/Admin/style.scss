@@ -322,9 +322,25 @@
   .details .recentOrders table tr td:nth-child(3) {
     text-align: center;
   }
-  .status.delivered {
+  .delivered-accept{
     padding: 2px 4px;
     background: #8de02c;
+    color: var(--white);
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .delivered-refuse {
+    padding: 2px 4px;
+    background: red;
+    color: var(--white);
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .delivered-enattends {
+    padding: 2px 4px;
+    background: #e9b10a;
     color: var(--white);
     border-radius: 4px;
     font-size: 14px;

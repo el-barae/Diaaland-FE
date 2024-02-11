@@ -30,12 +30,26 @@ interface appliedCandidates{
     };
 }
 
+function getStatusClass(status: string) {
+    switch (status) {
+      case 'refuse':
+        return 'delivered-refuse';
+      case 'accept':
+        return 'delivered-accept';
+      case 'en attends':
+        return 'delivered-enattends';
+      default:
+        return 'delivered';
+    }
+  }
+
 const Admin = () =>{
     const [appliedCandidatesData, setAppliedCandidatesData] = useState<appliedCandidates[]>([]);
     const [jobsData, setJobsData] = useState<Job[]>([]);
     const [countJobs, setCountJobs] = useState(0);
     const [countCandidates, setCountCandidates] = useState(0);
     const [countCustomers, setCountCustomers] = useState(0);
+    const [status, setStatus] = useState('refuse');
  useEffect(() => {
     const fetchData = async () => {
       try {
@@ -96,7 +110,7 @@ const Admin = () =>{
                         <td>{candidateJob.candidate.firstName} {candidateJob.candidate.lastName}</td>
                         <td>{candidateJob.job.name}</td>
                         <td>{candidateJob.candidate.firstName}</td>
-                        <td><span className="status delivered">{candidateJob.status}</span></td>
+                        <td><span className={getStatusClass(candidateJob.status)}>{candidateJob.status}</span></td>
                     </tr>
                 ))}
             </>
