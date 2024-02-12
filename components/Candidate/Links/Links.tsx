@@ -7,6 +7,8 @@ import Cookies from 'js-cookie';
 interface education{
     id: number;
     name : string;
+    url: string;
+    school: string;
     startDate : string;
     endDate : string;
 }
@@ -18,8 +20,9 @@ interface certificate{
     domain: string;
 }
 
-interface link{
+interface other_link{
     id: number;
+    name: string;
     url: string;
 }
 
@@ -35,7 +38,23 @@ interface Education {
     certificatesData: certificate[];
   }
 
+  interface Other_link {
+    className: string;
+    n: number;
+    other_linksData: other_link[];
+  }
+
 const Links = () => {
+
+    const [name,setName] = useState('')
+    const [school,setSchool] = useState('')
+    const [url,setUrl] = useState('')
+    const [desc,setDesc] = useState('')
+    const [startDate, setStartDate] = useState('')
+    const [endDate, setEndDate] = useState('')
+    const [educationsData,setEducationsData] = useState<education[]>([])
+    const [certificatesData,setCertificatesData] = useState<certificate[]>([])
+    const [other_linksData,setOther_LinksData] = useState<other_link[]>([])
 
     const handleAddEducation = async (e:any)  =>{
         e.preventDefault()
@@ -64,9 +83,29 @@ const Links = () => {
         const id = Cookies.get("id");
         axios.post('http://localhost:7777/api/v1/certificates', {
           "name": name,
-          "school": school,
-          "startDate": startDate,
-          "endDate": endDate,
+          "url": url,
+          "decription": desc,
+          }/*, {
+            headers: {
+              Authorization: `Bearer ${authToken}`,
+            },
+          }*/)
+          .then(function (response) {
+          console.log(response);
+          alert("Your post had been sent to admin ")
+          })
+          .catch(function (error) {
+          alert(error.message);
+          });
+      }
+
+      const handleAddOther_Link = async (e:any)  =>{
+        e.preventDefault()
+        const id = Cookies.get("id");
+        axios.post('http://localhost:7777/api/v1/other_links', {
+          "name": name,
+          "url": url,
+          "decription": desc,
           }/*, {
             headers: {
               Authorization: `Bearer ${authToken}`,
@@ -96,15 +135,13 @@ const Links = () => {
           console.log(error);
          });
       }
-
-    const [name,setName] = useState('')
-    const [school,setSchool] = useState('')
-    const [url,setUrl] = useState('')
-    const [desc,setDesc] = useState('')
-    const [startDate, setStartDate] = useState('')
-    const [endDate, setEndDate] = useState('')
-    const [educationsData,setEducationsData] = useState<education[]>([])
-    const [certificatesData,setCertificatesData] = useState<certificate[]>([])
+      const handleDeleteLink = async (e:any, id:number) =>{
+        e.preventDefault()
+        axios.delete('http://localhost:7777/api/v1/other_links/'+String(id))
+         .catch(function (error) {
+          console.log(error);
+         });
+      }
 
     const Educations: React.FC<Education> = ({ className, n, educationsData }) => {
         if(educationsData.length != 0)
@@ -113,10 +150,10 @@ const Links = () => {
             {educationsData.map((education) => (
               <div key={education.id} className={className}>
               <h1>{education.name} :</h1>
-              <p>
-                startDate: {education.startDate}
-              </p>
-              <p>Close Date: {education.endDate}</p>
+              <p>Url: {education.url}</p>
+              <p>School: {education.school}</p>
+              <p>Start date: {education.startDate}</p>
+              <p>Close date: {education.endDate}</p>
               <button onClick={(e) => handleDeleteEducation(e, education.id)}>Delete</button>
             </div>
             ))}
@@ -131,16 +168,31 @@ const Links = () => {
                 {certificatesData.map((certificate) => (
                   <div key={certificate.id} className={className}>
                   <h1>{certificate.name} :</h1>
-                  <p>
-                    Url: {certificate.url}
-                  </p>
+                  <p>Url: {certificate.url}</p>
                   <p>Domain: {certificate.domain}</p>
-                  <button onClick={(e) => handleDeleteEducation(e, certificate.id)}>Delete</button>
+                  <button onClick={(e) => handleDeleteCertificate(e, certificate.id)}>Delete</button>
                 </div>
                 ))}
                 </>
               )
             }
+
+            const Other_Links: React.FC<Other_link> = ({ className, n, other_linksData }) => {
+              if(other_linksData.length != 0)
+                return(
+                  <>
+                  {other_linksData.map((link) => (
+                    <div key={link.id} className={className}>
+                    <h1>{link.name} :</h1>
+                    <p>
+                      Url: {link.url}
+                    </p>
+                    <button onClick={(e) => handleDeleteLink(e, link.id)}>Delete</button>
+                  </div>
+                  ))}
+                  </>
+                )
+              }
     
         useEffect(() => {
             const fetchData = async () => {
@@ -151,6 +203,9 @@ const Links = () => {
                 setEducationsData(response.data);
                 const response1 = await axios.get('http://localhost:7777/api/v1/certificates');
                 setCertificatesData(response1.data);
+                const response2 = await axios.get('http://localhost:7777/api/v1/other_links');
+                setOther_LinksData(response2.data);
+                console.log(other_linksData)
               } catch (error) {
                 console.error('Erreur lors de la récupération des données :', error);
               }
@@ -206,7 +261,7 @@ const Links = () => {
                                 <input type="text" placeholder='Enter  url certificate' value={url} onChange={(e) => setUrl(e.target.value)}/>
                                 <label htmlFor="description">Description:</label>
                                 <textarea className='desc' placeholder='Enter description' value={desc} onChange={(e) => setDesc(e.target.value)}/>
-                                <button onClick={handleAddEducation}>add certificate</button>
+                                <button onClick={handleAddCertificate}>add certificate</button>
                             </div>
                             <div className='part2'>
                                 <div className='lists' id='ls2'>
@@ -219,15 +274,17 @@ const Links = () => {
                         <h1>Other links</h1>
                         <div className='add'>
                             <div className='part1'>
+                                <label htmlFor="name">Name:</label>
+                                <input type="text" placeholder='Enter name' value={name} onChange={(e) => setName(e.target.value)}/>
                                 <label htmlFor="name">Url:</label>
                                 <input type="text" placeholder='Enter url' value={name} onChange={(e) => setName(e.target.value)}/>
                                 <label htmlFor="description">Description:</label>
                                 <textarea className='desc' placeholder='Enter description' value={desc} onChange={(e) => setDesc(e.target.value)}/>
-                                <button onClick={handleAddEducation}>add link</button>
+                                <button onClick={handleAddOther_Link}>add link</button>
                             </div>
                             <div className='part2'>
                                 <div className='lists' id='ls3'>
-                                    <Educations className="list" n={educationsData.length} educationsData={educationsData} />
+                                    <Other_Links className="list" n={other_linksData.length} other_linksData={other_linksData} />
                                 </div>
                             </div>
                         </div>
@@ -235,6 +292,7 @@ const Links = () => {
             </div>
         </>
     )
-}
+  }
+
 
 export default Links;
