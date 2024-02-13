@@ -91,6 +91,7 @@
 }
 @media (max-width: 600px){
     .add{
+        padding: 10px;
         .part1{
             input{
                 width: 20rem;
@@ -105,6 +106,13 @@
             input{
                 width: 20rem;
             }
+            .list{
+                margin: 0px;
+                padding: 10px;
+            }
+        }
+        textarea{
+            width: 20rem;
         }
     }
 }
