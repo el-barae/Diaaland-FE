@@ -106,6 +106,8 @@ html{
   }
   @media (max-width: 768px) {
     .container {
+      padding-top: 4px;
+      padding-bottom: 4px;
       position: relative;
       .list {
         display: block;

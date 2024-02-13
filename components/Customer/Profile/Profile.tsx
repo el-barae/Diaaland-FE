@@ -6,6 +6,8 @@ import '../../../app/(accounts)/register/style.scss';
 import './Profile.scss'
 import Link from 'next/link'
 import { FaEyeSlash, FaEye } from 'react-icons/fa';
+import Image from 'next/image'
+import RegisterImg from '@/public/images/registeration.png'
 import axios from 'axios';
 
 const passwordStrength = (password: string) => {
@@ -180,11 +182,17 @@ const Profile = () =>{
 											<div ref={passwordMessageRef} className="message hidden">
 											</div>
 										</div>
-										<input className='inline checkbox' type="checkbox" name="term-of-use" id="term-of-use" required onInvalid={invalidTerms} />
-										<label className='inline-block checkbox-label mb-4' htmlFor="term-of-use">i accept the term of use</label>
 										<p ref={termsErrorRef} className='error terms-error'></p>
 										<button className='block' type="submit" onClick={handleSubmit}>Modify</button>
 					</div>
+					<div className="div-image">
+								<Image 
+									src={RegisterImg}
+									width={400}
+									height={600}
+									alt="register image"
+								/>
+							</div>
 		</div>
     )
 }
