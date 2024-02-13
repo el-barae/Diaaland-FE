@@ -4,6 +4,7 @@ import { useState,useEffect } from 'react';
 import Cookies from 'js-cookie';
 import axios from 'axios';
 import Link from 'next/link';
+import Modal from './Modal/Modal'
 
 interface project{
     id: number;
@@ -24,7 +25,6 @@ const Projects = () => {
   const [startDate,setStartDate] = useState('')
   const [endDate,setEndDate] = useState('')
   const [desc,setDesc] = useState('')
-  const [candidateId,setCandidateId] = useState(1)
     const [projectsData,setProjectsData] = useState<project[]>([])
 
     const handleAddProject = async (e:any)  =>{
@@ -74,7 +74,13 @@ const Projects = () => {
         fetchData();
   }, []);
 
+  
+
   const RepeatClassNTimes: React.FC<RepeatClassNTimesProps> = ({ className, n, projectsData }) => {
+    const [modalOpen, setModalOpen] = useState(false);
+    const handleApplyClick = () => {
+      setModalOpen(true);
+    };
     if(projectsData.length != 0)
       return(
         <>
@@ -89,6 +95,8 @@ const Projects = () => {
           </p>
           <p>Close Date: {project.endDate}</p>
           <button onClick={(e) => handleDelete(e, project.id)}>Delete</button>
+          <button onClick={() => handleApplyClick()}>Modify</button>
+          <Modal isOpen={modalOpen} id={project.id} name={project.name} description={project.description} onClose={() => setModalOpen(false)}/>
         </div>
         ))}
         </>
