@@ -85,7 +85,6 @@ const Favoris = () =>{
     }
   };
         fetchData();
-        console.log(jobsData)
   }, []);
   return(
     <>

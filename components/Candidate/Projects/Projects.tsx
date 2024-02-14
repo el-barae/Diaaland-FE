@@ -4,7 +4,8 @@ import { useState,useEffect } from 'react';
 import Cookies from 'js-cookie';
 import axios from 'axios';
 import Link from 'next/link';
-import Modal from './Modal/Modal'
+import Modal from './ModalProject/ModalProject'
+
 
 interface project{
     id: number;
@@ -14,12 +15,32 @@ interface project{
     description : string;
 }
 
+export const useProjectsData = () => {
+  const [projectsData, setProjectsData] = useState<project[]>([]);
+
+  const modifyProject = (modifiedProject: project) => {
+    setProjectsData(prevProjectsData => {
+      const index = prevProjectsData.findIndex(project => project.id === modifiedProject.id);
+      if (index !== -1) {
+        const updatedProjectsData = [...prevProjectsData];
+        updatedProjectsData[index] = modifiedProject;
+        return updatedProjectsData;
+      } else {
+        return prevProjectsData;
+      }
+    });
+  };
+
+  return { projectsData, setProjectsData, modifyProject };
+};
+ 
+
 interface RepeatClassNTimesProps {
     className: string;
     n: number;
     projectsData: project[];
   }
-
+  
 const Projects = () => {
   const [name,setName] = useState('')
   const [startDate,setStartDate] = useState('')
@@ -44,6 +65,7 @@ const Projects = () => {
           },
         }*/)
         .then(function (response) {
+          setProjectsData(prevProjectsData => [...prevProjectsData, response.data]);
         console.log(response);
         alert("Your post had been sent to admin ")
         })
@@ -54,10 +76,13 @@ const Projects = () => {
 
     const handleDelete = async (e:any, id:number) =>{
       e.preventDefault()
+      try{
       axios.delete('http://localhost:7777/api/v1/projects/'+String(id))
-       .catch(function (error) {
+      const updatedProjectsData = projectsData.filter(pro => pro.id !== id)
+      setProjectsData(updatedProjectsData)
+      }catch (error) {
         console.log(error);
-       });
+       };
     }
 
     useEffect(() => {
@@ -81,6 +106,7 @@ const Projects = () => {
     const handleApplyClick = () => {
       setModalOpen(true);
     };
+
     if(projectsData.length != 0)
       return(
         <>
@@ -92,7 +118,7 @@ const Projects = () => {
           <p>Description: {project.description}</p>
           <button onClick={(e) => handleDelete(e, project.id)}>Delete</button>
           <button onClick={() => handleApplyClick()}>Modify</button>
-          <Modal isOpen={modalOpen} id={project.id} name={project.name} startDate={project.startDate} endDate={project.endDate} description={project.description} onClose={() => setModalOpen(false)}/>
+          <Modal isOpen={modalOpen} id={project.id} name={project.name} startDate={project.startDate} endDate={project.endDate} description={project.description} onClose={() => setModalOpen(false)} />
         </div>
         ))}
         </>
