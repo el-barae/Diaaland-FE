@@ -7,28 +7,34 @@ interface ModalProps {
     isOpen: boolean;
     id: number;
     name: string;
+    startDate: string;
+    endDate: string;
     description: string;
     onClose: () => void;
   }
 
-export default function Modal({ isOpen, id, description, name, onClose }: ModalProps) {
-  const [startDate,setStartDate] = useState('')
-  const [endDate,setEndDate] = useState('')
-  const [desc,setDesc] = useState('')
+export default function Modal({ isOpen, id, name, startDate, endDate, description, onClose }: ModalProps) {
+  const [modifiedName, setModifiedName] = useState(name);
+  const [modifiedStartDate, setModifiedStartDate] = useState(startDate);
+  const [modifiedEndDate, setModifiedEndDate] = useState(endDate);
+  const [modifiedDescription, setModifiedDescription] = useState(description);
+
     const toggleModal = () => {
       onClose();
     };
     
     const handleModifyProject = async (e:any) =>{
 		e.preventDefault()
-		axios.post('http://localhost:7777/api/v1/candidate-jobs', {
-			"status": "en attends",
-      "candidate": {
-        "id": 1
-      },
-      "job": {
-        "id": id
-      }
+    const idC = Cookies.get("id");
+		axios.put('http://localhost:7777/api/v1/projects/'+String(id), {
+        "id": id,
+        "name": modifiedName,
+        "startDate": modifiedStartDate,
+        "endDate": modifiedEndDate,
+        "description": modifiedDescription,
+        "candidate": {
+          "id": idC
+        }
 		 })
 		 .then(function (response) {
 			console.log(response);
@@ -49,6 +55,22 @@ export default function Modal({ isOpen, id, description, name, onClose }: ModalP
         document.body.classList.remove('active-modal');
       };
     }, [isOpen]);
+
+    const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      setModifiedName(e.target.value);
+    };
+  
+    const handleStartDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      setModifiedStartDate(e.target.value);
+    };
+  
+    const handleEndDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      setModifiedEndDate(e.target.value);
+    };
+  
+    const handleDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+      setModifiedDescription(e.target.value);
+    };
   
     return (
       <>
@@ -58,23 +80,13 @@ export default function Modal({ isOpen, id, description, name, onClose }: ModalP
               <button id="close-btn" onClick={toggleModal}>CLOSE</button>
               <div className="modal-content">
               <label htmlFor="name">Name:</label>
-              <input type="text" placeholder='Enter name project' value={name} />
-              <label htmlFor="startDate">Start Date:</label>
-              <input 
-              type="date" 
-              id="startDate" 
-              value={startDate} 
-              onChange={(e) => setStartDate(e.target.value)}
-              />
-              <label htmlFor="CloseDate">End Date:</label>
-              <input 
-              type="date" 
-              id="CloseDate" 
-              value={endDate} 
-              onChange={(e) => setEndDate(e.target.value)}
-              />
-             <label htmlFor="description">Description:</label>
-              <textarea className='desc' placeholder='Enter description' value={desc} onChange={(e) => setDesc(e.target.value)}/>
+            <input type="text" id="name" placeholder="Enter name project" value={modifiedName} onChange={handleNameChange} />
+            <label htmlFor="startDate">Start Date:</label>
+            <input type="date" id="startDate" value={modifiedStartDate} onChange={handleStartDateChange} />
+            <label htmlFor="CloseDate">End Date:</label>
+            <input type="date" id="CloseDate" value={modifiedEndDate} onChange={handleEndDateChange} />
+            <label htmlFor="description">Description:</label>
+            <textarea className="desc" id="description" placeholder="Enter description" value={modifiedDescription} onChange={handleDescriptionChange} />
             <button onClick={handleModifyProject}>Modify project</button>
               </div>
           </div>

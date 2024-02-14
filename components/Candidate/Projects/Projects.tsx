@@ -87,16 +87,12 @@ const Projects = () => {
         {projectsData.map((project) => (
           <div key={project.id} className={className}>
           <h1>{project.name} :</h1>
-          <p>
-            Description: {project.description}
-          </p>
-          <p>
-            startDate: {project.startDate}
-          </p>
+          <p>startDate: {project.startDate}</p>
           <p>Close Date: {project.endDate}</p>
+          <p>Description: {project.description}</p>
           <button onClick={(e) => handleDelete(e, project.id)}>Delete</button>
           <button onClick={() => handleApplyClick()}>Modify</button>
-          <Modal isOpen={modalOpen} id={project.id} name={project.name} description={project.description} onClose={() => setModalOpen(false)}/>
+          <Modal isOpen={modalOpen} id={project.id} name={project.name} startDate={project.startDate} endDate={project.endDate} description={project.description} onClose={() => setModalOpen(false)}/>
         </div>
         ))}
         </>
