@@ -18,51 +18,69 @@ interface RepeatClassNTimesProps {
   interface RepeatClassNTimesProps1 {
     className: string;
     n: number;
-    skills1: skill[];
+    skillsAll: skill[];
   }
 
 const Skills = () => {
     const [name,setName] = useState('')
     const [score,setScore] = useState(0)
     const [skill,setSkill] = useState('')
-    const [skills1,setSkills1] = useState<skill[]>([])
+    const [skillsAll,setSkillsAll] = useState<skill[]>([])
     const [skillsData,setSkillsData] = useState<skill[]>([])
 
     const handleAddSkill = async (e:any, sname:string)  =>{
-        e.preventDefault()
-        const id = Cookies.get("id");
-        const response = await axios.get('http://localhost:7777/api/v1/skills/id/'+sname);
-        axios.post('http://localhost:7777/api/v1/candidate-skills', {
-          "name": name,
-          "score": score,
-          "candidate": {
-            "id": id
+      e.preventDefault()
+      const id = Cookies.get("id");
+      const response = await axios.get('http://localhost:7777/api/v1/skills/id/'+sname);
+      try{
+        const res = await axios.get('http://localhost:7777/api/v1/skills/'+String(response.data)).then(function (res) {
+        setSkillsData(prevSkillsData => [...prevSkillsData, res.data]);
+        console.log(res);
+        })
+      }catch (error) {
+        console.log(error);
+       };
+      axios.post('http://localhost:7777/api/v1/candidate-skills', {
+        "name": name,
+        "score": score,
+        "candidate": {
+          "id": id
+        },
+        "skill": {
+          "id": response.data
+        }
+        }/*, {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
           },
-          "skill": {
-            "id": response.data
-          }
-          }/*, {
-            headers: {
-              Authorization: `Bearer ${authToken}`,
-            },
-          }*/)
-          .then(function (response) {
-          console.log(response);
-          alert("Your post had been sent to admin ")
-          })
-          .catch(function (error) {
-          alert(error.message);
-          });
-      }
+        }*/)
+        .then(function (response) {
+        console.log(response);
+        alert("Your post had been sent to admin ")
+        })
+        .catch(function (error) {
+        alert(error.message);
+        });
+    }      /*try{
+        const res = await axios.get('http://localhost:7777/api/v1/skills/'+String(response.data)).then(function (res) {
+        setSkillsData(prevSkillsData => [...prevSkillsData, res.data]);
+        console.log(res);
+        })
+      }catch (error) {
+        console.log(error);
+       };*/
   
       const handleDelete = async (e:any, idS:number) =>{
         e.preventDefault()
+        try{
         Cookies.set("id","1")
         const idC = Cookies.get("id");
         axios.delete('http://localhost:7777/api/v1/candidate-skills/'+String(idC)+'/'+String(idS))
-         .catch(function (error) {
-          console.log(error);
-         });
+        const updatedSkillsData = skillsData.filter(skill => skill.id !== idS)
+        setSkillsData(updatedSkillsData)
+        }catch (error) {
+        console.log(error);
+       };
       }
   
       useEffect(() => {
@@ -73,7 +91,7 @@ const Skills = () => {
               const response = await axios.get('http://localhost:7777/api/v1/candidate-skills/byCandidate/'+String(id));
               const res = await axios.get('http://localhost:7777/api/v1/skills');         
               setSkillsData(response.data);
-              setSkills1(res.data)
+              setSkillsAll(res.data)
             } catch (error) {
               console.error('Erreur lors de la récupération des données :', error);
             }
@@ -96,11 +114,11 @@ const Skills = () => {
           )
         }
 
-        const RepeatClassNTimes1: React.FC<RepeatClassNTimesProps1> = ({ className, n, skills1 }) => {
-          if(skills1.length != 0)
+        const RepeatClassNTimes1: React.FC<RepeatClassNTimesProps1> = ({ className, n, skillsAll }) => {
+          if(skillsAll.length != 0)
             return(
               <>
-              {skills1.map((skill) => (
+              {skillsAll.map((skill) => (
                 <option key={skill.name} value={skill.name} >{skill.name}</option>
               ))}
               </>
@@ -114,7 +132,7 @@ const Skills = () => {
               <div className="add">
                 
                 <select id="skills" name="skills" value={skill} onChange={(e) => setSkill(e.target.value)}>
-                    <RepeatClassNTimes1 className="list" n={skills1.length} skills1={skills1} />
+                    <RepeatClassNTimes1 className="list" n={skillsAll.length} skillsAll={skillsAll} />
                 </select>
                 <button onClick={(e) => handleAddSkill(e, skill)}>Add skill</button>
             </div>
