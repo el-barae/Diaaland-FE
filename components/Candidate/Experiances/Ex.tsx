@@ -39,6 +39,7 @@ const Xp = () => {
           },
         }*/)
         .then(function (response) {
+          setXpData(prevXpData => [...prevXpData, response.data]);
         console.log(response);
         alert("Your post had been sent to admin ")
         })
@@ -53,6 +54,8 @@ const Xp = () => {
        .catch(function (error) {
         console.log(error);
        });
+       const updatedXpData = xpData.filter(xp => xp.id !== id)
+       setXpData(updatedXpData)
     }
 
     useEffect(() => {

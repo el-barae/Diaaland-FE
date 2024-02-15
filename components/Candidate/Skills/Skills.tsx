@@ -30,8 +30,10 @@ const Skills = () => {
 
     const handleAddSkill = async (e:any, sname:string)  =>{
       e.preventDefault()
+      setSkill('');
       const id = Cookies.get("id");
       const response = await axios.get('http://localhost:7777/api/v1/skills/id/'+sname);
+      const skillId = response.data.id;
       try{
         const res = await axios.get('http://localhost:7777/api/v1/skills/'+String(response.data)).then(function (res) {
         setSkillsData(prevSkillsData => [...prevSkillsData, res.data]);
@@ -47,7 +49,7 @@ const Skills = () => {
           "id": id
         },
         "skill": {
-          "id": response.data
+          "id": skillId
         }
         }/*, {
           headers: {
@@ -55,20 +57,15 @@ const Skills = () => {
           },
         }*/)
         .then(function (response) {
+        const updatedSkillsAll = skillsAll.filter(skill => skill.id !== skillId)
+        setSkillsAll(updatedSkillsAll)
         console.log(response);
         alert("Your post had been sent to admin ")
         })
         .catch(function (error) {
         alert(error.message);
         });
-    }      /*try{
-        const res = await axios.get('http://localhost:7777/api/v1/skills/'+String(response.data)).then(function (res) {
-        setSkillsData(prevSkillsData => [...prevSkillsData, res.data]);
-        console.log(res);
-        })
-      }catch (error) {
-        console.log(error);
-       };*/
+    } 
   
       const handleDelete = async (e:any, idS:number) =>{
         e.preventDefault()
@@ -88,10 +85,13 @@ const Skills = () => {
             try {
               Cookies.set("id","1")
               const id = Cookies.get("id");
-              const response = await axios.get('http://localhost:7777/api/v1/candidate-skills/byCandidate/'+String(id));
-              const res = await axios.get('http://localhost:7777/api/v1/skills');         
-              setSkillsData(response.data);
-              setSkillsAll(res.data)
+              const response = await axios.get('http://localhost:7777/api/v1/candidate-skills/byCandidate/' + String(id));
+              const candidateSkills: skill[] = response.data;
+              const res = await axios.get('http://localhost:7777/api/v1/skills');
+              const allSkills: skill[] = res.data;
+              const skillsAll = allSkills.filter(skill => !candidateSkills.some(candidateSkill => candidateSkill.id === skill.id));
+              setSkillsData(candidateSkills);
+              setSkillsAll(skillsAll);
             } catch (error) {
               console.error('Erreur lors de la récupération des données :', error);
             }
