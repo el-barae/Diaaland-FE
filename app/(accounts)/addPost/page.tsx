@@ -8,6 +8,7 @@ import LoginImage from '@/public/images/login-info.svg'
 import axios from 'axios'
 import { ThemeProvider } from 'next-themes'
 import { useRouter } from 'next/navigation';
+import API_URL from '@/config'
 export default function AddPost() {
 
 
@@ -27,7 +28,7 @@ export default function AddPost() {
  
   const handleSubmit = async (e:any)  =>{
 		e.preventDefault()
-		axios.post('http://localhost:7777/api/v1/jobs', {
+		axios.post(API_URL+'/api/v1/jobs', {
 			"name": jobTitle,
       "description": jobDescription,
       "minSalary": minSalary,

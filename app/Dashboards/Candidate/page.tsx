@@ -15,6 +15,7 @@ import Ex from '@/components/Candidate/Experiances/Ex';
 import Links from '@/components/Candidate/Links/Links';
 import Image from 'next/image'
 import Notif from '@/public/images/notif.png'
+import API_URL from '@/config';
   
 interface candidate{
   id:number;
@@ -72,7 +73,7 @@ const Candidate = () => {
       try {
         Cookies.set("id","1")
         const id = Cookies.get("id");
-        const response = await axios.get('http://localhost:7777/api/v1/candidates/name/'+String(id));         
+        const response = await axios.get(API_URL+'/api/v1/candidates/name/'+String(id));         
         setCandidateData(response.data);
       } catch (error) {
         console.error('Erreur lors de la récupération des données :', error);

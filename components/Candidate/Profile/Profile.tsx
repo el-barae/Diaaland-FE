@@ -10,6 +10,7 @@ import axios from 'axios';
 import Image from 'next/image'
 import RegisterImg from '@/public/images/registeration.png'
 import Candidate from '@/app/Dashboards/Candidate/page';
+import API_URL from '@/config'
 
 interface candidate{
 	firstName:string;
@@ -91,7 +92,7 @@ const [image, setImage] = useState<string>(''); // Je suppose que "image" est un
 	
 	const handleSubmit = async (e:any)  =>{
 		e.preventDefault()
-		axios.post('http://localhost:7777/api/v1/auth/register', {
+		axios.post(API_URL+'/api/v1/auth/register', {
 			"name": name,
 			"email":email,
 			"password": password,
@@ -128,7 +129,7 @@ const [image, setImage] = useState<string>(''); // Je suppose que "image" est un
 			  try {
 				Cookies.set("id","1")
 				const id = Cookies.get("id");
-				const response = await axios.get('http://localhost:7777/api/v1/candidates/tostring/'+String(id));         
+				const response = await axios.get(API_URL+'/api/v1/candidates/tostring/'+String(id));         
 				setCandidate(response.data);
 			  } catch (error) {
 				console.error('Erreur lors de la récupération des données :', error);
@@ -140,7 +141,7 @@ const [image, setImage] = useState<string>(''); // Je suppose que "image" est un
 				try {
 				  Cookies.set("id","1")
 				  const id = Cookies.get("id");
-				  const response = await axios.get('http://localhost:7777/api/v1/candidates/name/'+String(id));         
+				  const response = await axios.get(API_URL+'/api/v1/candidates/name/'+String(id));         
 				  
 				} catch (error) {
 				  console.error('Erreur lors de la récupération des données :', error);

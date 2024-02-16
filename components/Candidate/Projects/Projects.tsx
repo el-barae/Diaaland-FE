@@ -5,6 +5,7 @@ import Cookies from 'js-cookie';
 import axios from 'axios';
 import Link from 'next/link';
 import Modal from './ModalProject/ModalProject'
+import API_URL from '@/config'
 
 
 interface project{
@@ -51,7 +52,7 @@ const Projects = () => {
     const handleAddProject = async (e:any)  =>{
       e.preventDefault()
       const id = Cookies.get("id");
-      axios.post('http://localhost:7777/api/v1/projects', {
+      axios.post(API_URL+'/api/v1/projects', {
         "name": name,
         "startDate": startDate,
         "endDate": endDate,
@@ -77,7 +78,7 @@ const Projects = () => {
     const handleDelete = async (e:any, id:number) =>{
       e.preventDefault()
       try{
-      axios.delete('http://localhost:7777/api/v1/projects/'+String(id))
+      axios.delete(API_URL+'/api/v1/projects/'+String(id))
       const updatedProjectsData = projectsData.filter(pro => pro.id !== id)
       setProjectsData(updatedProjectsData)
       }catch (error) {
@@ -90,7 +91,7 @@ const Projects = () => {
           try {
             Cookies.set("id","1")
             const id = Cookies.get("id");
-            const response = await axios.get('http://localhost:7777/api/v1/projects/byCandidate/'+String(id));         
+            const response = await axios.get(API_URL+'/api/v1/projects/byCandidate/'+String(id));         
             setProjectsData(response.data);
           } catch (error) {
             console.error('Erreur lors de la récupération des données :', error);

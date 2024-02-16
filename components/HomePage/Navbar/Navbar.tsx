@@ -13,6 +13,7 @@ import axios from 'axios';
 import './Navbar.scss'
 import SigninButton from './SigninButton';
 import { useSession, signIn, signOut } from 'next-auth/react';
+import API_URL from '@/config';
 
 
 
@@ -51,7 +52,7 @@ const Navbar = () => {
 
   const logout = async ()=>{
     const token = localStorage.getItem('token')
-		axios.post('http://localhost:7777/api/v1/auth/logout', {
+		axios.post(API_URL+'/api/v1/auth/logout', {
 			"token" : token
 		  })
 		  .then(function (response) {

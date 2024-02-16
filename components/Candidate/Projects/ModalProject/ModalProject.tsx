@@ -3,6 +3,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import "./ModalProject.scss";
 import Project from '../Projects'; 
+import API_URL from "@/config";
 
 interface ModalProps {
     isOpen: boolean;
@@ -28,7 +29,7 @@ interface ModalProps {
       e.preventDefault();
       const idC = Cookies.get('id');
       axios
-        .put('http://localhost:7777/api/v1/projects/' + String(id), {
+        .put(API_URL+'/api/v1/projects/' + String(id), {
           id: id,
           name: modifiedName,
           startDate: modifiedStartDate,

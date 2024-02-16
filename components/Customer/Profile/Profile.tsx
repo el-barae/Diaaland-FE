@@ -9,6 +9,7 @@ import { FaEyeSlash, FaEye } from 'react-icons/fa';
 import Image from 'next/image'
 import RegisterImg from '@/public/images/registeration.png'
 import axios from 'axios';
+import API_URL from '@/config';
 
 const passwordStrength = (password: string) => {
 	let res = 0;
@@ -56,7 +57,7 @@ const Profile = () =>{
 	
 	const handleSubmit = async (e:any)  =>{
 		e.preventDefault()
-		axios.post('http://localhost:7777/api/v1/auth/register', {
+		axios.post(API_URL+'/api/v1/auth/register', {
 			"name": name,
 			"email":email,
 			"password": password,

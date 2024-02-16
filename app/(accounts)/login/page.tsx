@@ -12,6 +12,7 @@ import Link from 'next/link'
 import LoginImage from '@/public/images/login-info.svg'
 import { FaEye, FaEyeSlash } from 'react-icons/fa'
 import { signIn, useSession } from 'next-auth/react';
+import API_URL from '@/config';
 
 export default function Login() {
 
@@ -27,7 +28,7 @@ export default function Login() {
 
 	const fetchID = async () => {
 		try {
-			const resp = await axios.get('http://localhost:7777/api/v1/candidates/findIdByEmail/'+String(email)); 
+			const resp = await axios.get(API_URL+'/api/v1/candidates/findIdByEmail/'+String(email)); 
 			const ID = JSON.stringify(resp.data);
 			console.log(String(ID));
 			  Cookies.set("id", String(ID));
@@ -38,7 +39,7 @@ export default function Login() {
 
 	const handleSubmit = async (e:any)  =>{
 		e.preventDefault()
-		axios.post('http://localhost:7777/api/v1/auth', {
+		axios.post(API_URL+'/api/v1/auth', {
 			"email": email,
 			"password": password
 		  })

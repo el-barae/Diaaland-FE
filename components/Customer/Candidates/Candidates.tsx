@@ -3,6 +3,7 @@ import { useState,useEffect } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
 import './Candidates.scss'
+import API_URL from "@/config";
 
 interface Candidate {
     id: number;
@@ -41,7 +42,7 @@ const Candidates = () =>{
           try {
             Cookies.set("id","1")
             const id = Cookies.get("id");
-            const response = await axios.get('http://localhost:7777/api/v1/candidate-jobs/byCustomer/'+String(id));   
+            const response = await axios.get(API_URL+'/api/v1/candidate-jobs/byCustomer/'+String(id));   
                   
             setCandidatesData(response.data);
           } catch (error) {

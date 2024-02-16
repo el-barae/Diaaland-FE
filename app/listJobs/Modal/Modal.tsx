@@ -2,6 +2,7 @@ import React, { useState,useEffect } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
 import "./Modal.scss";
+import API_URL from "@/config";
 
 interface ModalProps {
     isOpen: boolean;
@@ -18,7 +19,7 @@ export default function Modal({ isOpen, id, description, name, onClose }: ModalP
     
     const handleApply = async (e:any, id:number) =>{
 		e.preventDefault()
-		axios.post('http://localhost:7777/api/v1/candidate-jobs', {
+		axios.post(API_URL+'/api/v1/candidate-jobs', {
 			"status": "en attends",
       "candidate": {
         "id": 1
@@ -37,7 +38,7 @@ export default function Modal({ isOpen, id, description, name, onClose }: ModalP
 
   const handleAddFavoris = async (e:any, id:number) =>{
 		e.preventDefault()
-		axios.post('http://localhost:7777/api/v1/favoris', {
+		axios.post(API_URL+'/api/v1/favoris', {
       "candidate": {
         "id": 1
       },

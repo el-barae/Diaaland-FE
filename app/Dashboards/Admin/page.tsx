@@ -8,6 +8,7 @@ import './style.scss';
 import {ThemeProvider} from 'next-themes'
 import Navbar from '@/components/HomePage/Navbar/Navbar'
 import Candidate from '../Candidate/page';
+import API_URL from '@/config';
 
 interface Job {
     id: number;
@@ -53,15 +54,15 @@ const Admin = () =>{
  useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:7777/api/v1/jobs/list');
+        const response = await axios.get(API_URL+'/api/v1/jobs/list');
         setJobsData(response.data);
-        const countJ = await axios.get('http://localhost:7777/api/v1/admin/jobs');
+        const countJ = await axios.get(API_URL+'/api/v1/admin/jobs');
         setCountJobs(countJ.data);
-        const countCa = await axios.get('http://localhost:7777/api/v1/admin/candidates');
+        const countCa = await axios.get(API_URL+'/api/v1/admin/candidates');
         setCountCandidates(countCa.data);
-        const countCu = await axios.get('http://localhost:7777/api/v1/admin/customers');
+        const countCu = await axios.get(API_URL+'/api/v1/admin/customers');
         setCountCustomers(countCu.data);
-        const response1 = await axios.get<appliedCandidates[]>('http://localhost:7777/api/v1/candidate-jobs');
+        const response1 = await axios.get<appliedCandidates[]>(API_URL+'/api/v1/candidate-jobs');
         setAppliedCandidatesData(response1.data);
       } catch (error) {
         console.error('Erreur lors de la récupération des données :', error);

@@ -3,6 +3,7 @@ import './Skills.scss'
 import { useState, useEffect } from "react"
 import Cookies from "js-cookie";
 import axios from "axios";
+import API_URL from '@/config';
 
 interface skill{
     id: number;
@@ -32,17 +33,17 @@ const Skills = () => {
       e.preventDefault()
       setSkill('');
       const id = Cookies.get("id");
-      const response = await axios.get('http://localhost:7777/api/v1/skills/id/'+sname);
+      const response = await axios.get(API_URL+'/api/v1/skills/id/'+sname);
       const skillId = response.data.id;
       try{
-        const res = await axios.get('http://localhost:7777/api/v1/skills/'+String(response.data)).then(function (res) {
+        const res = await axios.get(API_URL+'/api/v1/skills/'+String(response.data)).then(function (res) {
         setSkillsData(prevSkillsData => [...prevSkillsData, res.data]);
         console.log(res);
         })
       }catch (error) {
         console.log(error);
        };
-      axios.post('http://localhost:7777/api/v1/candidate-skills', {
+      axios.post(API_URL+'/api/v1/candidate-skills', {
         "name": name,
         "score": score,
         "candidate": {
@@ -72,7 +73,7 @@ const Skills = () => {
         try{
         Cookies.set("id","1")
         const idC = Cookies.get("id");
-        axios.delete('http://localhost:7777/api/v1/candidate-skills/'+String(idC)+'/'+String(idS))
+        axios.delete(API_URL+'/api/v1/candidate-skills/'+String(idC)+'/'+String(idS))
         const updatedSkillsData = skillsData.filter(skill => skill.id !== idS)
         setSkillsData(updatedSkillsData)
         }catch (error) {
@@ -85,9 +86,9 @@ const Skills = () => {
             try {
               Cookies.set("id","1")
               const id = Cookies.get("id");
-              const response = await axios.get('http://localhost:7777/api/v1/candidate-skills/byCandidate/' + String(id));
+              const response = await axios.get(API_URL+'/api/v1/candidate-skills/byCandidate/' + String(id));
               const candidateSkills: skill[] = response.data;
-              const res = await axios.get('http://localhost:7777/api/v1/skills');
+              const res = await axios.get(API_URL+'/api/v1/skills');
               const allSkills: skill[] = res.data;
               const skillsAll = allSkills.filter(skill => !candidateSkills.some(candidateSkill => candidateSkill.id === skill.id));
               setSkillsData(candidateSkills);

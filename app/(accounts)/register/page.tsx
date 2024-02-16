@@ -10,6 +10,7 @@ import Link from 'next/link'
 import RegisterImg from '@/public/images/register-info.svg'
 import { FaEyeSlash, FaEye } from 'react-icons/fa';
 import axios from 'axios';
+import API_URL from '@/config';
 
 const passwordStrength = (password: string) => {
 	let res = 0;
@@ -54,7 +55,7 @@ export default function Register() {
 	
 	const handleSubmit = async (e:any)  =>{
 		e.preventDefault()
-		axios.post('http://localhost:7777/api/v1/auth/register', {
+		axios.post(API_URL+'/api/v1/auth/register', {
 			"firstName": firstname,
 			"lastName": lastname,
 			"email":email,

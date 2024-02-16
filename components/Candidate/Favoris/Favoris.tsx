@@ -3,6 +3,7 @@ import { useState ,useEffect} from "react"
 import axios from 'axios'
 import React from 'react';
 import Cookies from 'js-cookie';
+import API_URL from '@/config'
 
 interface Job {
     id: number;
@@ -20,7 +21,7 @@ interface Job {
 
   const handleApply = async (e:any, id:number) =>{
 		e.preventDefault()
-		axios.post('http://localhost:7777/api/v1/candidate-jobs', {
+		axios.post(API_URL+'/api/v1/candidate-jobs', {
 			"status": "en attends",
       "candidate": {
         "id": 1
@@ -65,7 +66,7 @@ const Favoris = () =>{
       try {
       Cookies.set("id","1")
       const idC = Cookies.get("id");
-      axios.delete('http://localhost:7777/api/v1/favoris/'+String(idC)+'/'+String(idJ))
+      axios.delete(API_URL+'/api/v1/favoris/'+String(idC)+'/'+String(idJ))
       const updatedJobsData = jobsData.filter(job => job.id !== idJ)
       setJobsData(updatedJobsData)
     } catch (error) {
@@ -78,7 +79,7 @@ const Favoris = () =>{
     try {
       Cookies.set("id","1")
       const id = Cookies.get("id");
-      const response = await axios.get('http://localhost:7777/api/v1/favoris/'+String(id));         
+      const response = await axios.get(API_URL+'/api/v1/favoris/'+String(id));         
       setJobsData(response.data);
     } catch (error) {
       console.error('Erreur lors de la récupération des données :', error);

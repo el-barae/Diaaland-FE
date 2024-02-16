@@ -11,6 +11,7 @@ import Candidates from '@/components/Customer/Candidates/Candidates'
 import {ThemeProvider} from 'next-themes'
 import Navbar from '@/components/HomePage/Navbar/Navbar'
 import Notif from '@/public/images/notif.png'
+import API_URL from '@/config';
 
 interface Candidate {
     id: number;
@@ -100,7 +101,7 @@ const Customer = () => {
     useEffect(() => {
         const fetchCandidateData = async () => {
           try {
-            const response = await axios.get('http://localhost:7777/api/v1/candidate-jobs/byJob/2');
+            const response = await axios.get(API_URL+'/api/v1/candidate-jobs/byJob/2');
             
             setCandidatesData(response.data);
           } catch (error) {
@@ -111,7 +112,7 @@ const Customer = () => {
           try {
             Cookies.set("id","1")
             const id = Cookies.get("id");
-            const response = await axios.get('http://localhost:7777/api/v1/jobs/byCustomer/'+String(id));         
+            const response = await axios.get(API_URL+'/api/v1/jobs/byCustomer/'+String(id));         
             setJobsData(response.data);
           } catch (error) {
             console.error('Erreur lors de la récupération des données :', error);

@@ -3,6 +3,7 @@ import { useState ,useEffect} from "react"
 import axios from 'axios'
 import React from 'react';
 import Cookies from 'js-cookie';
+import API_URL from '@/config'
 
 interface Job {
     id: number;
@@ -39,7 +40,7 @@ interface Job {
       e.preventDefault()
       Cookies.set("id","1")
       const idC = Cookies.get("id");
-      axios.delete('http://localhost:7777/api/v1/candidate-jobs/'+String(idC)+'/'+String(idJ))
+      axios.delete(API_URL+'/api/v1/candidate-jobs/'+String(idC)+'/'+String(idJ))
        .catch(function (error) {
         console.log(error);
        });
@@ -52,7 +53,7 @@ const Jobs = () =>{
           try {
             Cookies.set("id","1")
             const id = Cookies.get("id");
-            const response = await axios.get('http://localhost:7777/api/v1/candidate-jobs/byCandidate/'+String(id));         
+            const response = await axios.get(API_URL+'/api/v1/candidate-jobs/byCandidate/'+String(id));         
             setJobsData(response.data);
           } catch (error) {
             console.error('Erreur lors de la récupération des données :', error);

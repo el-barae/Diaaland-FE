@@ -12,6 +12,7 @@ import './style.scss';
 import {ThemeProvider} from 'next-themes'
 import Navbar from '@/components/HomePage/Navbar/Navbar'
 import Modal from './Modal/Modal'
+import API_URL from '@/config'
 
 interface Job {
  id: number;
@@ -42,7 +43,7 @@ const ListJobs = () => {
  useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:7777/api/v1/jobs/list');
+        const response = await axios.get(API_URL+'/api/v1/jobs/list');
 
         setJobsData(response.data);
       } catch (error) {
