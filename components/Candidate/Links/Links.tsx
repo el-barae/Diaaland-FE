@@ -3,6 +3,7 @@ import './Links.scss'
 import { useState,useEffect } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import API_URL from '@/config';
 
 interface education{
     id: number;
@@ -46,10 +47,17 @@ interface Education {
 
 const Links = () => {
 
-    const [name,setName] = useState('')
+    const [nameEducation,setNameEducation] = useState('')
+    const [nameCertificate,setNameCertificate] = useState('')
+    const [nameLink,setNameLink] = useState('')
+    const [domain,setDomain] = useState('')
     const [school,setSchool] = useState('')
-    const [url,setUrl] = useState('')
-    const [desc,setDesc] = useState('')
+    const [urlEducation,setUrlEducation] = useState('')
+    const [urlCertificate,setUrlCertificate] = useState('')
+    const [urlLink,setUrlLink] = useState('')
+    const [descEducation,setDescEducation] = useState('')
+    const [descCertificate,setDescCertificate] = useState('')
+    const [descLink,setDescLink] = useState('')
     const [startDate, setStartDate] = useState('')
     const [endDate, setEndDate] = useState('')
     const [educationsData,setEducationsData] = useState<education[]>([])
@@ -60,7 +68,12 @@ const Links = () => {
         e.preventDefault()
         const id = Cookies.get("id");
         axios.post('http://localhost:7777/api/v1/educations', {
-          "name": name,
+          "name": nameEducation,
+          "url": urlEducation,
+          "description": descEducation,
+          "candidate": {
+            "id": id
+          },
           "school": school,
           "startDate": startDate,
           "endDate": endDate,
@@ -70,6 +83,7 @@ const Links = () => {
             },
           }*/)
           .then(function (response) {
+            setEducationsData(prevEducationData => [...prevEducationData, response.data]);
           console.log(response);
           alert("Your post had been sent to admin ")
           })
@@ -82,15 +96,20 @@ const Links = () => {
         e.preventDefault()
         const id = Cookies.get("id");
         axios.post('http://localhost:7777/api/v1/certificates', {
-          "name": name,
-          "url": url,
-          "decription": desc,
+          "name": nameCertificate,
+          "url": urlCertificate,
+          "decription": descCertificate,
+          "candidate": {
+            "id": id
+          },
+          "domain": domain
           }/*, {
             headers: {
               Authorization: `Bearer ${authToken}`,
             },
           }*/)
           .then(function (response) {
+          setCertificatesData(prevCertificatesData => [...prevCertificatesData, response.data]);
           console.log(response);
           alert("Your post had been sent to admin ")
           })
@@ -103,15 +122,19 @@ const Links = () => {
         e.preventDefault()
         const id = Cookies.get("id");
         axios.post('http://localhost:7777/api/v1/other_links', {
-          "name": name,
-          "url": url,
-          "decription": desc,
+          "name": nameLink,
+          "url": urlLink,
+          "decription": descLink,
+          "candidate": {
+            "id": id
+          }
           }/*, {
             headers: {
               Authorization: `Bearer ${authToken}`,
             },
           }*/)
           .then(function (response) {
+            setOther_LinksData(prevOthersData => [...prevOthersData, response.data]);
           console.log(response);
           alert("Your post had been sent to admin ")
           })
@@ -122,25 +145,37 @@ const Links = () => {
   
       const handleDeleteEducation = async (e:any, id:number) =>{
         e.preventDefault()
+        try{
         axios.delete('http://localhost:7777/api/v1/educations/'+String(id))
-         .catch(function (error) {
+        const updatedEducationsData = educationsData.filter(ed => ed.id !== id)
+        setEducationsData(updatedEducationsData)
+        }
+        catch(error) {
           console.log(error);
-         });
+        };
       }
 
       const handleDeleteCertificate = async (e:any, id:number) =>{
         e.preventDefault()
+        try{
         axios.delete('http://localhost:7777/api/v1/certificates/'+String(id))
-         .catch(function (error) {
+        const updatedCertificatesData = certificatesData.filter(cer => cer.id !== id)
+        setCertificatesData(updatedCertificatesData)
+        }
+        catch(error) {
           console.log(error);
-         });
+        };
       }
       const handleDeleteLink = async (e:any, id:number) =>{
         e.preventDefault()
+        try{
         axios.delete('http://localhost:7777/api/v1/other_links/'+String(id))
-         .catch(function (error) {
+        const updatedOtherData = other_linksData.filter(o => o.id !== id)
+        setOther_LinksData(updatedOtherData)
+        }
+        catch(error) {
           console.log(error);
-         });
+        };
       }
 
     const Educations: React.FC<Education> = ({ className, n, educationsData }) => {
@@ -221,9 +256,9 @@ const Links = () => {
                         <div className='add'>
                             <div className='part1'>
                                 <label htmlFor="name">Name:</label>
-                                <input type="text" placeholder='Enter name education' value={name} onChange={(e) => setName(e.target.value)}/>
+                                <input type="text" placeholder='Enter name education' value={nameEducation} onChange={(e) => setNameEducation(e.target.value)}/>
                                 <label htmlFor="url">Url:</label>
-                                <input type="text" placeholder='Enter  url education' value={url} onChange={(e) => setUrl(e.target.value)}/>
+                                <input type="text" placeholder='Enter  url education' value={urlEducation} onChange={(e) => setUrlEducation(e.target.value)}/>
                                 <label htmlFor="name">School:</label>
                                 <input type="text" placeholder='Enter school education' value={school} onChange={(e) => setSchool(e.target.value)}/>
                                 <label htmlFor="startDate">Start Date:</label>
@@ -241,7 +276,7 @@ const Links = () => {
                                     onChange={(e) => setEndDate(e.target.value)}
                                 />
                                 <label htmlFor="description">Description:</label>
-                                <textarea className='desc' placeholder='Enter description' value={desc} onChange={(e) => setDesc(e.target.value)}/>
+                                <textarea className='desc' placeholder='Enter description' value={descEducation} onChange={(e) => setDescEducation(e.target.value)}/>
                                 <button onClick={handleAddEducation}>add education</button>
                             </div>
                             <div className='part2'>
@@ -256,11 +291,13 @@ const Links = () => {
                         <div className='add'>
                             <div className='part1'>
                                 <label htmlFor="name">Name:</label>
-                                <input type="text" placeholder='Enter name certificate' value={name} onChange={(e) => setName(e.target.value)}/>
+                                <input type="text" placeholder='Enter name certificate' value={nameCertificate} onChange={(e) => setNameCertificate(e.target.value)}/>
                                 <label htmlFor="url">Url:</label>
-                                <input type="text" placeholder='Enter  url certificate' value={url} onChange={(e) => setUrl(e.target.value)}/>
+                                <input type="text" placeholder='Enter  url certificate' value={urlCertificate} onChange={(e) => setUrlCertificate(e.target.value)}/>
+                                <label htmlFor="url">Domain:</label>
+                                <input type="text" placeholder='Enter  url certificate' value={domain} onChange={(e) => setDomain(e.target.value)}/>
                                 <label htmlFor="description">Description:</label>
-                                <textarea className='desc' placeholder='Enter description' value={desc} onChange={(e) => setDesc(e.target.value)}/>
+                                <textarea className='desc' placeholder='Enter description' value={descCertificate} onChange={(e) => setDescCertificate(e.target.value)}/>
                                 <button onClick={handleAddCertificate}>add certificate</button>
                             </div>
                             <div className='part2'>
@@ -275,11 +312,11 @@ const Links = () => {
                         <div className='add'>
                             <div className='part1'>
                                 <label htmlFor="name">Name:</label>
-                                <input type="text" placeholder='Enter name' value={name} onChange={(e) => setName(e.target.value)}/>
+                                <input type="text" placeholder='Enter name' value={nameLink} onChange={(e) => setNameLink(e.target.value)}/>
                                 <label htmlFor="name">Url:</label>
-                                <input type="text" placeholder='Enter url' value={name} onChange={(e) => setName(e.target.value)}/>
+                                <input type="text" placeholder='Enter url' value={urlLink} onChange={(e) => setUrlLink(e.target.value)}/>
                                 <label htmlFor="description">Description:</label>
-                                <textarea className='desc' placeholder='Enter description' value={desc} onChange={(e) => setDesc(e.target.value)}/>
+                                <textarea className='desc' placeholder='Enter description' value={descLink} onChange={(e) => setDescLink(e.target.value)}/>
                                 <button onClick={handleAddOther_Link}>add link</button>
                             </div>
                             <div className='part2'>
