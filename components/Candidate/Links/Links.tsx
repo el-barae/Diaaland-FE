@@ -4,6 +4,9 @@ import { useState,useEffect } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import API_URL from '@/config';
+import ModalE from './ModalEducations/ModalEducation'
+import ModalC from './ModalCertificates/ModalCertificate'
+import ModalL from './ModalLinks/ModalLink'
 
 interface education{
     id: number;
@@ -12,6 +15,7 @@ interface education{
     school: string;
     startDate : string;
     endDate : string;
+    description: string;
 }
 
 interface certificate{
@@ -19,12 +23,14 @@ interface certificate{
     name: string;
     url: string;
     domain: string;
+    description: string;
 }
 
 interface other_link{
     id: number;
     name: string;
     url: string;
+    description: string;
 }
 
 interface Education {
@@ -178,6 +184,19 @@ const Links = () => {
         };
       }
 
+      const [modalEOpen, setModalEOpen] = useState(false);
+      const handleEducationClick = () => {
+        setModalEOpen(true);
+      };
+      const [modalCOpen, setModalCOpen] = useState(false);
+    const handleCertificateClick = () => {
+      setModalCOpen(true);
+    };
+    const [modalLOpen, setModalLOpen] = useState(false);
+    const handleLinkClick = () => {
+      setModalLOpen(true);
+    };
+
     const Educations: React.FC<Education> = ({ className, n, educationsData }) => {
         if(educationsData.length != 0)
           return(
@@ -190,6 +209,8 @@ const Links = () => {
               <p>Start date: {education.startDate}</p>
               <p>Close date: {education.endDate}</p>
               <button onClick={(e) => handleDeleteEducation(e, education.id)}>Delete</button>
+              <button onClick={() => handleEducationClick()}>Modify</button>
+              <ModalE isOpen={modalEOpen} id={education.id} name={education.name} url={education.url} school={education.school} startDate={education.startDate} endDate={education.endDate} description={education.description} onClose={() => setModalEOpen(false)} />
             </div>
             ))}
             </>
@@ -206,6 +227,8 @@ const Links = () => {
                   <p>Url: {certificate.url}</p>
                   <p>Domain: {certificate.domain}</p>
                   <button onClick={(e) => handleDeleteCertificate(e, certificate.id)}>Delete</button>
+                  <button onClick={() => handleCertificateClick()}>Modify</button>
+              <ModalC isOpen={modalCOpen} id={certificate.id} name={certificate.name} url={certificate.url}  description={certificate.description} domain={certificate.domain} onClose={() => setModalCOpen(false)} />
                 </div>
                 ))}
                 </>
@@ -223,6 +246,8 @@ const Links = () => {
                       Url: {link.url}
                     </p>
                     <button onClick={(e) => handleDeleteLink(e, link.id)}>Delete</button>
+                    <button onClick={() => handleLinkClick()}>Modify</button>
+                    <ModalL isOpen={modalLOpen} id={link.id} name={link.name} url={link.url}  description={link.description} onClose={() => setModalLOpen(false)} />
                   </div>
                   ))}
                   </>
