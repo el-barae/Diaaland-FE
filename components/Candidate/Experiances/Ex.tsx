@@ -4,6 +4,7 @@ import { useState,useEffect } from 'react';
 import Cookies from 'js-cookie';
 import axios from 'axios';
 import API_URL from '@/config'
+import ModalXp from './ModalXp/ModalXp'
 
 interface xp{
     id: number;
@@ -23,6 +24,10 @@ const Xp = () => {
   const [startDate,setStartDate] = useState('')
   const [endDate,setEndDate] = useState('')
   const [xpData,setXpData] = useState<xp[]>([])
+  const [modalOpen, setModalOpen] = useState(false);
+    const handleApplyClick = () => {
+      setModalOpen(true);
+    };
 
     const handleAddXp = async (e:any)  =>{
       e.preventDefault()
@@ -85,6 +90,8 @@ const Xp = () => {
           </p>
           <p>Close Date: {xp.endDate}</p>
           <button onClick={(e) => handleDelete(e, xp.id)}>Delete</button>
+          <button onClick={() => handleApplyClick()}>Modify</button>
+          <ModalXp isOpen={modalOpen} id={xp.id} name={xp.name} startDate={xp.startDate} endDate={xp.endDate} onClose={() => setModalOpen(false)} />
         </div>
         ))}
         </>
