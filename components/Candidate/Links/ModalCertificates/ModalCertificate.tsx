@@ -17,28 +17,26 @@ interface ModalProps {
   export default function Modal({ isOpen, id, name, url, domain, description, onClose }: ModalProps) {
   const [modifiedName, setModifiedName] = useState(name);
   const [modifiedUrl, setModifiedUrl] = useState(url);
-  const [modifiedSchool, setModifiedSchool] = useState('');
-  const [modifiedStartDate, setModifiedStartDate] = useState('');
-  const [modifiedEndDate, setModifiedEndDate] = useState('');
+  const [modifiedDomain, setModifiedDomain] = useState(domain);
   const [modifiedDescription, setModifiedDescription] = useState(description);
 
     const toggleModal = () => {
       onClose();
     };
 
-    const handleModifyProject = async (e: any) => {
+    const handleModifyCertificate = async (e: any) => {
       e.preventDefault();
       const idC = Cookies.get('id');
       axios
-        .put(API_URL+'/api/v1/projects/' + String(id), {
+        .put(API_URL+'/api/v1/certificates/' + String(id), {
           id: id,
           name: modifiedName,
-          startDate: modifiedStartDate,
-          endDate: modifiedEndDate,
+          url: modifiedUrl,
           description: modifiedDescription,
           candidate: {
             id: idC,
           },
+          domain: modifiedDomain
         })
         .then(function (response) {
           console.log(response);
@@ -64,12 +62,12 @@ interface ModalProps {
       setModifiedName(e.target.value);
     };
   
-    const handleStartDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      setModifiedStartDate(e.target.value);
+    const handleUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      setModifiedUrl(e.target.value);
     };
   
-    const handleEndDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      setModifiedEndDate(e.target.value);
+    const handleDomainChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      setModifiedDomain(e.target.value);
     };
   
     const handleDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -79,19 +77,19 @@ interface ModalProps {
     return (
       <>
         {isOpen && (
-          <div className="modal">
+          <div className="modal-certificate">
             <div onClick={toggleModal} className="overlay"></div>
               <button id="close-btn" onClick={toggleModal}>CLOSE</button>
               <div className="modal-content">
               <label htmlFor="name">Name:</label>
-            <input type="text" id="name" placeholder="Enter name project" value={modifiedName} onChange={handleNameChange} />
-            <label htmlFor="startDate">Start Date:</label>
-            <input type="date" id="startDate" value={modifiedStartDate} onChange={handleStartDateChange} />
-            <label htmlFor="CloseDate">End Date:</label>
-            <input type="date" id="CloseDate" value={modifiedEndDate} onChange={handleEndDateChange} />
+            <input type="text" id="name" placeholder="Enter name certificate" value={modifiedName} onChange={handleNameChange} />
+            <label htmlFor="url">Url:</label>
+            <input type="text" id="url" placeholder="Enter url certificate" value={modifiedUrl} onChange={handleUrlChange} />
+            <label htmlFor="domain">Domain:</label>
+            <input type="text" id="domain" placeholder="Enter domain certificate" value={modifiedDomain} onChange={handleDomainChange} />
             <label htmlFor="description">Description:</label>
             <textarea className="desc" id="description" placeholder="Enter description" value={modifiedDescription} onChange={handleDescriptionChange} />
-            <button onClick={handleModifyProject}>Modify project</button>
+            <button onClick={handleModifyCertificate}>Modify certificate</button>
               </div>
           </div>
         )}
