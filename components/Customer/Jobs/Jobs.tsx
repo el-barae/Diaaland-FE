@@ -4,14 +4,22 @@ import axios from 'axios'
 import React from 'react';
 import Cookies from 'js-cookie';
 import API_URL from '@/config';
+import Modal from './ModalJobs/ModalJobs';
 
 interface Job {
-    id: number;
-    name: string;
-    description: string;
-    numberOfPositions: number;
-    closeDate: string;
-  }
+  id: number;
+  jobTitle: string;
+  minSalary: string;
+  maxSalary: string;
+  positionNumber: string;
+  openDate: string;
+  endDate: string; 
+  adress: string;
+  xp: string;
+  type: string;
+  description: string;
+}
+
 
   interface RepeatClassNTimesProps {
     className: string;
@@ -20,17 +28,23 @@ interface Job {
   }
 
   const RepeatClassNTimes: React.FC<RepeatClassNTimesProps> = ({ className, n, jobsData }) => {
+    const [modalOpen, setModalOpen] = useState(false);
+    const handleApplyClick = () => {
+      setModalOpen(true);
+    };
     if(jobsData.length != 0)
       return(
         <>
         {jobsData.map((job) => (
           <div key={job.id} className={className}>
-          <h1>{job.name} :</h1>
+          <h1>{job.jobTitle} :</h1>
           <p>
-            Description: {job.description} <br/> Number of positions: {job.numberOfPositions} 
+            Description: {job.description} <br/> Number of positions: {job.positionNumber} 
           </p>
-          <p>Close Date: {job.closeDate}</p>
+          <p>Close Date: {job.endDate}</p>
           <button onClick={(e) => handleDelete(e, job.id)}>Delete</button>
+          <button onClick={() => handleApplyClick()}>Modify</button>
+          <Modal isOpen={modalOpen} id={job.id} jobTitle={job.jobTitle} minSalary={job.minSalary} maxSalary={job.maxSalary} positionNumber={job.positionNumber} openDate={job.openDate} endDate={job.endDate} adress={job.adress} xp={job.xp} type={job.type} description={job.description} onClose={() => setModalOpen(false)}/>
         </div>
         ))}
         </>
