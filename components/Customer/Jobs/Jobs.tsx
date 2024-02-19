@@ -8,16 +8,16 @@ import Modal from './ModalJobs/ModalJobs';
 
 interface Job {
   id: number;
-  jobTitle: string;
-  minSalary: string;
-  maxSalary: string;
-  positionNumber: string;
-  openDate: string;
-  endDate: string; 
-  adress: string;
-  xp: string;
-  type: string;
+  name: string;
   description: string;
+  minSalary: number;
+  maxSalary: number;
+  type: string;
+  openDate: string;
+  closeDate: string; 
+  numberOfPositions: number;
+  address: string;
+  remoteStatus: string;
 }
 
 
@@ -37,14 +37,14 @@ interface Job {
         <>
         {jobsData.map((job) => (
           <div key={job.id} className={className}>
-          <h1>{job.jobTitle} :</h1>
+          <h1>{job.name} :</h1>
           <p>
-            Description: {job.description} <br/> Number of positions: {job.positionNumber} 
+            Type: {job.type} <br/> Number of positions: {job.numberOfPositions} 
           </p>
-          <p>Close Date: {job.endDate}</p>
+          <p>Close Date: {job.closeDate}</p>
           <button onClick={(e) => handleDelete(e, job.id)}>Delete</button>
           <button onClick={() => handleApplyClick()}>Modify</button>
-          <Modal isOpen={modalOpen} id={job.id} jobTitle={job.jobTitle} minSalary={job.minSalary} maxSalary={job.maxSalary} positionNumber={job.positionNumber} openDate={job.openDate} endDate={job.endDate} adress={job.adress} xp={job.xp} type={job.type} description={job.description} onClose={() => setModalOpen(false)}/>
+          <Modal isOpen={modalOpen} id={job.id} jobTitle={job.name} minSalary={job.minSalary} maxSalary={job.maxSalary} positionNumber={job.numberOfPositions} openDate={job.openDate} endDate={job.closeDate} adress={job.address} xp={job.remoteStatus} type={job.type} description={job.description} onClose={() => setModalOpen(false)}/>
         </div>
         ))}
         </>

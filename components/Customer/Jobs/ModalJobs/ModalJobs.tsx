@@ -91,7 +91,7 @@ interface ModalProps {
     return (
       <>
         {isOpen && (
-          <div className="modal">
+          <div className="modal-jobs">
             <div onClick={toggleModal} className="overlay"></div>
               <button id="close-btn" onClick={toggleModal}>CLOSE</button>
               <div className="modal-content">
