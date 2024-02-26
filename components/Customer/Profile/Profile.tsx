@@ -52,7 +52,7 @@ const Profile = () =>{
 	const [url, setUrl] = useState('')
 	const [adress, setAdress] = useState('')
 	const [logo, setLogo] = useState('')
-
+	const [customer, setCustomer] = useState('')
 	const [passState, setPassState] = useState('hide');
 	
 	const handleSubmit = async (e:any)  =>{
@@ -87,6 +87,19 @@ const Profile = () =>{
 	}
 
 	useEffect(() => {
+		const fetchData = async () => {
+			try {
+			  Cookies.set("id","1")
+			  const id = Cookies.get("id");
+			  const response = await axios.get(API_URL+'/api/v1/customers/tostring/'+String(id));         
+			  setCustomer(response.data);
+			  console.log(customer);
+			} catch (error) {
+			  console.error('Erreur lors de la récupération des données :', error);
+			}
+		  };
+		fetchData();
+
 		let messageColors = ['text-red-600', 'text-red-400', 'text-yellow-600', 'text-green-400', 'text-green-600', 'text-green-500', 'text-green-700'];
 		let res = passwordStrength(password);
 		messageColors.map((color) => {
@@ -109,6 +122,17 @@ const Profile = () =>{
 			passwordMessageRef.current.innerText = 'very strong password';
 		}
 	}, [password])
+
+	useEffect(() => {
+		if (customer) {
+			const customerAttributes = customer.split('|~');
+			setName(customerAttributes[0]);
+			setEmail(customerAttributes[1]);
+			setCity(customerAttributes[3]);
+			setCountry(customerAttributes[4]);
+			setAdress(customerAttributes[2]);
+		}
+	}, [customer]);
 
 	const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setPassword(e.target.value);
@@ -151,16 +175,16 @@ const Profile = () =>{
 
 					<br></br>
 										<label htmlFor="firstname">Name</label>
-										<input type="text" name="firstname" id="firstname" placeholder="Enter your company name " autoFocus required onInvalid={invalidFirstname} onChange={(e) => setName(e.target.value)} />
+										<input type="text" name="firstname" id="firstname" placeholder="Enter your company name " value={name} autoFocus required onInvalid={invalidFirstname} onChange={(e) => setName(e.target.value)} />
 										<p ref={firstnameErrorRef} className="error username-error"></p>
 										<label htmlFor="email">Email</label>
-										<input type="email" name="email" id="email" placeholder="Enter your email" required onInvalid={invalidEmail} onChange={(e) => setEmail(e.target.value)} />
+										<input type="email" name="email" id="email" placeholder="Enter your email" value={email} required onInvalid={invalidEmail} onChange={(e) => setEmail(e.target.value)} />
 										<p ref={emailErrorRef} className="error email-error"></p>
 										<div className="nation">
 											<label htmlFor="city">City:</label>
-											<input type="text" name="city" id="city" required onChange={(e) => setCity(e.target.value)}  />
+											<input type="text" name="city" id="city" value={city} required onChange={(e) => setCity(e.target.value)}  />
 											<label htmlFor="country">Country:</label>
-											<input type="text" name="country" id="country" required onChange={(e) => setCountry(e.target.value)}  />
+											<input type="text" name="country" id="country" value={country} required onChange={(e) => setCountry(e.target.value)}  />
 										</div>
 										<div className="url-adress">
 											<label htmlFor="adress">Adress:</label>

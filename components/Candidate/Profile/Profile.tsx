@@ -172,10 +172,10 @@ const [image, setImage] = useState<string>(''); // Je suppose que "image" est un
 
 	useEffect(() => {
 		if (candidate) {
-			const candidateAttributes = candidate.split('|');
+			const candidateAttributes = candidate.split('|~');
 			setFirstName(candidateAttributes[0]);
-			setLastName(candidateAttributes[0]);
-			setEmail(candidateAttributes[1]);
+			setLastName(candidateAttributes[1]);
+			setEmail(candidateAttributes[3]);
 			setCity(candidateAttributes[2]);
 			setCountry(candidateAttributes[3]);
 			setAddress(candidateAttributes[4]);
@@ -201,6 +201,13 @@ const [image, setImage] = useState<string>(''); // Je suppose que "image" est un
 		e.preventDefault();
 		if (firstnameErrorRef.current) {
 			firstnameErrorRef.current.innerText = 'firstname must be at least 6 characters long';
+		}
+	}
+
+	const invalidLastname = (e: any) => {
+		e.preventDefault();
+		if (lastnameErrorRef.current) {
+			lastnameErrorRef.current.innerText = 'lastname must be at least 6 characters long';
 		}
 	}
 
@@ -232,9 +239,12 @@ const [image, setImage] = useState<string>(''); // Je suppose que "image" est un
 					<h1>Profile</h1>
 
 					<br></br>
-										<label htmlFor="firstname">Name</label>
-										<input type="text" name="firstname" id="firstname" placeholder="Enter your company name " value={firstName} autoFocus required onInvalid={invalidFirstname} onChange={(e) => setLastName(e.target.value)} />
+										<label htmlFor="firstname">First name</label>
+										<input type="text" name="firstname" id="firstname" placeholder="Enter your first name " value={firstName} autoFocus required onInvalid={invalidFirstname} onChange={(e) => setFirstName(e.target.value)} />
 										<p ref={firstnameErrorRef} className="error username-error"></p>
+										<label htmlFor="lastname">Last name</label>
+										<input type="text" name="lastname" id="lastname" placeholder="Enter your last name " value={lastName} autoFocus required onInvalid={invalidLastname} onChange={(e) => setLastName(e.target.value)} />
+										<p ref={lastnameErrorRef} className="error username-error"></p>
 										<label htmlFor="email">Email</label>
 										<input type="email" name="email" id="email" placeholder="Enter your email" value={email} required onInvalid={invalidEmail} onChange={(e) => setEmail(e.target.value)} />
 										<p ref={emailErrorRef} className="error email-error"></p>
