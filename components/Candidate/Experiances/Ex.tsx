@@ -91,7 +91,7 @@ const Xp = () => {
           <p>Close Date: {xp.endDate}</p>
           <button onClick={(e) => handleDelete(e, xp.id)}>Delete</button>
           <button onClick={() => handleApplyClick()}>Modify</button>
-          <ModalXp isOpen={modalOpen} id={xp.id} name={xp.name} startDate={xp.startDate} endDate={xp.endDate} onClose={() => setModalOpen(false)} />
+          <ModalXp isOpen={modalOpen} id={xp.id} name={xp.name} startDate={xp.startDate} endDate={xp.endDate} onClose={() => setModalOpen(false)} setXpData={setXpData} />
         </div>
         ))}
         </>

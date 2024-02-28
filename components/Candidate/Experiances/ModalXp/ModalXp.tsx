@@ -4,6 +4,13 @@ import Cookies from "js-cookie";
 import "./ModalXp.scss";
 import API_URL from "@/config";
 
+interface xp{
+  id: number;
+  name : string;
+  startDate : string;
+  endDate : string;
+}
+
 interface ModalProps {
     isOpen: boolean;
     id: number;
@@ -11,9 +18,10 @@ interface ModalProps {
     startDate: string;
     endDate: string;
     onClose: () => void;
+    setXpData: React.Dispatch<React.SetStateAction<xp[]>>;
   }
 
-  export default function Modal({ isOpen, id, name, startDate, endDate, onClose }: ModalProps) {
+  export default function Modal({ isOpen, id, name, startDate, endDate, onClose, setXpData }: ModalProps) {
   const [modifiedName, setModifiedName] = useState(name);
   const [modifiedStartDate, setModifiedStartDate] = useState(startDate);
   const [modifiedEndDate, setModifiedEndDate] = useState(endDate);
@@ -24,6 +32,7 @@ interface ModalProps {
 
     const handleModifyXp = async (e: any) => {
       e.preventDefault();
+      try{
       const idC = Cookies.get('id');
       axios
         .put(API_URL+'/api/v1/experiences/' + String(id), {
@@ -35,12 +44,24 @@ interface ModalProps {
             id: idC,
           },
         })
-        .then(function (response) {
-          console.log(response);
-        })
-        .catch(function (error) {
+          setXpData(prevXpData => {
+            const updatedXpData = prevXpData.map(xp => {
+              if (xp.id === id) {
+                return {
+                  ...xp,
+                  name: modifiedName,
+                  startDate: modifiedStartDate,
+                  endDate: modifiedEndDate
+                };
+              }
+              return xp;
+            });
+            return updatedXpData;
+          });
+          onClose();
+        }catch(error) {
           console.log(error);
-        });
+        };
     };
 
     useEffect(() => {

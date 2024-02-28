@@ -3,7 +3,6 @@ import './Projects.scss';
 import { useState,useEffect } from 'react';
 import Cookies from 'js-cookie';
 import axios from 'axios';
-import Link from 'next/link';
 import Modal from './ModalProject/ModalProject'
 import API_URL from '@/config'
 
@@ -15,26 +14,6 @@ interface Project {
   endDate: string;
   description: string;
 }
-
-/*export const useProjectsData = () => {
-  const [projectsData, setProjectsData] = useState<project[]>([]);
-
-  const modifyProject = (modifiedProject: project) => {
-    setProjectsData(prevProjectsData => {
-      const index = prevProjectsData.findIndex(project => project.id === modifiedProject.id);
-      if (index !== -1) {
-        const updatedProjectsData = [...prevProjectsData];
-        updatedProjectsData[index] = modifiedProject;
-        return updatedProjectsData;
-      } else {
-        return prevProjectsData;
-      }
-    });
-  };
-
-  return { projectsData, setProjectsData, modifyProject };
-};
- */
 
 interface RepeatClassNTimesProps {
     className: string;
