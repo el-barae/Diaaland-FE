@@ -4,6 +4,20 @@ import Cookies from "js-cookie";
 import "./ModalJobs.scss";
 import API_URL from "@/config";
 
+interface Job {
+  id: number;
+  name: string;
+  description: string;
+  minSalary: number;
+  maxSalary: number;
+  type: string;
+  openDate: string;
+  closeDate: string; 
+  numberOfPositions: number;
+  address: string;
+  remoteStatus: string;
+}
+
 interface ModalProps {
     isOpen: boolean;
     id: number;
@@ -18,9 +32,10 @@ interface ModalProps {
     type: string;
     description: string;
     onClose: () => void;
+    setJobData: React.Dispatch<React.SetStateAction<Job[]>>;
   }
 
-  export default function Modal({ isOpen, id, jobTitle, minSalary, maxSalary, positionNumber, openDate, endDate, adress, xp, type, description, onClose }: ModalProps) {
+  export default function Modal({ isOpen, id, jobTitle, minSalary, maxSalary, positionNumber, openDate, endDate, adress, xp, type, description, onClose, setJobData }: ModalProps) {
     const [MjobTitle, setJobTitle] = useState(jobTitle);
  const [MminSalary, setMinSalary] = useState( minSalary);
  const [MmaxSalary, setMaxSalary] = useState(maxSalary);
@@ -54,7 +69,28 @@ interface ModalProps {
           "remoteStatus": true
         })
         .then(function (response) {
-          console.log(response);
+          setJobData(prevJobData => {
+            const updatedJobData = prevJobData.map(job => {
+              if (job.id === id) {
+                return {
+                  ...job,
+                  name: MjobTitle,
+                  description: MjobDescription,
+                  minSalary: MminSalary,
+                  maxSalary: MmaxSalary,
+                  type: MjobType,
+                  openDate: MjobOpenDate,
+                  closeDate: MjobCloseDate,
+                  numberOfPositions: MpositionNumber,
+                  address: Madress,
+                  remoteStatus: "true"
+                };
+              }
+              return job;
+            });
+            return updatedJobData;
+          });
+          onClose();
         })
         .catch(function (error) {
           console.log(error);

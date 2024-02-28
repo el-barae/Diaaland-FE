@@ -29,7 +29,7 @@ export default function Modal({ isOpen, id, description, name, onClose }: ModalP
       }
 		 })
 		 .then(function (response) {
-			console.log(response);
+			onClose();
 		 })
 		 .catch(function (error) {
 			console.log(error);
@@ -47,6 +47,7 @@ export default function Modal({ isOpen, id, description, name, onClose }: ModalP
       }
 		 })
 		 .then(function (response) {
+      onClose();
 		 })
 		 .catch(function (error) {
 			console.log(error);

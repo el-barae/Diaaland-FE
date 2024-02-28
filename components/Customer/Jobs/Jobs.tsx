@@ -20,36 +20,12 @@ interface Job {
   remoteStatus: string;
 }
 
-
   interface RepeatClassNTimesProps {
     className: string;
     n: number;
     jobsData: Job[];
   }
 
-  const RepeatClassNTimes: React.FC<RepeatClassNTimesProps> = ({ className, n, jobsData }) => {
-    const [modalOpen, setModalOpen] = useState(false);
-    const handleApplyClick = () => {
-      setModalOpen(true);
-    };
-    if(jobsData.length != 0)
-      return(
-        <>
-        {jobsData.map((job) => (
-          <div key={job.id} className={className}>
-          <h1>{job.name} :</h1>
-          <p>
-            Type: {job.type} <br/> Number of positions: {job.numberOfPositions} 
-          </p>
-          <p>Close Date: {job.closeDate}</p>
-          <button onClick={(e) => handleDelete(e, job.id)}>Delete</button>
-          <button onClick={() => handleApplyClick()}>Modify</button>
-          <Modal isOpen={modalOpen} id={job.id} jobTitle={job.name} minSalary={job.minSalary} maxSalary={job.maxSalary} positionNumber={job.numberOfPositions} openDate={job.openDate} endDate={job.closeDate} adress={job.address} xp={job.remoteStatus} type={job.type} description={job.description} onClose={() => setModalOpen(false)}/>
-        </div>
-        ))}
-        </>
-      )
-    }
     const handleDelete = async (e:any, idJ:number) =>{
       e.preventDefault()
       Cookies.set("id","1")
@@ -75,6 +51,30 @@ const Jobs = () =>{
         };
         fetchData();
   }, []);
+
+  const RepeatClassNTimes: React.FC<RepeatClassNTimesProps> = ({ className, n, jobsData }) => {
+    const [modalOpen, setModalOpen] = useState(false);
+    const handleApplyClick = () => {
+      setModalOpen(true);
+    };
+    if(jobsData.length != 0)
+      return(
+        <>
+        {jobsData.map((job) => (
+          <div key={job.id} className={className}>
+          <h1>{job.name} :</h1>
+          <p>
+            Type: {job.type} <br/> Number of positions: {job.numberOfPositions} 
+          </p>
+          <p>Close Date: {job.closeDate}</p>
+          <button onClick={(e) => handleDelete(e, job.id)}>Delete</button>
+          <button onClick={() => handleApplyClick()}>Modify</button>
+          <Modal isOpen={modalOpen} id={job.id} jobTitle={job.name} minSalary={job.minSalary} maxSalary={job.maxSalary} positionNumber={job.numberOfPositions} openDate={job.openDate} endDate={job.closeDate} adress={job.address} xp={job.remoteStatus} type={job.type} description={job.description} onClose={() => setModalOpen(false)} setJobData={setJobsData}/>
+        </div>
+        ))}
+        </>
+      )
+    }
 
   return(
     <>
