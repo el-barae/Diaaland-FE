@@ -1,9 +1,18 @@
+'use client'
 import React, { useState,useEffect } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
 import "./ModalProject.scss";
 import Project from '../Projects'; 
 import API_URL from "@/config";
+
+interface Project {
+  id: number;
+  name: string;
+  startDate: string;
+  endDate: string;
+  description: string;
+}
 
 interface ModalProps {
     isOpen: boolean;
@@ -13,9 +22,10 @@ interface ModalProps {
     endDate: string;
     description: string;
     onClose: () => void;
+    setProjectsData: React.Dispatch<React.SetStateAction<Project[]>>;
   }
 
-  export default function Modal({ isOpen, id, name, startDate, endDate, description, onClose }: ModalProps) {
+  export default function Modal({ isOpen, id, name, startDate, endDate, description, onClose, setProjectsData }: ModalProps) {
   const [modifiedName, setModifiedName] = useState(name);
   const [modifiedStartDate, setModifiedStartDate] = useState(startDate);
   const [modifiedEndDate, setModifiedEndDate] = useState(endDate);
@@ -27,24 +37,37 @@ interface ModalProps {
 
     const handleModifyProject = async (e: any) => {
       e.preventDefault();
-      const idC = Cookies.get('id');
-      axios
-        .put(API_URL+'/api/v1/projects/' + String(id), {
+      try{
+        const idC = Cookies.get('id');
+        const response = await axios.put(API_URL + '/api/v1/projects/' + String(id), {
           id: id,
           name: modifiedName,
           startDate: modifiedStartDate,
           endDate: modifiedEndDate,
           description: modifiedDescription,
           candidate: {
-            id: idC,
-          },
-        })
-        .then(function (response) {
-          console.log(response);
-        })
-        .catch(function (error) {
-          console.log(error);
+            id: idC
+          }
         });
+        setProjectsData(prevProjectsData => {
+          const updatedProjectsData = prevProjectsData.map(project => {
+            if (project.id === id) {
+              return {
+                ...project,
+                name: modifiedName,
+                startDate: modifiedStartDate,
+                endDate: modifiedEndDate,
+                description: modifiedDescription
+              };
+            }
+            return project;
+          });
+          return updatedProjectsData;
+        });
+        }
+        catch(error) {
+          console.log(error);
+        };
     };
 
     useEffect(() => {

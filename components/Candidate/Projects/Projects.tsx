@@ -8,15 +8,15 @@ import Modal from './ModalProject/ModalProject'
 import API_URL from '@/config'
 
 
-interface project{
-    id: number;
-    name : string;
-    startDate : string;
-    endDate : string;
-    description : string;
+interface Project {
+  id: number;
+  name: string;
+  startDate: string;
+  endDate: string;
+  description: string;
 }
 
-export const useProjectsData = () => {
+/*export const useProjectsData = () => {
   const [projectsData, setProjectsData] = useState<project[]>([]);
 
   const modifyProject = (modifiedProject: project) => {
@@ -34,20 +34,21 @@ export const useProjectsData = () => {
 
   return { projectsData, setProjectsData, modifyProject };
 };
- 
+ */
 
 interface RepeatClassNTimesProps {
     className: string;
     n: number;
-    projectsData: project[];
+    projectsData: Project[];
   }
+
   
 const Projects = () => {
   const [name,setName] = useState('')
   const [startDate,setStartDate] = useState('')
   const [endDate,setEndDate] = useState('')
   const [desc,setDesc] = useState('')
-    const [projectsData,setProjectsData] = useState<project[]>([])
+  const [projectsData, setProjectsData] = useState<Project[]>([]);
 
     const handleAddProject = async (e:any)  =>{
       e.preventDefault()
@@ -119,7 +120,7 @@ const Projects = () => {
           <p>Description: {project.description}</p>
           <button onClick={(e) => handleDelete(e, project.id)}>Delete</button>
           <button onClick={() => handleApplyClick()}>Modify</button>
-          <Modal isOpen={modalOpen} id={project.id} name={project.name} startDate={project.startDate} endDate={project.endDate} description={project.description} onClose={() => setModalOpen(false)} />
+          <Modal isOpen={modalOpen} id={project.id} name={project.name} startDate={project.startDate} endDate={project.endDate} description={project.description} onClose={() => setModalOpen(false)} setProjectsData={setProjectsData} />
         </div>
         ))}
         </>
