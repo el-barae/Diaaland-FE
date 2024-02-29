@@ -4,6 +4,14 @@ import Cookies from "js-cookie";
 import "./Modal.scss";
 import API_URL from "@/config";
 
+interface Job {
+  id: number;
+  name: string;
+  description: string;
+  numberOfPositions: number;
+  closeDate: string;
+ }
+
 interface ModalProps {
     isOpen: boolean;
     id: number;
@@ -13,6 +21,7 @@ interface ModalProps {
   }
 
 export default function Modal({ isOpen, id, description, name, onClose }: ModalProps) {
+  const [isApplied, setIsApplied] = useState(false);
     const toggleModal = () => {
       onClose();
     };
@@ -55,6 +64,15 @@ export default function Modal({ isOpen, id, description, name, onClose }: ModalP
 	}
 
     useEffect(() => {
+      async function fetchData() {
+        try {
+          const response = await axios.get(API_URL + '/api/v1/candidate-jobs/itsApplied/' + 1 + '/' + id);
+          setIsApplied(response.data); 
+        } catch (error) {
+          console.error('Error fetching data:', error);
+        }
+      }
+      fetchData();
       if (isOpen) {
         document.body.classList.add('active-modal');
       } else {
@@ -75,7 +93,7 @@ export default function Modal({ isOpen, id, description, name, onClose }: ModalP
               <div className="modal-content">
                 <h1>{name}</h1>
                 <p>{description}</p>
-                <button id="apply-btn" onClick={(e) => handleApply(e, id)}>Apply</button>
+                {!isApplied && <button id="apply-btn" onClick={(e) => handleApply(e, id)}>Apply</button>}
                 <button id="favoris-btn" onClick={(e) => handleAddFavoris(e, id)}>Add favoris</button>
               </div>
           </div>
