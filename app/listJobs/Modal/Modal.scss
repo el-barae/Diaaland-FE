@@ -41,14 +41,16 @@ body.active-modal {
     #apply-btn{
         position: absolute;
         margin: 0px;
-        top: 7rem;
+        bottom: 2rem !important;
         right: 1rem;
+        max-height: 50px;
     }
     #favoris-btn{
         position: absolute;
         margin: 0px;
-        top: 7rem;
+        bottom: 2rem;
         right: 8rem;
+        max-height: 50px;
     }
 }
 #close-btn{

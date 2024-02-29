@@ -22,6 +22,7 @@ interface ModalProps {
 
 export default function Modal({ isOpen, id, description, name, onClose }: ModalProps) {
   const [isApplied, setIsApplied] = useState(false);
+  const [isFavoris, setIsFavoris] = useState(false);
     const toggleModal = () => {
       onClose();
     };
@@ -94,7 +95,7 @@ export default function Modal({ isOpen, id, description, name, onClose }: ModalP
                 <h1>{name}</h1>
                 <p>{description}</p>
                 {!isApplied && <button id="apply-btn" onClick={(e) => handleApply(e, id)}>Apply</button>}
-                <button id="favoris-btn" onClick={(e) => handleAddFavoris(e, id)}>Add favoris</button>
+                {!isFavoris && <button id="favoris-btn" onClick={(e) => handleAddFavoris(e, id)}>Add favoris</button>}
               </div>
           </div>
         )}

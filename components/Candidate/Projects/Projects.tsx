@@ -66,6 +66,21 @@ const Projects = () => {
        };
     }
 
+    const [modalOpen, setModalOpen] = useState(false);
+    const [currentId, setCurrentId] = useState(0);
+    const [currentName, setCurrentName] = useState("");
+    const [currentStartDate, setCurrentStartDate] = useState("");
+    const [currentEndDate, setCurrentEndDate] = useState("");
+    const [currentDescription, setCurrentDescription] = useState("");
+    const handleModifyClick = (e:any, id:number, name:string, startDate: string, endDate:string, description:string) => {
+      setCurrentId(id);
+      setCurrentName(name);
+      setCurrentStartDate(startDate);
+      setCurrentEndDate(endDate);
+      setCurrentDescription(description);
+      setModalOpen(true);
+    };
+
     useEffect(() => {
         const fetchData = async () => {
           try {
@@ -83,10 +98,6 @@ const Projects = () => {
   
 
   const RepeatClassNTimes: React.FC<RepeatClassNTimesProps> = ({ className, n, projectsData }) => {
-    const [modalOpen, setModalOpen] = useState(false);
-    const handleApplyClick = () => {
-      setModalOpen(true);
-    };
 
     if(projectsData.length != 0)
       return(
@@ -98,8 +109,8 @@ const Projects = () => {
           <p>Close Date: {project.endDate}</p>
           <p>Description: {project.description}</p>
           <button onClick={(e) => handleDelete(e, project.id)}>Delete</button>
-          <button onClick={() => handleApplyClick()}>Modify</button>
-          <Modal isOpen={modalOpen} id={project.id} name={project.name} startDate={project.startDate} endDate={project.endDate} description={project.description} onClose={() => setModalOpen(false)} setProjectsData={setProjectsData} />
+          <button onClick={(e) => handleModifyClick(e, project.id, project.name, project.startDate, project.endDate, project.description)}>Modify</button>
+          <Modal isOpen={modalOpen} id={currentId} name={currentName} startDate={currentStartDate} endDate={currentEndDate} description={currentDescription} onClose={() => setModalOpen(false)} setProjectsData={setProjectsData} />
         </div>
         ))}
         </>

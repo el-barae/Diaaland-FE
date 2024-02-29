@@ -3,8 +3,6 @@
 import Image from 'next/image'
 import ListImage from '@/public/images/listjobs.png'
 import SearchImage from '@/public/images/search1.png'
-import Search2Image from '@/public/images/search.png'
-import service2 from '@/public/images/service2.svg'
 import { useState ,useEffect} from "react"
 import axios from 'axios'
 import React from 'react';
@@ -62,13 +60,16 @@ const ListJobs = () => {
  const RepeatClassNTimes: React.FC<RepeatClassNTimesProps> = ({ className, n, jobsData }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [currentDescription, setCurrentDescription] = useState("");
+  const [currentId, setCurrentId] = useState(0);
+  const [currentName, setCurrentName] = useState("");
 
-  const handleApplyClick = (description: string) => {
+  const handleApplyClick = (id:number, name:string, description: string) => {
     setCurrentDescription(description);
+    setCurrentId(id);
+    setCurrentName(name);
     setModalOpen(true);
   };
 
-    if(c==0){
       if(jobsData.length != 0)
       return(
         <>
@@ -79,54 +80,12 @@ const ListJobs = () => {
             <br/> Number of positions: {job.numberOfPositions} 
           </p>
           <p>Close Date: {job.closeDate}</p>
-          <button onClick={() => handleApplyClick(job.description)}>View</button>
-          <Modal isOpen={modalOpen} id={job.id} name={job.name} description={currentDescription} onClose={() => setModalOpen(false)}/>
-          {/*showPanel && (
-      <div className="job-panel">
-        <h2>{jobDetails.name}</h2>
-        <p>{jobDetails.description}</p>
-        <button onClick={handleClosePanel}>Close</button>
-        <button onClick={(e) => handleAddFavoris(e, job.id)}>Add favoris</button>
-        <button onClick={(e) => handleApply(e, job.id)}>Apply</button>
-      </div>
-          )*/}
+          <button onClick={() => handleApplyClick(job.id, job.name, job.description)}>View</button>
+          <Modal isOpen={modalOpen} id={currentId} name={currentName} description={currentDescription} onClose={() => setModalOpen(false)}/>
         </div>
         ))}
         </>
       )
-    }
-    else{
-      if(jobsData.length != 0)
-      return (
-      <>
-        {filteredJobs.map((job) => (
-          <div key={job.id} className={className}>
-            <h1>{job.name} :</h1>
-            <p>
-              <br/> Number of positions: {job.numberOfPositions} 
-            </p>
-            <p>Close Date: {job.closeDate}</p>
-            <Modal isOpen={modalOpen} id={job.id} name={job.name} description={currentDescription} onClose={() => setModalOpen(false)}/>
-          </div>
-        ))}
-      </>
-      );
-    }
- };
-  
- const [showPanel, setShowPanel] = useState(false);
-
- const jobDetails = {
-    name: 'Titre de l\'emploi',
-    description: 'Description détaillée de l\'emploi...'
- };
-
- const handleApplyClick = () => {
-    setShowPanel(true);
- };
-
- const handleClosePanel = () => {
-    setShowPanel(false);
  };
     return (
     <ThemeProvider enableSystem={true} attribute="class">

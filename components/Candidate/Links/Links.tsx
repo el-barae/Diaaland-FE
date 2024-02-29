@@ -7,6 +7,7 @@ import API_URL from '@/config';
 import ModalE from './ModalEducations/ModalEducation'
 import ModalC from './ModalCertificates/ModalCertificate'
 import ModalL from './ModalLinks/ModalLink'
+import { dom } from '@fortawesome/fontawesome-svg-core';
 
 interface education{
     id: number;
@@ -185,15 +186,39 @@ const Links = () => {
       }
 
       const [modalEOpen, setModalEOpen] = useState(false);
-      const handleEducationClick = () => {
+      const [currentId, setCurrentId] = useState(0);
+      const [currentName, setCurrentName] = useState("");
+      const [currentUrl, setCurrentUrl] = useState("");
+      const [currentSchool, setCurrentSchool] = useState("");
+      const [currentDomain, setCurrentDomain] = useState("");
+      const [currentStartDate, setCurrentStartDate] = useState("");
+      const [currentEndDate, setCurrentEndDate] = useState("");
+      const [currentDescription, setCurrentDescription] = useState("");
+      const handleEducationClick = (id:number, name:string, url:string, school:string, startDate: string, endDate:string, decription:string) => {
+        setCurrentId(id);
+        setCurrentName(name);
+        setCurrentUrl(url);
+        setCurrentSchool(school);
+        setCurrentStartDate(startDate);
+        setCurrentEndDate(endDate);
+        setCurrentDescription(decription);
         setModalEOpen(true);
       };
       const [modalCOpen, setModalCOpen] = useState(false);
-    const handleCertificateClick = () => {
+    const handleCertificateClick = (id:number, name:string, url:string, domain:string, description:string) => {
+      setCurrentId(id);
+        setCurrentName(name);
+        setCurrentUrl(url);
+        setCurrentDomain(domain);
+        setCurrentDescription(description);
       setModalCOpen(true);
     };
     const [modalLOpen, setModalLOpen] = useState(false);
-    const handleLinkClick = () => {
+    const handleLinkClick = (id:number, name:string, url:string, description:string) => {
+      setCurrentId(id);
+        setCurrentName(name);
+        setCurrentUrl(url);
+        setCurrentDescription(description);
       setModalLOpen(true);
     };
 
@@ -209,8 +234,8 @@ const Links = () => {
               <p>Start date: {education.startDate}</p>
               <p>Close date: {education.endDate}</p>
               <button onClick={(e) => handleDeleteEducation(e, education.id)}>Delete</button>
-              <button onClick={() => handleEducationClick()}>Modify</button>
-              <ModalE isOpen={modalEOpen} id={education.id} name={education.name} url={education.url} school={education.school} startDate={education.startDate} endDate={education.endDate} description={education.description} onClose={() => setModalEOpen(false)} />
+              <button onClick={() => handleEducationClick(education.id, education.name, education.url, education.school, education.startDate, education.endDate, education.description)}>Modify</button>
+              <ModalE isOpen={modalEOpen} id={currentId} name={currentName} url={currentUrl} school={currentSchool} startDate={currentStartDate} endDate={currentEndDate} description={currentDescription} onClose={() => setModalEOpen(false)} />
             </div>
             ))}
             </>
@@ -227,8 +252,8 @@ const Links = () => {
                   <p>Url: {certificate.url}</p>
                   <p>Domain: {certificate.domain}</p>
                   <button onClick={(e) => handleDeleteCertificate(e, certificate.id)}>Delete</button>
-                  <button onClick={() => handleCertificateClick()}>Modify</button>
-              <ModalC isOpen={modalCOpen} id={certificate.id} name={certificate.name} url={certificate.url}  description={certificate.description} domain={certificate.domain} onClose={() => setModalCOpen(false)} />
+                  <button onClick={() => handleCertificateClick(certificate.id, certificate.name, certificate.url, certificate.domain, certificate.description)}>Modify</button>
+              <ModalC isOpen={modalCOpen} id={currentId} name={currentName} url={currentUrl}  description={currentDescription} domain={currentDomain} onClose={() => setModalCOpen(false)} />
                 </div>
                 ))}
                 </>
@@ -246,8 +271,8 @@ const Links = () => {
                       Url: {link.url}
                     </p>
                     <button onClick={(e) => handleDeleteLink(e, link.id)}>Delete</button>
-                    <button onClick={() => handleLinkClick()}>Modify</button>
-                    <ModalL isOpen={modalLOpen} id={link.id} name={link.name} url={link.url}  description={link.description} onClose={() => setModalLOpen(false)} />
+                    <button onClick={() => handleLinkClick(link.id, link.name, link.url, link.description)}>Modify</button>
+                    <ModalL isOpen={modalLOpen} id={currentId} name={currentName} url={currentUrl}  description={currentDescription} onClose={() => setModalLOpen(false)} />
                   </div>
                   ))}
                   </>

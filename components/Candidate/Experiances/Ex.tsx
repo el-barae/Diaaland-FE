@@ -25,9 +25,6 @@ const Xp = () => {
   const [endDate,setEndDate] = useState('')
   const [xpData,setXpData] = useState<xp[]>([])
   const [modalOpen, setModalOpen] = useState(false);
-    const handleApplyClick = () => {
-      setModalOpen(true);
-    };
 
     const handleAddXp = async (e:any)  =>{
       e.preventDefault()
@@ -64,6 +61,18 @@ const Xp = () => {
        setXpData(updatedXpData)
     }
 
+    const [currentId, setCurrentId] = useState(0);
+    const [currentName, setCurrentName] = useState("");
+    const [currentStartDate, setCurrentStartDate] = useState("");
+    const [currentEndDate, setCurrentEndDate] = useState("");
+    const handleApplyClick = (id:number, name:string, startDate: string, endDate:string) => {
+      setCurrentId(id);
+      setCurrentName(name);
+      setCurrentStartDate(startDate);
+      setCurrentEndDate(endDate);
+      setModalOpen(true);
+    };
+
     useEffect(() => {
         const fetchData = async () => {
           try {
@@ -90,8 +99,8 @@ const Xp = () => {
           </p>
           <p>Close Date: {xp.endDate}</p>
           <button onClick={(e) => handleDelete(e, xp.id)}>Delete</button>
-          <button onClick={() => handleApplyClick()}>Modify</button>
-          <ModalXp isOpen={modalOpen} id={xp.id} name={xp.name} startDate={xp.startDate} endDate={xp.endDate} onClose={() => setModalOpen(false)} setXpData={setXpData} />
+          <button onClick={() => handleApplyClick(xp.id, xp.name, xp.startDate, xp.endDate)}>Modify</button>
+          <ModalXp isOpen={modalOpen} id={currentId} name={currentName} startDate={currentStartDate} endDate={currentEndDate} onClose={() => setModalOpen(false)} setXpData={setXpData} />
         </div>
         ))}
         </>
