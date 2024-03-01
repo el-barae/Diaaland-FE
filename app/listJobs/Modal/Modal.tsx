@@ -68,12 +68,21 @@ export default function Modal({ isOpen, id, description, name, onClose }: ModalP
       async function fetchData() {
         try {
           const response = await axios.get(API_URL + '/api/v1/candidate-jobs/itsApplied/' + 1 + '/' + id);
-          setIsApplied(response.data); 
+          setIsApplied(response.data);  
         } catch (error) {
           console.error('Error fetching data:', error);
         }
       }
       fetchData();
+      async function fetchData1() {
+        try {
+          const response1 = await axios.get(API_URL + '/api/v1/favoris/itsFavoris/' + 1 + '/' + id);
+          setIsFavoris(response1.data); 
+        } catch (error) {
+          console.error('Error fetching data:', error);
+        }
+      }
+      fetchData1();
       if (isOpen) {
         document.body.classList.add('active-modal');
       } else {
