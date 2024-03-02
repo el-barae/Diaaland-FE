@@ -2,6 +2,7 @@
 import React from 'react';
 import './style.scss';
 import { useState ,useEffect} from 'react';
+import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
 import axios from 'axios';
 import {ThemeProvider} from 'next-themes'
@@ -43,6 +44,28 @@ const Candidate = () => {
     setX(value);
     y();
   };
+
+  const [isOpen, setIsOpen] = useState(false);
+  const [notif,setNotif] = useState(2); 
+  const options = ['Message 1', 'Message 2', 'Message 3'];
+  const handleToggle = () => {
+    setIsOpen(!isOpen);
+    setNotif(0);
+  };
+
+  const handleOptionClick = (option: string) => {
+    if (option==='Candidate'){
+      router.push('/Dashboards/Candidate');
+  }
+  else if (option==='Customer'){
+      router.push('/Dashboards/Customer');
+  }
+  else if (option==='Admin'){
+      router.push('/Dashboards/Admin');
+  }
+    setIsOpen(false);
+  };
+  const router = useRouter();
 
   const y = () => {
     if (x === "Profile"){ 
@@ -88,14 +111,24 @@ const Candidate = () => {
             <div className='Candidate'>
               <div className='header'>
                 {candidateData}
-                <button>
+                <button onClick={handleToggle}>
                 <Image 
 									src={Notif}
 									width={50}
 									height={50}
 									alt="login image"
 								/>
+                {notif === 0 ? null : <span className="badge">{notif}</span>}
                 </button>
+                {isOpen && (
+        <ul className="dropdown-list">
+          {options.map((option) => (
+            <li key={option} onClick={() => handleOptionClick(option)}>
+              {option}
+            </li>
+          ))}
+        </ul>
+      )}
               </div>
               <div className='content'>
                 <div className='Menu'>

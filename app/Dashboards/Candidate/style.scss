@@ -20,6 +20,52 @@
             position: absolute;
             right: 50px;
         }
+        .dropdown-button {
+            padding: 8px 12px;
+            cursor: pointer;
+          }
+          
+          .dropdown-list {
+            display: flex;
+            font-size: 1.2rem;
+            flex-direction: column;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            background-color: #fff;
+            border: 2px solid $footer-bg;
+            border-radius: 15px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+              gap: 0rem;
+          }
+          
+          .dropdown-list li {
+            color: black;
+            padding: 8px 12px;
+            cursor: pointer;
+          }
+          
+          .dropdown-list li:hover {
+            background-color: #f2f2f2;
+            border-radius: 15px;
+          }
+          .badge {
+            position: absolute;
+            font-size: 12px;
+            top: -3px;
+            right: -3px;
+            width: 15px;
+            height: 15px;
+            background: red;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+          }
     }
     .content{
         display: flex;
