@@ -37,6 +37,15 @@ const passwordStrength = (password: string) => {
 
 export default function Register() {
 
+	const [firstName, setFirstName] = useState('')
+	const [lastName, setLastName] = useState('')
+	const [city, setCity] = useState('')
+	const [country, setCountry] = useState('')
+	const [url, setUrl] = useState('')
+	const [adress, setAdress] = useState('')
+	const [logo, setLogo] = useState('')
+	const [candidate, setCandidate] = useState('')
+
 	const firstnameErrorRef = useRef<HTMLParagraphElement>(null);
 	const lastnameErrorRef = useRef<HTMLParagraphElement>(null);
 	const emailErrorRef = useRef<HTMLParagraphElement>(null);
@@ -56,8 +65,6 @@ export default function Register() {
 	const handleSubmit = async (e:any)  =>{
 		e.preventDefault()
 		axios.post(API_URL+'/api/v1/auth/register', {
-			"firstName": firstname,
-			"lastName": lastname,
 			"email":email,
 			"password": password,
 			"role": "USER"
@@ -169,15 +176,16 @@ export default function Register() {
 						<div className="form-side">
 							<div className="form">
 								<form >
-									<div className="form-group">
-										<label htmlFor="firstname">Firstname</label>
-										<input type="text" name="firstname" id="firstname" placeholder="Enter your firstname" autoFocus required onInvalid={invalidFirstname} onChange={(e) => setFirstname(e.target.value)} />
+									<div className="form-divs">
+									<div className='div1'>
+										<label htmlFor="firstname">First name</label>
+										<input type="text" name="firstname" id="firstname" placeholder="Enter your first name " value={firstName} autoFocus required onInvalid={invalidFirstname} onChange={(e) => setFirstName(e.target.value)} />
 										<p ref={firstnameErrorRef} className="error username-error"></p>
-										<label htmlFor="lastname">Lastname</label>
-										<input type="text" name="lastname" id="lastname" placeholder="Enter your lastname" autoFocus required onInvalid={invalidLastname} onChange={(e) => setLastname(e.target.value)} />
+										<label htmlFor="lastname">Last name</label>
+										<input type="text" name="lastname" id="lastname" placeholder="Enter your last name " value={lastName} autoFocus required onInvalid={invalidLastname} onChange={(e) => setLastName(e.target.value)} />
 										<p ref={lastnameErrorRef} className="error username-error"></p>
 										<label htmlFor="email">Email</label>
-										<input type="email" name="email" id="email" placeholder="Enter your email" required onInvalid={invalidEmail} onChange={(e) => setEmail(e.target.value)} />
+										<input type="email" name="email" id="email" placeholder="Enter your email" value={email} required onInvalid={invalidEmail} onChange={(e) => setEmail(e.target.value)} />
 										<p ref={emailErrorRef} className="error email-error"></p>
 										<label htmlFor="password">Password</label>
 										<div className="password-input">
@@ -185,20 +193,54 @@ export default function Register() {
 											<div className="icon" onClick={handleIconClick}>
 												{passState === 'hide' ? <FaEyeSlash /> : <FaEye />}
 											</div>
-										</div>
-										<p ref={passwordErrorRef} className="error password-error"></p>
+										</div>										<p ref={passwordErrorRef} className="error password-error"></p>
 										<div className="password-strength">
 											<div ref={passwordMessageRef} className="message hidden">
-
 											</div>
 										</div>
+										<div className="nation">
+											<label htmlFor="city">City:</label>
+											<input type="text" name="city" id="city" placeholder='Enter your city' value={city} required onChange={(e) => setCity(e.target.value)}  />
+											<label htmlFor="country">Country:</label>
+											<input type="text" name="country" id="country" required onChange={(e) => setCountry(e.target.value)}  />
+										</div>
+										<div className="url-adress">
+											<label htmlFor="adress">Adress:</label>
+											<div className="info-image">
+							</div>		<input type="text" name="adress" id="adress" required onChange={(e) => setAdress(e.target.value)}  />
+										</div>
+										<label htmlFor="url">Account statut:</label>
+											<input type="text" name="url" required onChange={(e) => setUrl(e.target.value)}  />
+											<label htmlFor="url">Phone:</label>
+											<input type="text" name="url" required onChange={(e) => setUrl(e.target.value)}  />
+											<label htmlFor="url">Job statut:</label>
+											<input type="text" name="url" required onChange={(e) => setUrl(e.target.value)}  />
+					</div>
+					<div className='div2'>									
+											<label htmlFor="url">Expected salary:</label>
+											<input type="text" name="url" required onChange={(e) => setUrl(e.target.value)}  />
+											<label htmlFor="url">Linkedin:</label>
+											<input type="text" name="url" required onChange={(e) => setUrl(e.target.value)}  />
+											<label htmlFor="url">Github:</label>
+											<input type="text" name="url" required onChange={(e) => setUrl(e.target.value)}  />
+											<label htmlFor="url">Portofolio:</label>
+											<input type="text" name="url" required onChange={(e) => setUrl(e.target.value)}  />
+											<label htmlFor="url">Blog:</label>
+											<input type="text" name="url" required onChange={(e) => setUrl(e.target.value)}  />
+											<label htmlFor="url">Resume:</label>
+											<input type="text" name="url" required onChange={(e) => setUrl(e.target.value)}  />
+											<label htmlFor="logo">Image:</label>
+											<input type="file" id="fileInput" name="fileInput" required onChange={(e) => setLogo(e.target.value)}/>
+											<label htmlFor="logo">Diplome:</label>
+											<input type="file" id="fileInput" name="fileInput" required onChange={(e) => setLogo(e.target.value)}/>
+									
 										<input className='inline checkbox' type="checkbox" name="term-of-use" id="term-of-use" required onInvalid={invalidTerms} />
-										<label className='inline-block checkbox-label mb-4' htmlFor="term-of-use">i accept the term of use</label>
 										<p ref={termsErrorRef} className='error terms-error'></p>
 										<button className='block' type="submit" onClick={handleSubmit}>Register</button>
 										<p className='have-account'>
-											Already have an account? <Link href="/login">Login</Link>Or <Link href='/user'>Register as a client</Link>
+											Already have an account? <Link href="/login">Login</Link>Or <Link href='/user'>Register as a customer</Link>
 										</p>
+										</div>
 									</div>
 								</form>
 							</div>

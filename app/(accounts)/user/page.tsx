@@ -59,25 +59,29 @@ export default function Register() {
 	
 	const handleSubmit = async (e:any)  =>{
 		e.preventDefault()
-		axios.post(API_URL+'/api/v1/auth/register', {
+		try{
+			const response1 = axios.post(API_URL+'/api/v1/auth/register', {
+				"name": name,
+				"email":email,
+				"password": password,
+				"role": "CUSTOMER"
+			});
+			const response2 = axios.post(API_URL+'/api/v1/auth/register', {
 			"name": name,
 			"email":email,
-			"password": password,
 			"city": city,
 			"country": country,
 			"url": url,
 			"adress": adress,
-			"logo": logo,
-			"role": "CLIENT"
+			"logo": logo
 		  })
-		  .then(function (response) {
-			console.log(response);
+			//console.log(response);
 			Cookies.set("loggedin", "true");
 			router.push('/addPost')
-		  })
-		  .catch(function (error) {
+		  }
+		  catch(error) {
 			console.log(error);
-		  });
+		  };
 	}
 
 	const handleIconClick = () => {
@@ -207,7 +211,7 @@ export default function Register() {
 										<p ref={termsErrorRef} className='error terms-error'></p>
 										<button className='block' type="submit" onClick={handleSubmit}>Register</button>
 										<p className='have-account'>
-											Already have an account? <Link href="/login">Login</Link> OR <Link href="/register">Register as a user</Link>
+											Already have an account? <Link href="/login">Login</Link> OR <Link href="/register">Register as a candidate</Link>
 										</p>
 									</div>
 								</form>
