@@ -1,0 +1,70 @@
+@import '@/app/globals.scss';
+.jobs{
+    align-items: center;
+            justify-content: center;
+            min-height: 80vh;
+            padding: 1rem 1rem 0rem 13rem;
+            height: 100%;
+            h1{
+                font-size: 2.8rem;
+                color: $primary;
+            }
+            h2{
+                font-size: 27px;
+                font-weight: 300;
+                color: rgb(65, 19, 214);
+            }
+            .lists{
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 1rem;
+                padding: 1rem 0;
+                align-items: center;
+                justify-content: center;
+                //position:fixed;
+                .list{
+                    text-align: left;
+                    //display: flex;
+                    gap: 2rem;
+                    margin: 10px 20px 10px 20px;
+                    box-shadow: 0 1px 10px #cecaca;
+                    padding: 20px;
+                    border-radius: 20px;
+                    //flex-direction: column;
+                   h1{
+                        font-size: 30px;
+                        font-weight: 300;
+                        color: $primary;
+                    } 
+                    p{
+                        font-size: 17px;
+                    }
+                    button{
+                        font-size: 17px;
+                        font-weight: 300;
+                        text-align: center;
+                        padding: 10px;
+                        background-color: $main-color;
+                        color: $second-color;
+                        border-radius: 20px;
+                        margin: 10px;
+                        transition: .3s ease-in-out;
+                        &:hover {
+                            font-size: 20px;
+                            font-weight: 300;
+                            background-color: darken($main-color, 10%);
+                        }
+                    }
+                }
+            }
+}
+@media(max-width: 1000px){
+    .jobs{
+        margin-top: 60px;
+        padding: 1rem;
+        .lists{
+            display: flex;
+            flex-direction: column;
+        }
+    }
+}

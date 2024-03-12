@@ -9,9 +9,9 @@ import axios from 'axios'
 import { ThemeProvider } from 'next-themes'
 import { useRouter } from 'next/navigation';
 import API_URL from '@/config'
+
 export default function AddPost() {
-
-
+  
  const [jobTitle, setJobTitle] = useState('');
  const [minSalary, setMinSalary] = useState('');
  const [maxSalary, setMaxSalary] = useState('');

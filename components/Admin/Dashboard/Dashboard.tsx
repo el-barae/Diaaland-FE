@@ -1,16 +1,7 @@
-'use client'
-import Image from 'next/image'
 import { useState ,useEffect} from "react"
 import axios from 'axios'
 import React from 'react';
-import Cookies from 'js-cookie';
-import './style.scss';
-import {ThemeProvider} from 'next-themes'
-import Navbar from '@/components/HomePage/Navbar/Navbar'
-import Candidate from '../Candidate/page';
-import API_URL from '@/config';
-import Jobs from '@/components/Admin/jobs/jobs'
-import Dashboard from '@/components/Admin/Dashboard/Dashboard'
+import API_URL from "@/config";
 
 interface Job {
     id: number;
@@ -46,28 +37,14 @@ function getStatusClass(status: string) {
     }
   }
 
-const Admin = () =>{
+const Dashboard = () =>{
+
     const [appliedCandidatesData, setAppliedCandidatesData] = useState<appliedCandidates[]>([]);
     const [jobsData, setJobsData] = useState<Job[]>([]);
     const [countJobs, setCountJobs] = useState(0);
     const [countCandidates, setCountCandidates] = useState(0);
     const [countCustomers, setCountCustomers] = useState(0);
-    const [status, setStatus] = useState('refuse');
-    var [x,setX] = useState("Jobs");
 
-    const handleClick = (value : string) => {
-        setX(value);
-        y();
-      };
-
-      const y = () => {
-        if (x === "Jobs") {
-          return <Jobs />;
-        }
-        if (x === "Dashboard") {
-            return <Dashboard/>;
-          }
-      }
     
  useEffect(() => {
     const fetchData = async () => {
@@ -136,64 +113,9 @@ const Admin = () =>{
         );
       }
 
-    return (
-        <ThemeProvider enableSystem={true} attribute="class">
-            <Navbar/>
-            <div className="admin">
-    <div className="navigation">
-        <ul>
-            <li>
-                <a href="#" onClick={() => handleClick("Dashboard")}>
-                    <span className="title">Dashboard</span>
-                </a>
-            </li>
-
-            <li>
-                <a href="#" onClick={() => handleClick("Jobs")}>
-                    <span className="title">Jobs</span>
-                </a>
-            </li>
-
-            <li>
-                <a href="#">
-                    <span className="title">Customers</span>
-                </a>
-            </li>
-
-            <li>
-                <a href="#">
-                    <span className="title">Candidates</span>
-                </a>
-            </li>
-
-            <li>
-                <a href="#">
-                    <span className="title">Matches</span>
-                </a>
-            </li>
-
-            <li>
-                <a href="#">
-                    <span className="title">Settings</span>
-                </a>
-            </li>
-
-            <li>
-                <a href="#">
-                    <span className="title">Messages</span>
-                </a>
-            </li>
-
-            <li>
-                <a href="#">
-                    <span className="title">Report</span>
-                </a>
-            </li>
-        </ul>
-    </div>
-    <div className="main">
-        {y()}
-        {/*<div className="topbar">
+    return(
+        <>
+        <div className="topbar">
 
             <div className="search">
                 <label>
@@ -259,14 +181,7 @@ const Admin = () =>{
                 </table>
             </div>
         </div>
-    */}
-    </div>
-</div>
-
-
-        </ThemeProvider>
+        </>
     );
 }
-  
-  export default Admin;
-
+export default Dashboard;
