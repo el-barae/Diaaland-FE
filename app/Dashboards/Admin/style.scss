@@ -57,7 +57,7 @@
   
   .navigation ul li:hover,
   .navigation ul li.hovered {
-    background-color: var(--white);
+    background-color: $second-color;
   }
   
   .navigation ul li a {
@@ -70,7 +70,7 @@
   }
   .navigation ul li:hover a,
   .navigation ul li.hovered a {
-    color: $main-color;
+    color: var(--main-color);
   }
   
   .navigation ul li a .icon {
@@ -106,7 +106,7 @@
     height: 50px;
     background-color: transparent;
     border-radius: 50%;
-    box-shadow: 35px 35px 0 10px var(--white);
+    box-shadow: 35px 35px 0 10px var(--box-shadow-color);
     pointer-events: none;
   }
   .navigation ul li:hover a::after,
@@ -119,7 +119,7 @@
     height: 50px;
     background-color: transparent;
     border-radius: 50%;
-    box-shadow: 35px -35px 0 10px var(--white);
+    box-shadow: 35px -35px 0 10px var(--box-shadow-color);
     pointer-events: none;
   }
   

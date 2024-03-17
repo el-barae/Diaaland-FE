@@ -42,11 +42,11 @@ const ListJobs = () => {
     const authToken = localStorage.getItem('token');
     const fetchData = async () => {
       try {
-        const response = await axios.get(API_URL+"/api/v1/jobs/list", {
+        const response = await axios.get(API_URL+"/api/v1/jobs/list"/*, {
           headers: {
             Authorization: `Bearer ${authToken}`
           }
-        });
+        }*/);
         setJobsData(response.data);
       } catch (error) {
         console.error('Erreur lors de la récupération des données :', error);

@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@tailwind dark;
 
 /* Start General Rules */
 * {
@@ -47,11 +48,27 @@ body {
 
 @layer base {
   body {
+    --box-shadow-color: #fff;
+    --main-color: $main-color;
+    @apply bg-gray-50 text-gray-900 dark:bg-gray-800 dark:text-gray-100;
+  }
+
+  .navigation ul li:hover,
+  .navigation ul li.hovered {
     @apply bg-gray-50 text-gray-900 dark:bg-gray-800 dark:text-gray-100;
   }
 
   ::selection {
     @apply text-white bg-blue-600
+  }
+}
+
+@layer utilities {
+  @dark {
+    body {
+      --box-shadow-color: $main-color;
+      --main-color: $primary;
+    }
   }
 }
 

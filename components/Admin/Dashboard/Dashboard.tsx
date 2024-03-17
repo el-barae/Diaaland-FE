@@ -45,6 +45,7 @@ const Dashboard = () =>{
     const [countCandidates, setCountCandidates] = useState(0);
     const [countCustomers, setCountCustomers] = useState(0);
 
+
     
  useEffect(() => {
     const fetchData = async () => {

@@ -11,6 +11,7 @@ import Candidate from '../Candidate/page';
 import API_URL from '@/config';
 import Jobs from '@/components/Admin/jobs/jobs'
 import Dashboard from '@/components/Admin/Dashboard/Dashboard'
+import Candidates from '@/components/Admin/Candidates/Candidates'
 
 interface Job {
     id: number;
@@ -53,7 +54,7 @@ const Admin = () =>{
     const [countCandidates, setCountCandidates] = useState(0);
     const [countCustomers, setCountCustomers] = useState(0);
     const [status, setStatus] = useState('refuse');
-    var [x,setX] = useState("Jobs");
+    var [x,setX] = useState("Dashboard");
 
     const handleClick = (value : string) => {
         setX(value);
@@ -66,6 +67,9 @@ const Admin = () =>{
         }
         if (x === "Dashboard") {
             return <Dashboard/>;
+          }
+          if (x === "Candidates") {
+            return <Candidates/>;
           }
       }
     
@@ -161,7 +165,7 @@ const Admin = () =>{
             </li>
 
             <li>
-                <a href="#">
+                <a href="#" onClick={() => handleClick("Candidates")}>
                     <span className="title">Candidates</span>
                 </a>
             </li>
@@ -193,73 +197,6 @@ const Admin = () =>{
     </div>
     <div className="main">
         {y()}
-        {/*<div className="topbar">
-
-            <div className="search">
-                <label>
-                    <input type="text" placeholder="Search here"></input>
-                </label>
-            </div>
-
-            <div className="user">
-            </div>
-        </div>
-
-        <div className="cardBox">
-            <div className="card">
-                <div>
-                    <div className="numbers">{countCandidates}</div>
-                    <div className="cardName">Candidates</div>
-                </div>
-            </div>
-
-            <div className="card">
-                <div>
-                    <div className="numbers">{countCustomers}</div>
-                    <div className="cardName">Customers</div>
-                </div>
-            </div>
-
-            <div className="card">
-                <div>
-                    <div className="numbers">{countJobs}</div>
-                    <div className="cardName">Jobs</div>
-                </div>
-            </div>
-        </div>
-
-        <div className="details">
-            <div className="recentOrders">
-                <div className="cardHeader">
-                    <h2>Last applied candidates</h2>
-                    <a href="#" className="btn">View All</a>
-                </div>
-
-                <table>
-                    <thead>
-                        <tr>
-                            <td>Name</td>
-                            <td>Job</td>
-                            <td>Customer</td>
-                            <td>Status</td>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        <ListAppliedCandidates n={appliedCandidatesData.length} appliedCandidatesData={appliedCandidatesData} />
-                    </tbody>
-                </table>
-            </div>
-            <div className="recentCustomers">
-            <div className="cardHeader">
-                    <h2>Last jobs</h2>
-            </div>
-                <table>
-                    <ListJobs n={jobsData.length} jobsData={jobsData} />
-                </table>
-            </div>
-        </div>
-    */}
     </div>
 </div>
 
