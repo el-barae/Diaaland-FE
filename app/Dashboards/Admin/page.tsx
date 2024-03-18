@@ -12,6 +12,7 @@ import API_URL from '@/config';
 import Jobs from '@/components/Admin/jobs/jobs'
 import Dashboard from '@/components/Admin/Dashboard/Dashboard'
 import Candidates from '@/components/Admin/Candidates/Candidates'
+import Customers from '@/components/Admin/Customers/Customer'
 
 interface Job {
     id: number;
@@ -70,6 +71,9 @@ const Admin = () =>{
           }
           if (x === "Candidates") {
             return <Candidates/>;
+          }
+          if (x === "Customers") {
+            return <Customers/>;
           }
       }
     
@@ -160,7 +164,7 @@ const Admin = () =>{
 
             <li>
                 <a href="#">
-                    <span className="title">Customers</span>
+                    <span className="title" onClick={() => handleClick("Customers")}>Customers</span>
                 </a>
             </li>
 
