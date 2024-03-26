@@ -1,7 +1,7 @@
 import React, { useState,useEffect } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
-import "./ModalJobs.scss";
+import "../../jobs/ModalJobs/ModalJobs.scss";
 import API_URL from "@/config";
 
 interface Customer {
@@ -48,7 +48,7 @@ interface ModalProps {
       e.preventDefault();
       const idC = Cookies.get('id');
       axios
-        .put(API_URL+'/api/v1/jobs/' + String(id), {
+        .put(API_URL+'/api/v1/customers/' + String(id), {
           id: id,
           name: McustomerName,
           email: McustomerEmail,
@@ -95,41 +95,6 @@ interface ModalProps {
         document.body.classList.remove('active-modal');
       };
     }, [isOpen]);
-
-    const handleCustomerNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      const value = e.target.value;
-      setCustomerName(value);
-    };
-    
-    const handleCustomerEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      const value = e.target.value;
-      setCustomerEmail(value);
-    };
-    
-    const handleCustomerAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      const value = e.target.value;
-      setCustomerAddress(value);
-    };
-    
-    const handleCustomerCityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      const value = e.target.value;
-      setCustomerCity(value);
-    };
-    
-    const handleCustomerCountryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      const value = e.target.value;
-      setCustomerCountry(value);
-    };
-    
-    const handleCustomerDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-      const value = e.target.value;
-      setCustomerDescription(value);
-    };
-    
-    const handleCustomerLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      const value = e.target.value;
-      setCustomerLogo(value);
-    };
     
 
     return (

@@ -44,15 +44,15 @@ const [customerDescription, setCustomerDescription] = useState('');
 const [customerLogo, setCustomerLogo] = useState('');
 
 const handleModifyClick = (e:any, id:number, name:string, email:string, address:string, city:string, country:string, description:string, logo:string) => {
-  // Votre logique de manipulation ici
-  console.log('ID:', id);
-  console.log('Name:', name);
-  console.log('Email:', email);
-  console.log('Address:', address);
-  console.log('City:', city);
-  console.log('Country:', country);
-  console.log('Description:', description);
-  console.log('Logo:', logo);
+  setCustomerId(id);
+  setCustomerName(name);
+  setCustomerEmail(email);
+  setCustomerAddress(address);
+  setCustomerCity(city);
+  setCustomerCountry(country);
+  setCustomerDescription(description);
+  setCustomerLogo(logo);
+  setModalOpen(true);
 };
 
 const RepeatClassNTimes: React.FC<RepeatClassNTimesProps> = ({ className, n, customersData }) => {
