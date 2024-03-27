@@ -40,7 +40,7 @@ interface Candidate{
   }
 
 const Candidates = () =>{
-    const [candidatesData,setCandidatesData] = useState([])
+    const [candidatesData,setCandidatesData] = useState<Candidate[]>([]);
     const [candidateId, setCandidateId] = useState<number>(0);
 const [candidateFirstName, setCandidateFirstName] = useState<string>('');
 const [candidateLastName, setCandidateLastName] = useState<string>('');
@@ -94,7 +94,7 @@ const RepeatClassNTimes: React.FC<RepeatClassNTimesProps> = ({ className, n, can
         </p>
         <button onClick={(e) => handleDelete(e, c.id)}>Delete</button>
         <button onClick={() => handleModify(c.id, c.firstName, c.lastName, c.email, c.city, c.country, c.adress, c.accountStatus, c.phone, c.jobStatus, c.expectedSalary, c.linkedin, c.github, c.portofolio, c.blog, c.resume, c.image)}>Modify</button>
-        <Modal isOpen={modalOpen} id={candidateId} firstName={candidateFirstName} lastName={candidateLastName} email={candidateEmail} city={candidateCity} country={candidateCountry} adress={candidateAddress} accountStatus={candidateAccountStatus} phone={candidatePhone} jobStatus={candidateJobStatus} expectedSalary={candidateExpectedSalary} linkedin={candidateLinkedin} github={candidateGithub} portfolio={candidatePortfolio} blog={candidateBlog} resume={candidateResume} image={candidateImage} onClose={() => setModalOpen(false)} setCandidateData={setCandidatesData} />
+        <Modal isOpen={modalOpen} id={candidateId} firstName={candidateFirstName} lastName={candidateLastName} email={candidateEmail} city={candidateCity} country={candidateCountry} adress={candidateAddress} accountStatus={candidateAccountStatus} phone={candidatePhone} jobStatus={candidateJobStatus} expectedSalary={candidateExpectedSalary} linkedin={candidateLinkedin} github={candidateGithub} portofolio={candidatePortfolio} blog={candidateBlog} resume={candidateResume} image={candidateImage} onClose={() => setModalOpen(false)} setCandidatesData={setCandidatesData} />
       </div>
       ))}
       </>

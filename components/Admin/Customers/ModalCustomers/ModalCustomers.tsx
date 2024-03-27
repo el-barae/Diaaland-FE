@@ -30,7 +30,6 @@ interface ModalProps {
   }
 
   export default function Modal({ isOpen, id, name, email, address, city, country, description, logo, onClose, setCustomerData }: ModalProps) {
-    const [McustomerId, setCustomerId] = useState(id);
     const [McustomerName, setCustomerName] = useState(name);
     const [McustomerEmail, setCustomerEmail] = useState(email);
     const [McustomerAddress, setCustomerAddress] = useState(address);

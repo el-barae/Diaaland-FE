@@ -4,7 +4,6 @@ import { useRef , useState} from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import './style.scss';
-import Cookies from 'js-cookie';
 import {ThemeProvider} from 'next-themes'
 import Navbar from '@/components/HomePage/Navbar/Navbar'
 import Image from 'next/image'
@@ -18,7 +17,6 @@ export default function Login() {
 
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
-	const { data: session } = useSession();
 	const emailErrorRef = useRef<HTMLDivElement>(null);
 	const passwordErrorRef = useRef<HTMLDivElement>(null);
 	const SubmitErrorRef = useRef<HTMLDivElement>(null);
@@ -31,7 +29,8 @@ export default function Login() {
 			const resp = await axios.get(API_URL+'/api/v1/candidates/findIdByEmail/'+String(email)); 
 			const ID = JSON.stringify(resp.data);
 			console.log(String(ID));
-			  Cookies.set("id", String(ID));
+			localStorage.setItem('ID',ID)
+			//Cookies.set("id", String(ID));
 		  } catch (error) {
 			console.error('Erreur lors de la récupération des données :', error);
 		  }
@@ -45,7 +44,8 @@ export default function Login() {
 		  })
 		  .then(function (response) {
 			localStorage.setItem('token',response.data.token)
-			Cookies.set("loggedin", "true");
+			localStorage.setItem('loggedIn',"true")
+			//Cookies.set("loggedin", "true");
 			fetchID();
 			router.push('/addPost')
 		  })

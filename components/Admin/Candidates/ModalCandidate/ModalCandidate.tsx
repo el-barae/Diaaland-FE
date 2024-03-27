@@ -1,7 +1,6 @@
 import React, { useState,useEffect } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
-//import "../../jobs/ModalJobs/ModalJobs.scss";
 import "./ModalCandidate.scss"
 import API_URL from "@/config";
 
@@ -50,7 +49,6 @@ interface ModalProps {
   }
 
   export default function Modal({ isOpen, id, firstName, lastName, email, city, country, adress, accountStatus, phone, jobStatus, expectedSalary, linkedin, github, portofolio, blog, resume, image, onClose, setCandidatesData }: ModalProps) {
-    const [McandidateId, setCandidateId] = useState(id);
     const [McandidateFirstName, setCandidateFirstName] = useState(firstName);
     const [McandidateLastName, setCandidateLastName] = useState(lastName);
     const [McandidateEmail, setCandidateEmail] = useState(email);

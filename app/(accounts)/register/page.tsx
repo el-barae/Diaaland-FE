@@ -187,6 +187,8 @@ export default function Register() {
 										<label htmlFor="email">Email</label>
 										<input type="email" name="email" id="email" placeholder="Enter your email" value={email} required onInvalid={invalidEmail} onChange={(e) => setEmail(e.target.value)} />
 										<p ref={emailErrorRef} className="error email-error"></p>
+										<label htmlFor="url">Resume:</label>
+										<input type="file" id="fileInput" name="fileInput" required onChange={(e) => setUrl(e.target.value)}/>
 										<label htmlFor="password">Password</label>
 										<div className="password-input">
 											<input type={passState === 'show' ? 'text' : 'password'} name="password" id="password" placeholder="Enter your password" onChange={handlePasswordChange} required onInvalid={invalidPassword} />
@@ -198,6 +200,7 @@ export default function Register() {
 											<div ref={passwordMessageRef} className="message hidden">
 											</div>
 										</div>
+										{/*
 										<div className="nation">
 											<label htmlFor="city">City:</label>
 											<input type="text" name="city" id="city" placeholder='Enter your city' value={city} required onChange={(e) => setCity(e.target.value)}  />
@@ -226,14 +229,12 @@ export default function Register() {
 											<label htmlFor="url">Portofolio:</label>
 											<input type="text" name="url" required onChange={(e) => setUrl(e.target.value)}  />
 											<label htmlFor="url">Blog:</label>
-											<input type="text" name="url" required onChange={(e) => setUrl(e.target.value)}  />
-											<label htmlFor="url">Resume:</label>
-											<input type="text" name="url" required onChange={(e) => setUrl(e.target.value)}  />
+											<input type="text" name="url" required onChange={(e) => setUrl(e.target.value)}  />										
 											<label htmlFor="logo">Image:</label>
 											<input type="file" id="fileInput" name="fileInput" required onChange={(e) => setLogo(e.target.value)}/>
 											<label htmlFor="logo">Diplome:</label>
 											<input type="file" id="fileInput" name="fileInput" required onChange={(e) => setLogo(e.target.value)}/>
-									
+									*/}
 										<input className='inline checkbox' type="checkbox" name="term-of-use" id="term-of-use" required onInvalid={invalidTerms} />
 										<p ref={termsErrorRef} className='error terms-error'></p>
 										<button className='block' type="submit" onClick={handleSubmit}>Register</button>

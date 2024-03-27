@@ -1,6 +1,5 @@
 import React, { useState,useEffect } from "react";
 import axios from "axios";
-import Cookies from "js-cookie";
 import "./Modal.scss";
 import API_URL from "@/config";
 
@@ -29,21 +28,35 @@ export default function Modal({ isOpen, id, description, name, onClose }: ModalP
     
     const handleApply = async (e:any, id:number) =>{
 		e.preventDefault()
-		axios.post(API_URL+'/api/v1/candidate-jobs', {
-			"status": "en attends",
-      "candidate": {
-        "id": 1
-      },
-      "job": {
-        "id": id
-      }
-		 })
-		 .then(function (response) {
-			onClose();
-		 })
-		 .catch(function (error) {
-			console.log(error);
-		 });
+    var ID = localStorage.getItem("ID");
+    ID = '1';
+  axios.get(API_URL+'/api/v1/candidate-skills/haveSkills/'+ID)
+  .then(function (response) {
+    if (response.data === true) {
+      axios.post(API_URL+'/api/v1/candidate-jobs', {
+        "status": "en attente",
+        "candidate": {
+          "id": 1
+        },
+        "job": {
+          "id": id
+        }
+      })
+      .then(function (response) {
+        onClose();
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    }
+    else{
+      alert("Your should add skills");
+    }
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
+
 	}
 
   const handleAddFavoris = async (e:any, id:number) =>{
