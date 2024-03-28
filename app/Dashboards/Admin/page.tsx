@@ -13,6 +13,7 @@ import Jobs from '@/components/Admin/jobs/jobs'
 import Dashboard from '@/components/Admin/Dashboard/Dashboard'
 import Candidates from '@/components/Admin/Candidates/Candidates'
 import Customers from '@/components/Admin/Customers/Customer'
+import Skills from '@/components/Admin/Skills/Skills'
 
 interface Job {
     id: number;
@@ -41,8 +42,8 @@ function getStatusClass(status: string) {
         return 'delivered-refuse';
       case 'accept':
         return 'delivered-accept';
-      case 'en attends':
-        return 'delivered-enattends';
+      case 'pending':
+        return 'delivered-pending';
       default:
         return 'delivered';
     }
@@ -74,6 +75,9 @@ const Admin = () =>{
           }
           if (x === "Customers") {
             return <Customers/>;
+          }
+          if (x === "Skills") {
+            return <Skills/>;
           }
       }
     
@@ -171,6 +175,12 @@ const Admin = () =>{
             <li>
                 <a href="#" onClick={() => handleClick("Candidates")}>
                     <span className="title">Candidates</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="#" onClick={() => handleClick("Skills")}>
+                    <span className="title">Skills</span>
                 </a>
             </li>
 

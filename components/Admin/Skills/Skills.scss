@@ -1,0 +1,51 @@
+@import '@/app/globals.scss';
+.jobs{
+    .add{
+    padding: 1.5rem;
+    margin: 1rem;
+    gap: 3.5rem;
+    width: max-content;
+    h2{
+        font-size: 27px;
+        font-weight: 300;
+        color: rgb(65, 19, 214);
+    }
+    
+    button{
+        font-size: 16px;
+        font-weight: 250;
+        text-align: center;
+        padding: 10px;
+        background-color: $main-color;
+        color: $second-color;
+        border-radius: 20px;
+        margin: 10px;
+        width: 10rem;
+        transition: .3s ease-in-out;
+        &:hover {
+            font-size: 20px;
+            font-weight: 300;
+            background-color: darken($main-color, 10%);
+        }
+    }
+
+    input{
+        border-radius: 10px;
+        border: 1px solid $footer-bg;
+        padding: .5rem;
+        margin-right: 50px;
+        margin-left: 20px;
+        margin-bottom: 20px;
+    }
+
+    }
+    @media(max-width:650px){
+        .add{
+            display: flex;
+            flex-direction: column;
+            select{
+                max-width: 60px;
+            }
+        }
+    }
+}
