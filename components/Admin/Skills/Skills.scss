@@ -4,12 +4,12 @@
         font-size: 16px;
         font-weight: 250;
         text-align: center;
-        padding: 10px;
+        padding: 8px;
         background-color: $main-color;
         color: $second-color;
         border-radius: 20px;
         margin: 10px;
-        width: 10rem;
+        width: 8rem;
         transition: .3s ease-in-out;
         &:hover {
             font-size: 20px;
@@ -43,6 +43,21 @@
         }
         }
     }
+    @media(max-width:1200px){
+        .lists-skills{
+            grid-template-columns: repeat(3, 1fr);
+        }
+    }
+    @media(max-width:700px){
+        .lists-skills{
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+    @media(max-width:500px){
+        .lists-skills{
+            grid-template-columns: repeat(1, 1fr);
+        }
+    }
     .add{
     padding: 1.5rem;
     margin: 1rem;
@@ -69,8 +84,12 @@
         .add{
             display: flex;
             flex-direction: column;
-            select{
-                max-width: 60px;
+            .list{
+                display: flex;
+                flex-direction: column;
+            }
+            input{
+                max-width: 200px;
             }
         }
     }
@@ -86,5 +105,11 @@
     table thead td {
         font-size: 32px;
       }
+      
     
+}
+@media(max-width:991px){
+    .jobs{
+        padding: 1rem;
+    }
 }
