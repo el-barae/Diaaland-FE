@@ -167,8 +167,8 @@ const Admin = () =>{
             </li>
 
             <li>
-                <a href="#">
-                    <span className="title" onClick={() => handleClick("Customers")}>Customers</span>
+                <a href="#" onClick={() => handleClick("Customers")}>
+                    <span className="title">Customers</span>
                 </a>
             </li>
 

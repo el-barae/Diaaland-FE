@@ -22,6 +22,11 @@ interface RepeatClassNTimesProps {
     skillsAll: skill[];
   }
 
+  interface Skills {
+    n: number;
+    skillsData: skill[];
+ }
+
 const Skills = () => {
     const [name,setName] = useState('')
     const [type,setType] = useState('')
@@ -90,6 +95,21 @@ const Skills = () => {
           )
         }
 
+        const AllSkills: React.FC<Skills> = ({ n, skillsData }) => {
+          const skills = skillsData;
+          return (
+              <>
+                  {skills.map((skill) => (
+                      <tr key={skill.id}>
+                          <td>{skill.name}</td>
+                          <td>{skill.type}</td>
+                          <td><button onClick={(e) => handleDelete(e, skill.id)}>Delete</button></td>
+                      </tr>
+                  ))}
+              </>
+          );
+        }
+
     return(
         <>
             <div className="jobs">
@@ -104,8 +124,21 @@ const Skills = () => {
                 <button onClick={(e) => handleAddSkill(e, skill,type)}>Add skill</button>
             </div>
                 <h1>Skills</h1>
-                <div className='lists'>
-                  <RepeatClassNTimes className="list" n={skillsData.length} skillsData={skillsData} />
+                <table>
+                    <thead>
+                        <tr>
+                            <td>Name</td>
+                            <td>Type</td>
+                            <td>Delete</td>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                    <AllSkills n={skillsData.length} skillsData={skillsData} /> 
+                    </tbody>
+                </table>
+                <div className='lists-skills'>
+                  <RepeatClassNTimes className="list-skill" n={skillsData.length} skillsData={skillsData} />
                 </div>
             </div>
         </>
