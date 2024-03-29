@@ -118,11 +118,7 @@ const Dashboard = () =>{
         <>
         <div className="topbar">
 
-            <div className="search">
-                <label>
-                    <input type="text" placeholder="Search here"></input>
-                </label>
-            </div>
+            <h1>Dashboard</h1>
 
             <div className="user">
             </div>

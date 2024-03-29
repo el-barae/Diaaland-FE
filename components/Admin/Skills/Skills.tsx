@@ -14,7 +14,7 @@ interface skill{
 interface RepeatClassNTimesProps {
     className: string;
     n: number;
-    skillsData: skill[];
+    filteredSkills: skill[];
   }
   interface RepeatClassNTimesProps1 {
     className: string;
@@ -24,7 +24,7 @@ interface RepeatClassNTimesProps {
 
   interface Skills {
     n: number;
-    skillsData: skill[];
+    filteredSkills: skill[];
  }
 
 const Skills = () => {
@@ -32,6 +32,16 @@ const Skills = () => {
     const [type,setType] = useState('')
     const [skill,setSkill] = useState('')
     const [skillsData,setSkillsData] = useState<skill[]>([])
+    const [searchTerm, setSearchTerm] = useState('');
+    const [filteredSkills, setFilteredSkills] = useState<skill[]>([]);
+
+    const handleSearch = (term: string) => {
+      const filtered = skillsData.filter((skill) =>
+        skill.name.toLowerCase().includes(term.toLowerCase())/* ||
+        skill.type.toLowerCase().includes(searchTerm.toLowerCase())*/
+      );
+      setFilteredSkills(filtered);
+   };
 
     const handleAddSkill = async (e:any, sname:string, stype:string)  =>{
       e.preventDefault()
@@ -50,6 +60,7 @@ const Skills = () => {
         const response = await axios.get(API_URL+'/api/v1/skills');
         const candidateSkills: skill[] = response.data;
         setSkillsData(candidateSkills);
+        setFilteredSkills(candidateSkills);
       } catch (error) {
         console.log(error);
       }
@@ -62,6 +73,7 @@ const Skills = () => {
         axios.delete(API_URL+'/api/v1/skills/'+String(idS))
         const updatedSkillsData = skillsData.filter(skill => skill.id !== idS)
         setSkillsData(updatedSkillsData)
+        setFilteredSkills(updatedSkillsData)
         }catch (error) {
         console.log(error);
        };
@@ -73,6 +85,7 @@ const Skills = () => {
               const response = await axios.get(API_URL+'/api/v1/skills');
               const candidateSkills: skill[] = response.data;
               setSkillsData(candidateSkills);
+              setFilteredSkills(candidateSkills);
             } catch (error) {
               console.error('Erreur lors de la récupération des données :', error);
             }
@@ -80,35 +93,36 @@ const Skills = () => {
           fetchData();
     }, []);
   
-      const RepeatClassNTimes: React.FC<RepeatClassNTimesProps> = ({ className, n, skillsData }) => {
-        if(skillsData.length != 0)
-          return(
-            <>
-            {skillsData.map((skill) => (
+    const RepeatClassNTimes: React.FC<RepeatClassNTimesProps> = ({ className, n, filteredSkills }) => {
+      if (filteredSkills.length !== 0)
+        return (
+          <>
+            {filteredSkills.map((skill) => (
               <div key={skill.id} className={className}>
-              <h1>{skill.name}</h1>
-              <p>type: {skill.type} </p>
-              <button onClick={(e) => handleDelete(e, skill.id)}>Delete</button>
-            </div>
+                <h1>{skill.name}</h1>
+                <p>type: {skill.type} </p>
+                <button onClick={(e) => handleDelete(e, skill.id)}>Delete</button>
+              </div>
             ))}
-            </>
-          )
-        }
-
-        const AllSkills: React.FC<Skills> = ({ n, skillsData }) => {
-          const skills = skillsData;
-          return (
-              <>
-                  {skills.map((skill) => (
-                      <tr key={skill.id}>
-                          <td>{skill.name}</td>
-                          <td>{skill.type}</td>
-                          <td><button onClick={(e) => handleDelete(e, skill.id)}>Delete</button></td>
-                      </tr>
-                  ))}
-              </>
-          );
-        }
+          </>
+        );
+    };
+    
+    const AllSkills: React.FC<Skills> = ({ n, filteredSkills }) => {
+      const skills = filteredSkills;
+      return (
+        <>
+          {skills.map((skill) => (
+            <tr key={skill.id}>
+              <td>{skill.name}</td>
+              <td>{skill.type}</td>
+              <td><button onClick={(e) => handleDelete(e, skill.id)}>Delete</button></td>
+            </tr>
+          ))}
+        </>
+      );
+    };
+    
 
     return(
         <>
@@ -124,6 +138,15 @@ const Skills = () => {
                 <button onClick={(e) => handleAddSkill(e, skill,type)}>Add skill</button>
             </div>
                 <h1>Skills</h1>
+                <div className="search">
+                <label>
+                    <input type="text" placeholder="Search here" value={searchTerm} onChange={(e) => {
+                    setSearchTerm(e.target.value);
+                    handleSearch(e.target.value);
+                    }}
+                    required></input>
+                </label>
+              </div>
                 <table>
                     <thead>
                         <tr>
@@ -134,11 +157,11 @@ const Skills = () => {
                     </thead>
 
                     <tbody>
-                    <AllSkills n={skillsData.length} skillsData={skillsData} /> 
+                    <AllSkills n={filteredSkills.length} filteredSkills={filteredSkills} /> 
                     </tbody>
                 </table>
                 <div className='lists-skills'>
-                  <RepeatClassNTimes className="list-skill" n={skillsData.length} skillsData={skillsData} />
+                  <RepeatClassNTimes className="list-skill" n={filteredSkills.length} filteredSkills={filteredSkills} />
                 </div>
             </div>
         </>

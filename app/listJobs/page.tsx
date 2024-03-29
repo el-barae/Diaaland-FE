@@ -48,6 +48,7 @@ const ListJobs = () => {
           }
         }*/);
         setJobsData(response.data);
+        setFilteredJobs(response.data);
       } catch (error) {
         console.error('Erreur lors de la récupération des données :', error);
       }
@@ -58,10 +59,10 @@ const ListJobs = () => {
  interface RepeatClassNTimesProps {
     className: string;
     n: number;
-    jobsData: Job[];
+    filteredJobs: Job[];
  }
 
- const RepeatClassNTimes: React.FC<RepeatClassNTimesProps> = ({ className, n, jobsData }) => {
+ const RepeatClassNTimes: React.FC<RepeatClassNTimesProps> = ({ className, n, filteredJobs }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [currentDescription, setCurrentDescription] = useState("");
   const [currentId, setCurrentId] = useState(0);
@@ -74,10 +75,10 @@ const ListJobs = () => {
     setModalOpen(true);
   };
 
-      if(jobsData.length != 0)
+      if(filteredJobs.length != 0)
       return(
         <>
-        {jobsData.map((job) => (
+        {filteredJobs.map((job) => (
           <div key={job.id} className={className}>
           <h1>{job.name} :</h1>
           <p>
@@ -131,7 +132,7 @@ const ListJobs = () => {
                     </div>
                  </div>
                     <div className='lists'>
-                        <RepeatClassNTimes className="list" n={jobsData.length} jobsData={jobsData} />
+                        <RepeatClassNTimes className="list" n={jobsData.length} filteredJobs={filteredJobs} />
                     </div>
                 </div>
             </div>
