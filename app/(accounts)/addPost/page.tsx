@@ -28,6 +28,7 @@ export default function AddPost() {
  
   const handleSubmit = async (e:any)  =>{
 		e.preventDefault()
+    const token = localStorage.getItem("token");
 		axios.post(API_URL+'/api/v1/jobs', {
 			"name": jobTitle,
       "description": jobDescription,
@@ -40,10 +41,10 @@ export default function AddPost() {
       "address": adress,
       "remoteStatus": true
 		  }, {
-        headers: {
-          Authorization: `Bearer ${authToken}`,
-        },
-      })
+				headers: {
+					'Authorization': 'Bearer ' + token
+				}
+			})
 		  .then(function (response) {
 			console.log(response);
       alert("Your post had been sent to admin ")

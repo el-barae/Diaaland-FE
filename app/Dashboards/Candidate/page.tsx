@@ -44,7 +44,7 @@ const Candidate = () => {
     setX(value);
     y();
   };
-
+  const token = localStorage.getItem("token");
   const [isOpen, setIsOpen] = useState(false);
   const [notif,setNotif] = useState(2); 
   const options = ['Message 1', 'Message 2', 'Message 3'];
@@ -96,7 +96,11 @@ const Candidate = () => {
       try {
         Cookies.set("id","1")
         const id = Cookies.get("id");
-        const response = await axios.get(API_URL+'/api/v1/candidates/name/'+String(id));         
+        const response = await axios.get(API_URL+'/api/v1/candidates/name/'+String(id), {
+          headers: {
+            'Authorization': 'Bearer ' + token
+          }
+        });         
         setCandidateData(response.data);
       } catch (error) {
         console.error('Erreur lors de la récupération des données :', error);

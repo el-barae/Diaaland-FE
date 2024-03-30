@@ -109,7 +109,11 @@ const Customer = () => {
     useEffect(() => {
         const fetchCandidateData = async () => {
           try {
-            const response = await axios.get(API_URL+'/api/v1/candidate-jobs/byJob/2');
+            const response = await axios.get(API_URL+'/api/v1/candidate-jobs/byJob/2', {
+              headers: {
+                'Authorization': 'Bearer ' + token
+              }
+            });
             
             setCandidatesData(response.data);
           } catch (error) {
@@ -120,7 +124,11 @@ const Customer = () => {
           try {
             Cookies.set("id","1")
             const id = Cookies.get("id");
-            const response = await axios.get(API_URL+'/api/v1/jobs/byCustomer/'+String(id));         
+            const response = await axios.get(API_URL+'/api/v1/jobs/byCustomer/'+String(id), {
+              headers: {
+                'Authorization': 'Bearer ' + token
+              }
+            });         
             setJobsData(response.data);
           } catch (error) {
             console.error('Erreur lors de la récupération des données :', error);

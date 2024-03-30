@@ -31,7 +31,7 @@ function getStatusClass(status: string) {
       case 'accept':
         return 'delivered-accept';
       case 'en attends':
-        return 'delivered-enattends';
+        return 'delivered-pending';
       default:
         return 'delivered';
     }
@@ -47,25 +47,46 @@ const Dashboard = () =>{
 
 
     
- useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(API_URL+'/api/v1/jobs/list');
-        setJobsData(response.data);
-        const countJ = await axios.get(API_URL+'/api/v1/admin/jobs');
-        setCountJobs(countJ.data);
-        const countCa = await axios.get(API_URL+'/api/v1/admin/candidates');
-        setCountCandidates(countCa.data);
-        const countCu = await axios.get(API_URL+'/api/v1/admin/customers');
-        setCountCustomers(countCu.data);
-        const response1 = await axios.get<appliedCandidates[]>(API_URL+'/api/v1/candidate-jobs');
-        setAppliedCandidatesData(response1.data);
-      } catch (error) {
-        console.error('Erreur lors de la récupération des données :', error);
-      }
-    };
-    fetchData();
- }, []);
+    useEffect(() => {
+        const token = localStorage.getItem("token")
+        const fetchData = async () => {
+          try {
+            const response = await axios.get(API_URL+"/api/v1/jobs/list", {
+                headers: {
+                  'Authorization': 'Bearer ' + token
+                }
+              });
+            setJobsData(response.data);
+            const countJ = await axios.get(API_URL+'/api/v1/admin/jobs', {
+                headers: {
+                  'Authorization': 'Bearer ' + token
+                }
+              });
+            setCountJobs(countJ.data);
+            const countCa = await axios.get(API_URL+'/api/v1/admin/candidates', {
+                headers: {
+                  'Authorization': 'Bearer ' + token
+                }
+              });
+            setCountCandidates(countCa.data);
+            const countCu = await axios.get(API_URL+'/api/v1/admin/customers', {
+                headers: {
+                  'Authorization': 'Bearer ' + token
+                }
+              });
+            setCountCustomers(countCu.data);
+            const response1 = await axios.get<appliedCandidates[]>(API_URL+'/api/v1/candidate-jobs', {
+                headers: {
+                  'Authorization': 'Bearer ' + token
+                }
+              });
+            setAppliedCandidatesData(response1.data);
+          } catch (error) {
+            console.error('Erreur lors de la récupération des données :', error);
+          }
+        };
+        fetchData();
+     }, []);
 
  interface LastJobs {
     n: number;
@@ -84,9 +105,7 @@ const Dashboard = () =>{
         {lastjobsData.map((job) => (
             <div key={job.id} >
                     <tr>
-                        <td width="60px">
-                            <div className="imgBx"></div>
-                        </td>
+
                         <td>
                             <h4>{job.name}<br/> <span>{job.numberOfPositions}</span></h4>
                         </td>
@@ -98,7 +117,7 @@ const Dashboard = () =>{
     }
 
     const ListAppliedCandidates: React.FC<LastCandidates> = ({ n, appliedCandidatesData }) => {
-        const lastFourCandidateJobs = appliedCandidatesData.slice(-4);
+        const lastFourCandidateJobs = appliedCandidatesData.slice(-6);
 
         return (
             <>

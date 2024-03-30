@@ -11,6 +11,7 @@ import Link from 'next/link'
 import LoginImage from '@/public/images/login-info.svg'
 import { FaEye, FaEyeSlash } from 'react-icons/fa'
 import { signIn, useSession } from 'next-auth/react';
+import Cookies from 'js-cookie';
 import API_URL from '@/config';
 
 export default function Login() {
@@ -26,7 +27,12 @@ export default function Login() {
 
 	const fetchID = async () => {
 		try {
-			const resp = await axios.get(API_URL+'/api/v1/candidates/findIdByEmail/'+String(email)); 
+			const token = localStorage.getItem("token");
+			const resp = await axios.get(API_URL+'/api/v1/users/relatedId/'+String(email), {
+				headers: {
+					'Authorization': 'Bearer ' + token
+				}
+			});
 			const ID = JSON.stringify(resp.data);
 			console.log(String(ID));
 			localStorage.setItem('ID',ID)
@@ -44,8 +50,8 @@ export default function Login() {
 		  })
 		  .then(function (response) {
 			localStorage.setItem('token',response.data.token)
-			localStorage.setItem('loggedIn',"true")
-			//Cookies.set("loggedin", "true");
+			//localStorage.setItem('loggedIn',"true")
+			Cookies.set("loggedin", "true");
 			fetchID();
 			router.push('/addPost')
 		  })

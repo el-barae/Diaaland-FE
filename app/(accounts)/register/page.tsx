@@ -36,7 +36,7 @@ const passwordStrength = (password: string) => {
 }
 
 export default function Register() {
-
+	const token = localStorage.getItem("token");
 	const [firstName, setFirstName] = useState('')
 	const [lastName, setLastName] = useState('')
 	const [city, setCity] = useState('')
@@ -68,6 +68,10 @@ export default function Register() {
 			"email":email,
 			"password": password,
 			"role": "USER"
+		  }, {
+			headers: {
+			  'Authorization': 'Bearer ' + token
+			}
 		  })
 		  .then(function (response) {
 			console.log(response);

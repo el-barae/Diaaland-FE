@@ -22,6 +22,7 @@ interface ModalProps {
 export default function Modal({ isOpen, id, description, name, onClose }: ModalProps) {
   const [isApplied, setIsApplied] = useState(false);
   const [isFavoris, setIsFavoris] = useState(false);
+  const token = localStorage.getItem("token");
     const toggleModal = () => {
       onClose();
     };
@@ -29,7 +30,7 @@ export default function Modal({ isOpen, id, description, name, onClose }: ModalP
     const handleApply = async (e:any, id:number) =>{
 		e.preventDefault()
     var ID = localStorage.getItem("ID");
-    ID = '1';
+    //ID = '1';
   axios.get(API_URL+'/api/v1/candidate-skills/haveSkills/'+ID)
   .then(function (response) {
     if (response.data === true) {
@@ -40,6 +41,10 @@ export default function Modal({ isOpen, id, description, name, onClose }: ModalP
         },
         "job": {
           "id": id
+        }
+      }, {
+        headers: {
+          'Authorization': 'Bearer ' + token
         }
       })
       .then(function (response) {
@@ -68,7 +73,11 @@ export default function Modal({ isOpen, id, description, name, onClose }: ModalP
       "job": {
         "id": id
       }
-		 })
+		 }, {
+      headers: {
+        'Authorization': 'Bearer ' + token
+      }
+    })
 		 .then(function (response) {
       onClose();
 		 })
@@ -80,7 +89,11 @@ export default function Modal({ isOpen, id, description, name, onClose }: ModalP
     useEffect(() => {
       async function fetchData() {
         try {
-          const response = await axios.get(API_URL + '/api/v1/candidate-jobs/itsApplied/' + 1 + '/' + id);
+          const response = await axios.get(API_URL + '/api/v1/candidate-jobs/itsApplied/' + 1 + '/' + id, {
+            headers: {
+              'Authorization': 'Bearer ' + token
+            }
+          });
           setIsApplied(response.data);  
         } catch (error) {
           console.error('Error fetching data:', error);
@@ -89,7 +102,11 @@ export default function Modal({ isOpen, id, description, name, onClose }: ModalP
       fetchData();
       async function fetchData1() {
         try {
-          const response1 = await axios.get(API_URL + '/api/v1/favoris/itsFavoris/' + 1 + '/' + id);
+          const response1 = await axios.get(API_URL + '/api/v1/favoris/itsFavoris/' + 1 + '/' + id, {
+            headers: {
+              'Authorization': 'Bearer ' + token
+            }
+          });
           setIsFavoris(response1.data); 
         } catch (error) {
           console.error('Error fetching data:', error);

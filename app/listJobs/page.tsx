@@ -42,11 +42,12 @@ const ListJobs = () => {
     const authToken = localStorage.getItem('token');
     const fetchData = async () => {
       try {
-        const response = await axios.get(API_URL+"/api/v1/jobs/list"/*, {
+        const token = localStorage.getItem("token");
+        const response = await axios.get(API_URL+"/api/v1/jobs/list", {
           headers: {
-            Authorization: `Bearer ${authToken}`
+            'Authorization': 'Bearer ' + token
           }
-        }*/);
+        });
         setJobsData(response.data);
         setFilteredJobs(response.data);
       } catch (error) {
