@@ -1,15 +1,15 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Logo from '@/components/HomePage/Logo/Logo'
 import Image from 'next/image'
 import ResetPasswordImage from '@/public/images/forgot-password.svg'
-import axios from 'axios'
-import API_URL from '@/config'
 import Cookies from 'js-cookie'
 import swal from 'sweetalert'
-import './style.scss'
+import API_URL from '@/config'
+import '../style.scss'
 
-export default function Reset() {
+export default function ChangePass() {
+
   const [email, setEmail] = useState('');
 
   function isValidEmail(email: string) {
@@ -24,16 +24,7 @@ export default function Reset() {
       swal('Please enter a valid email', '', 'error');
     } else {
       swal('Email sent', '', 'success');
-      axios.post(API_URL+"/api/v1/auth/forgot/"+email)
-    .then(response => {
-        const resetToken = response.data;
-        console.log(String(resetToken))
-        Cookies.set("resetToken", String(resetToken));
-    })
-    .catch(error => {
-        console.error('Error sending forgot password request:', error);
-    });
-
+      Cookies.set("resetToken", "");
     }
   }
 
@@ -55,9 +46,10 @@ export default function Reset() {
           <div className="logo text-5xl font-bold">
             <Logo />
           </div>
-          <h3>Forgot password?</h3>
-          <p>No worries, we&apos;ll send you reset instructions</p>
-          <input type="email" name="email" id="email" placeholder="Enter email" onChange={(e) => setEmail(e.target.value)} />
+          <h3>Change password</h3>
+          <p>New password:</p>
+          <input type="password" name="password" id="password" placeholder="Enter password" onChange={(e) => setEmail(e.target.value)} />
+          <input type="password" name="password" id="password" placeholder="Confirm password" onChange={(e) => setEmail(e.target.value)} />
           <input type="submit" value="Reset my password" onClick={handleSubmitClick} />
         </div>
       </div>

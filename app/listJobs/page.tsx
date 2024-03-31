@@ -39,7 +39,6 @@ const ListJobs = () => {
  
  const [jobsData, setJobsData] = useState<Job[]>([]);
  useEffect(() => {
-    const authToken = localStorage.getItem('token');
     const fetchData = async () => {
       try {
         const token = localStorage.getItem("token");

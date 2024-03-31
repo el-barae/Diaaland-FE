@@ -73,6 +73,7 @@ interface Candidate {
       }
 
 const Customer = () => {
+  const token = localStorage.getItem("token");
     const [candidatesData, setCandidatesData] = useState<Candidate[]>([]);
     const [jobsData, setJobsData] = useState<Job[]>([]);
 
@@ -94,15 +95,12 @@ const Customer = () => {
     const y = () => {
       if (x === "Profile"){ 
         return <Profile />;
-        console.log(x);
       }
       if (x === "Jobs") {
         return <Jobs />;
-        console.log(x);
       }
       if (x === "Candidates") {
         return <Candidates />;
-        console.log(x);
       }
     }
 

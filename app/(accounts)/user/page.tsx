@@ -36,7 +36,6 @@ const passwordStrength = (password: string) => {
 }
 
 export default function Register() {
-	const token = localStorage.getItem("token");
 	const firstnameErrorRef = useRef<HTMLParagraphElement>(null);
 	const lastnameErrorRef = useRef<HTMLParagraphElement>(null);
 	const emailErrorRef = useRef<HTMLParagraphElement>(null);
@@ -65,11 +64,7 @@ export default function Register() {
 				"email":email,
 				"password": password,
 				"role": "CUSTOMER"
-			}, {
-				headers: {
-				  'Authorization': 'Bearer ' + token
-				}
-			  });
+			});
 			const response2 = axios.post(API_URL+'/api/v1/auth/register', {
 			"name": name,
 			"email":email,
@@ -78,10 +73,6 @@ export default function Register() {
 			"url": url,
 			"adress": adress,
 			"logo": logo
-		  }, {
-			headers: {
-			  'Authorization': 'Bearer ' + token
-			}
 		  })
 			//console.log(response);
 			Cookies.set("loggedin", "true");
