@@ -52,6 +52,11 @@ body.active-modal {
         right: 8rem;
         max-height: 50px;
     }
+    .form-apply{
+        margin-bottom: 75px;
+        display: flex;
+        flex-direction: column;
+    }
 }
 #close-btn{
     background-color: crimson;

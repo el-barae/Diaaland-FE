@@ -23,15 +23,20 @@ export default function Modal({ isOpen, id, description, name, onClose }: ModalP
   const [isApplied, setIsApplied] = useState(false);
   const [isFavoris, setIsFavoris] = useState(false);
   const token = localStorage.getItem("token");
+  const [showModal, setShowModal] = useState(false);
+  const [cv, setCV] = useState('');
+  const [coverLetter, setCoverLetter] = useState('');
+  const [diploma, setDiploma] = useState('');
+
     const toggleModal = () => {
       onClose();
     };
-    
-    const handleApply = async (e:any, id:number) =>{
-		e.preventDefault()
-    var ID = localStorage.getItem("ID");
+
+    const handleSubmit = (e:any, id:number) => {
+      e.preventDefault();
+      var ID = localStorage.getItem("ID");
     //ID = '1';
-  axios.get(API_URL+'/api/v1/candidate-skills/haveSkills/'+ID)
+ /* axios.get(API_URL+'/api/v1/candidate-skills/haveSkills/'+ID)
   .then(function (response) {
     if (response.data === true) {
       axios.post(API_URL+'/api/v1/candidate-jobs', {
@@ -60,8 +65,16 @@ export default function Modal({ isOpen, id, description, name, onClose }: ModalP
   })
   .catch(function (error) {
     console.log(error);
-  });
-
+  });*/
+      setCV('');
+      setCoverLetter('');
+      setDiploma('');
+      setShowModal(false);
+    };
+    
+    const handleApply = async (e:any) =>{
+		e.preventDefault()
+    setShowModal(true);
 	}
 
   const handleAddFavoris = async (e:any, id:number) =>{
@@ -133,8 +146,19 @@ export default function Modal({ isOpen, id, description, name, onClose }: ModalP
               <div className="modal-content">
                 <h1>{name}</h1>
                 <p>{description}</p>
-                {!isApplied && <button id="apply-btn" onClick={(e) => handleApply(e, id)}>Apply</button>}
-                {!isFavoris && <button id="favoris-btn" onClick={(e) => handleAddFavoris(e, id)}>Add favoris</button>}
+                {!showModal && !isApplied && <button id="apply-btn" onClick={(e) => handleApply(e)}>Apply</button>}
+                {!showModal && !isFavoris && <button id="favoris-btn" onClick={(e) => handleAddFavoris(e, id)}>Add favoris</button>}
+                {showModal && (
+              <div className="form-apply">
+                <label>CV:</label>
+                <input type="text" value={cv} onChange={(e) => setCV(e.target.value)} />
+                <label>Cover Letter:</label>
+                <input type="text" value={coverLetter} onChange={(e) => setCoverLetter(e.target.value)} />
+                <label>Diploma:</label>
+                <input type="text" value={diploma} onChange={(e) => setDiploma(e.target.value)} />
+                <button type="submit" onClick={(e) =>handleSubmit(e, id)}>Submit</button>
+              </div>
+      )}
               </div>
           </div>
         )}
