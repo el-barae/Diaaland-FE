@@ -24,7 +24,7 @@ interface Job {
   interface RepeatClassNTimesProps {
     className: string;
     n: number;
-    jobsData: Job[];
+    filteredJobs: Job[];
   }
 
   const token = localStorage.getItem("token")
@@ -46,6 +46,7 @@ interface Job {
 const Jobs = () =>{
     const [jobsData, setJobsData] = useState<Job[]>([]);
     const router = useRouter();
+    const [searchTerm, setSearchTerm] = useState('');
     useEffect(() => {
         const fetchData = async () => {
           try {
@@ -57,6 +58,7 @@ const Jobs = () =>{
               }
             });         
             setJobsData(response.data);
+            setFilteredJobs(response.data)
           } catch (error) {
             console.error('Erreur lors de la récupération des données :', error);
           }
@@ -76,6 +78,15 @@ const Jobs = () =>{
     const [xp, setXp] = useState('');
     const [type, setType] = useState('');
     const [description, setDescription] = useState('');
+    const [filteredJobs, setFilteredJobs] = useState<Job[]>([]);
+
+    const handleSearch = (term: string) => {
+      const filtered = jobsData.filter((j) =>
+        j.name.toLowerCase().includes(term.toLowerCase())
+      );
+      setFilteredJobs(filtered);
+   };
+
 
     const handleAddClick = (e:any)  =>{
       e.preventDefault()
@@ -97,11 +108,11 @@ const handleModifyClick = (e: any, id: number, name: string, minSalary: number, 
     setModalOpen(true);
 };
 
-  const RepeatClassNTimes: React.FC<RepeatClassNTimesProps> = ({ className, n, jobsData }) => {
-    if(jobsData.length != 0)
+  const RepeatClassNTimes: React.FC<RepeatClassNTimesProps> = ({ className, n, filteredJobs }) => {
+    if(filteredJobs.length != 0)
       return(
         <>
-        {jobsData.map((job) => (
+        {filteredJobs.map((job) => (
           <div key={job.id} className={className}>
           <h1>{job.name} :</h1>
           <span> Type: </span>{job.type}
@@ -109,7 +120,7 @@ const handleModifyClick = (e: any, id: number, name: string, minSalary: number, 
           <p><span> Close Date: </span>{job.closeDate}</p>
           <button onClick={(e) => handleDelete(e, job.id)}>Delete</button>
           <button onClick={(e) => handleModifyClick(e, job.id, job.name, job.minSalary, job.maxSalary, job.numberOfPositions, job.openDate, job.closeDate, job.address, job.remoteStatus, job.type, job.description)}>Modify</button>
-          <Modal isOpen={modalOpen} id={jobId} jobTitle={jobTitle} minSalary={minSalary} maxSalary={maxSalary} positionNumber={positionNumber} openDate={openDate} endDate={endDate} adress={address} xp={xp} type={type} description={description} onClose={() => setModalOpen(false)} setJobData={setJobsData}/>
+          <Modal isOpen={modalOpen} id={jobId} jobTitle={jobTitle} minSalary={minSalary} maxSalary={maxSalary} positionNumber={positionNumber} openDate={openDate} endDate={endDate} adress={address} xp={xp} type={type} description={description} onClose={() => setModalOpen(false)} setJobData={setFilteredJobs}/>
         </div>
         ))}
         </>
@@ -126,8 +137,17 @@ const handleModifyClick = (e: any, id: number, name: string, minSalary: number, 
           <span className="button__icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" viewBox="0 0 24 24" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" stroke="currentColor" height="24" fill="none" className="svg"><line y2="19" y1="5" x2="12" x1="12"></line><line y2="12" y1="12" x2="19" x1="5"></line></svg></span>
           </button>
         </div>
+        <div className="search">
+                <label>
+                    <input type="text" placeholder="Search here" value={searchTerm} onChange={(e) => {
+                    setSearchTerm(e.target.value);
+                    handleSearch(e.target.value);
+                    }}
+                    required></input>
+                </label>
+          </div>
                 <div className='lists'>
-                  <RepeatClassNTimes className="list" n={jobsData.length} jobsData={jobsData} />
+                  <RepeatClassNTimes className="list" n={filteredJobs.length} filteredJobs={filteredJobs} />
                 </div>
     </div>
     </>

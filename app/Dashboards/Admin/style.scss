@@ -163,19 +163,16 @@
   }
   
   .search {
-    position: relative;
-    width: 350px;
-    margin-bottom: 15px;
-    margin-left: 55%;
+    width: 100%;
+    margin-bottom: 20px;
+    text-align: center;
   }
-
   .search label {
-    position: relative;
     width: 100%;
   }
   
   .search label input {
-    width: 100%;
+    width: 30%;
     height: 40px;
     border-radius: 40px;
     padding: 5px 20px;
@@ -193,10 +190,8 @@
   }
 
   @media(max-width:830px){
-    .search{
-        width: 40%;
-    }
     .search label input{
+      width: 50%;
       padding: 10px;
     }
 }
