@@ -23,9 +23,15 @@ interface Customer {
     customersData: Customer[];
   }
 
+  const token = localStorage.getItem("token")
+
     const handleDelete = async (e:any, idC:number) =>{
       e.preventDefault()
-      axios.delete(API_URL+'/api/v1/customers'+'/'+String(idC))
+      axios.delete(API_URL+'/api/v1/customers'+'/'+String(idC), {
+        headers: {
+          'Authorization': 'Bearer ' + token
+        }
+      })
        .catch(function (error) {
         console.log(error);
        });
@@ -76,7 +82,11 @@ const RepeatClassNTimes: React.FC<RepeatClassNTimesProps> = ({ className, n, cus
     useEffect(() => {
         const fetchData = async () => {
           try{
-            const response = await axios.get(API_URL+'/api/v1/customers');         
+            const response = await axios.get(API_URL+'/api/v1/customers', {
+              headers: {
+                'Authorization': 'Bearer ' + token
+              }
+            });        
             setCustomersData(response.data);
           } catch (error) {
             console.error('Erreur lors de la récupération des données :', error);
@@ -88,7 +98,13 @@ const RepeatClassNTimes: React.FC<RepeatClassNTimesProps> = ({ className, n, cus
   return(
     <>
     <div className='jobs'>
-        <h1>Customers</h1>
+    <div className='head'>
+          <h1>Customers</h1>
+          <button type="button" className="button">
+          <span className="button__text">Add</span>
+          <span className="button__icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" viewBox="0 0 24 24" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" stroke="currentColor" height="24" fill="none" className="svg"><line y2="19" y1="5" x2="12" x1="12"></line><line y2="12" y1="12" x2="19" x1="5"></line></svg></span>
+          </button>
+        </div>
                 <div className='lists'>
                   <RepeatClassNTimes className="list" n={customersData.length} customersData={customersData} />
                 </div>

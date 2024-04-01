@@ -65,7 +65,7 @@ interface ModalProps {
     const [McandidateBlog, setCandidateBlog] = useState(blog);
     const [McandidateResume, setCandidateResume] = useState(resume);
     const [McandidateImage, setCandidateImage] = useState(image);
-
+    const token = localStorage.getItem("token")
 
     const toggleModal = () => {
       onClose();
@@ -93,6 +93,10 @@ blog: McandidateBlog,
 resume: McandidateResume,
 image: McandidateImage
 
+        }, {
+          headers: {
+            'Authorization': 'Bearer ' + token
+          }
         })
         .then(function (response) {
           setCandidatesData(prevCData => {

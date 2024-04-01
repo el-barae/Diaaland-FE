@@ -46,7 +46,7 @@ interface ModalProps {
  const [Madress , setAdress] = useState(adress); 
  const [MExperience, setExperience] = useState(xp);
  const [MjobType, setJobType] = useState(type);
-
+ const token = localStorage.getItem("token")
     const toggleModal = () => {
       onClose();
     };
@@ -67,6 +67,10 @@ interface ModalProps {
           "numberOfPositions": MpositionNumber,
           "address": Madress,
           "remoteStatus": true
+        }, {
+          headers: {
+            'Authorization': 'Bearer ' + token
+          }
         })
         .then(function (response) {
           setJobData(prevJobData => {

@@ -37,7 +37,7 @@ interface ModalProps {
     const [McustomerCountry, setCustomerCountry] = useState(country);
     const [McustomerDescription, setCustomerDescription] = useState(description);
     const [McustomerLogo, setCustomerLogo] = useState(logo);
-    
+    const token = localStorage.getItem("token")
 
     const toggleModal = () => {
       onClose();
@@ -56,6 +56,10 @@ interface ModalProps {
           country: McustomerCountry,
           description: McustomerDescription,
           logo: McustomerLogo
+        }, {
+          headers: {
+            'Authorization': 'Bearer ' + token
+          }
         })
         .then(function (response) {
           setCustomerData(prevCData => {

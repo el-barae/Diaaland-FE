@@ -28,6 +28,7 @@ interface RepeatClassNTimesProps {
  }
 
 const Skills = () => {
+  const token = localStorage.getItem("token")
     const [name,setName] = useState('')
     const [type,setType] = useState('')
     const [skill,setSkill] = useState('')
@@ -51,13 +52,16 @@ const Skills = () => {
         await axios.post(API_URL+'/api/v1/skills', {
           "name": sname,
           "type": stype
-           /*, {
+        }, {
           headers: {
-            Authorization: `Bearer ${authToken}`,
-          },
-        }*/
+            'Authorization': 'Bearer ' + token
+          }
         });        
-        const response = await axios.get(API_URL+'/api/v1/skills');
+        const response = await axios.get(API_URL+'/api/v1/skills', {
+          headers: {
+            'Authorization': 'Bearer ' + token
+          }
+        });
         const candidateSkills: skill[] = response.data;
         setSkillsData(candidateSkills);
         setFilteredSkills(candidateSkills);
@@ -70,7 +74,11 @@ const Skills = () => {
       const handleDelete = async (e:any, idS:number) =>{
         e.preventDefault()
         try{
-        axios.delete(API_URL+'/api/v1/skills/'+String(idS))
+        axios.delete(API_URL+'/api/v1/skills/'+String(idS), {
+          headers: {
+            'Authorization': 'Bearer ' + token
+          }
+        });
         const updatedSkillsData = skillsData.filter(skill => skill.id !== idS)
         setSkillsData(updatedSkillsData)
         setFilteredSkills(updatedSkillsData)
@@ -82,7 +90,11 @@ const Skills = () => {
       useEffect(() => {
           const fetchData = async () => {
             try {
-              const response = await axios.get(API_URL+'/api/v1/skills');
+              const response = await axios.get(API_URL+'/api/v1/skills', {
+                headers: {
+                  'Authorization': 'Bearer ' + token
+                }
+              });
               const candidateSkills: skill[] = response.data;
               setSkillsData(candidateSkills);
               setFilteredSkills(candidateSkills);
