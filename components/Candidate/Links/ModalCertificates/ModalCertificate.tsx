@@ -15,6 +15,7 @@ interface ModalProps {
   }
 
   export default function Modal({ isOpen, id, name, url, domain, description, onClose }: ModalProps) {
+    const token = localStorage.getItem("token");
   const [modifiedName, setModifiedName] = useState(name);
   const [modifiedUrl, setModifiedUrl] = useState(url);
   const [modifiedDomain, setModifiedDomain] = useState(domain);
@@ -37,6 +38,10 @@ interface ModalProps {
             id: idC,
           },
           domain: modifiedDomain
+        }, {
+          headers: {
+            'Authorization': 'Bearer ' + token
+          }
         })
         .then(function (response) {
           console.log(response);

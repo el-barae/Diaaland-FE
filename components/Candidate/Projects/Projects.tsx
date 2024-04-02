@@ -23,6 +23,7 @@ interface RepeatClassNTimesProps {
 
   
 const Projects = () => {
+  const token = localStorage.getItem("token");
   const [name,setName] = useState('')
   const [startDate,setStartDate] = useState('')
   const [endDate,setEndDate] = useState('')
@@ -40,11 +41,11 @@ const Projects = () => {
         "candidate": {
           "id": id
         }
-        }/*, {
+        }, {
           headers: {
-            Authorization: `Bearer ${authToken}`,
-          },
-        }*/)
+            'Authorization': 'Bearer ' + token
+          }
+        })
         .then(function (response) {
           setProjectsData(prevProjectsData => [...prevProjectsData, response.data]);
         console.log(response);
@@ -58,7 +59,11 @@ const Projects = () => {
     const handleDelete = async (e:any, id:number) =>{
       e.preventDefault()
       try{
-      axios.delete(API_URL+'/api/v1/projects/'+String(id))
+      axios.delete(API_URL+'/api/v1/projects/'+String(id), {
+        headers: {
+          'Authorization': 'Bearer ' + token
+        }
+      });
       const updatedProjectsData = projectsData.filter(pro => pro.id !== id)
       setProjectsData(updatedProjectsData)
       }catch (error) {
@@ -86,7 +91,11 @@ const Projects = () => {
           try {
             Cookies.set("id","1")
             const id = Cookies.get("id");
-            const response = await axios.get(API_URL+'/api/v1/projects/byCandidate/'+String(id));         
+            const response = await axios.get(API_URL+'/api/v1/projects/byCandidate/'+String(id), {
+              headers: {
+                'Authorization': 'Bearer ' + token
+              }
+            });         
             setProjectsData(response.data);
           } catch (error) {
             console.error('Erreur lors de la récupération des données :', error);

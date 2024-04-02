@@ -18,18 +18,23 @@ interface Job {
     n: number;
     jobsData: Job[];
   }
+  const token = localStorage.getItem("token");
 
   const handleApply = async (e:any, id:number) =>{
 		e.preventDefault()
 		axios.post(API_URL+'/api/v1/candidate-jobs', {
-			"status": "en attends",
+			"status": "pending",
       "candidate": {
         "id": 1
       },
       "job": {
         "id": id
       }
-		 })
+		 }, {
+      headers: {
+        'Authorization': 'Bearer ' + token
+      }
+    })
 		 .then(function (response) {
 		 })
 		 .catch(function (error) {
@@ -66,7 +71,11 @@ const Favoris = () =>{
       try {
       Cookies.set("id","1")
       const idC = Cookies.get("id");
-      axios.delete(API_URL+'/api/v1/favoris/'+String(idC)+'/'+String(idJ))
+      axios.delete(API_URL+'/api/v1/favoris/'+String(idC)+'/'+String(idJ), {
+        headers: {
+          'Authorization': 'Bearer ' + token
+        }
+      })
       const updatedJobsData = jobsData.filter(job => job.id !== idJ)
       setJobsData(updatedJobsData)
     } catch (error) {
@@ -79,7 +88,11 @@ const Favoris = () =>{
     try {
       Cookies.set("id","1")
       const id = Cookies.get("id");
-      const response = await axios.get(API_URL+'/api/v1/favoris/'+String(id));         
+      const response = await axios.get(API_URL+'/api/v1/favoris/'+String(id), {
+        headers: {
+          'Authorization': 'Bearer ' + token
+        }
+      });    
       setJobsData(response.data);
     } catch (error) {
       console.error('Erreur lors de la récupération des données :', error);

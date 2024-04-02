@@ -53,7 +53,7 @@ interface Education {
   }
 
 const Links = () => {
-
+  const token = localStorage.getItem("token");
     const [nameEducation,setNameEducation] = useState('')
     const [nameCertificate,setNameCertificate] = useState('')
     const [nameLink,setNameLink] = useState('')
@@ -84,11 +84,11 @@ const Links = () => {
           "school": school,
           "startDate": startDate,
           "endDate": endDate,
-          }/*, {
+          }, {
             headers: {
-              Authorization: `Bearer ${authToken}`,
-            },
-          }*/)
+              'Authorization': 'Bearer ' + token
+            }
+          })
           .then(function (response) {
             setEducationsData(prevEducationData => [...prevEducationData, response.data]);
           console.log(response);
@@ -110,11 +110,11 @@ const Links = () => {
             "id": id
           },
           "domain": domain
-          }/*, {
+          }, {
             headers: {
-              Authorization: `Bearer ${authToken}`,
-            },
-          }*/)
+              'Authorization': 'Bearer ' + token
+            }
+          })
           .then(function (response) {
           setCertificatesData(prevCertificatesData => [...prevCertificatesData, response.data]);
           console.log(response);
@@ -135,11 +135,11 @@ const Links = () => {
           "candidate": {
             "id": id
           }
-          }/*, {
+          }, {
             headers: {
-              Authorization: `Bearer ${authToken}`,
-            },
-          }*/)
+              'Authorization': 'Bearer ' + token
+            }
+          })
           .then(function (response) {
             setOther_LinksData(prevOthersData => [...prevOthersData, response.data]);
           console.log(response);
@@ -153,7 +153,11 @@ const Links = () => {
       const handleDeleteEducation = async (e:any, id:number) =>{
         e.preventDefault()
         try{
-        axios.delete(API_URL+'/api/v1/educations/'+String(id))
+        axios.delete(API_URL+'/api/v1/educations/'+String(id), {
+          headers: {
+            'Authorization': 'Bearer ' + token
+          }
+        });
         const updatedEducationsData = educationsData.filter(ed => ed.id !== id)
         setEducationsData(updatedEducationsData)
         }
@@ -165,7 +169,11 @@ const Links = () => {
       const handleDeleteCertificate = async (e:any, id:number) =>{
         e.preventDefault()
         try{
-        axios.delete(API_URL+'/api/v1/certificates/'+String(id))
+        axios.delete(API_URL+'/api/v1/certificates/'+String(id), {
+          headers: {
+            'Authorization': 'Bearer ' + token
+          }
+        });
         const updatedCertificatesData = certificatesData.filter(cer => cer.id !== id)
         setCertificatesData(updatedCertificatesData)
         }
@@ -176,7 +184,11 @@ const Links = () => {
       const handleDeleteLink = async (e:any, id:number) =>{
         e.preventDefault()
         try{
-        axios.delete(API_URL+'/api/v1/other_links/'+String(id))
+        axios.delete(API_URL+'/api/v1/other_links/'+String(id), {
+          headers: {
+            'Authorization': 'Bearer ' + token
+          }
+        });
         const updatedOtherData = other_linksData.filter(o => o.id !== id)
         setOther_LinksData(updatedOtherData)
         }
@@ -284,11 +296,23 @@ const Links = () => {
               try {
                 Cookies.set("id","1")
                 const id = Cookies.get("id");
-                const response = await axios.get(API_URL+'/api/v1/educations');         
+                const response = await axios.get(API_URL+'/api/v1/educations', {
+                  headers: {
+                    'Authorization': 'Bearer ' + token
+                  }
+                });        
                 setEducationsData(response.data);
-                const response1 = await axios.get(API_URL+'/api/v1/certificates');
+                const response1 = await axios.get(API_URL+'/api/v1/certificates', {
+                  headers: {
+                    'Authorization': 'Bearer ' + token
+                  }
+                });
                 setCertificatesData(response1.data);
-                const response2 = await axios.get(API_URL+'/api/v1/other_links');
+                const response2 = await axios.get(API_URL+'/api/v1/other_links', {
+                  headers: {
+                    'Authorization': 'Bearer ' + token
+                  }
+                });
                 setOther_LinksData(response2.data);
               } catch (error) {
                 console.error('Erreur lors de la récupération des données :', error);

@@ -20,6 +20,7 @@ interface RepeatClassNTimesProps {
   }
 
 const Xp = () => {
+  const token = localStorage.getItem("token");
   const [name,setName] = useState('')
   const [startDate,setStartDate] = useState('')
   const [endDate,setEndDate] = useState('')
@@ -36,11 +37,11 @@ const Xp = () => {
         "candidate": {
           "id": id
         }
-        }/*, {
+        }, {
           headers: {
-            Authorization: `Bearer ${authToken}`,
-          },
-        }*/)
+            'Authorization': 'Bearer ' + token
+          }
+        })
         .then(function (response) {
           setXpData(prevXpData => [...prevXpData, response.data]);
         console.log(response);
@@ -53,7 +54,11 @@ const Xp = () => {
 
     const handleDelete = async (e:any, id:number) =>{
       e.preventDefault()
-      axios.delete(API_URL+'/api/v1/experiences/'+String(id))
+      axios.delete(API_URL+'/api/v1/experiences/'+String(id), {
+        headers: {
+          'Authorization': 'Bearer ' + token
+        }
+      })
        .catch(function (error) {
         console.log(error);
        });
@@ -78,7 +83,11 @@ const Xp = () => {
           try {
             Cookies.set("id","1")
             const id = Cookies.get("id");
-            const response = await axios.get(API_URL+'/api/v1/experiences/byCandidate/'+String(id));         
+            const response = await axios.get(API_URL+'/api/v1/experiences/byCandidate/'+String(id), {
+              headers: {
+                'Authorization': 'Bearer ' + token
+              }
+            });         
             setXpData(response.data);
           } catch (error) {
             console.error('Erreur lors de la récupération des données :', error);

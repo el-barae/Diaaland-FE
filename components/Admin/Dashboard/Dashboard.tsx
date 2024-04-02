@@ -30,7 +30,7 @@ function getStatusClass(status: string) {
         return 'delivered-refuse';
       case 'accept':
         return 'delivered-accept';
-      case 'en attends':
+      case 'pending':
         return 'delivered-pending';
       default:
         return 'delivered';

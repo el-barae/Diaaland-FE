@@ -36,17 +36,24 @@ export default function Modal({ isOpen, id, description, name, onClose }: ModalP
       e.preventDefault();
       var ID = localStorage.getItem("ID");
     //ID = '1';
- /* axios.get(API_URL+'/api/v1/candidate-skills/haveSkills/'+ID)
+  axios.get(API_URL+'/api/v1/candidate-skills/haveSkills/'+ID, {
+    headers: {
+      'Authorization': 'Bearer ' + token
+    }
+  })
   .then(function (response) {
     if (response.data === true) {
       axios.post(API_URL+'/api/v1/candidate-jobs', {
-        "status": "en attente",
+        "status": "pending",
         "candidate": {
-          "id": 1
+          "id": ID
         },
         "job": {
           "id": id
-        }
+        },
+        "cv": cv,
+        "diploma": diploma,
+        "coverLetter": coverLetter
       }, {
         headers: {
           'Authorization': 'Bearer ' + token
@@ -65,7 +72,7 @@ export default function Modal({ isOpen, id, description, name, onClose }: ModalP
   })
   .catch(function (error) {
     console.log(error);
-  });*/
+  });
       setCV('');
       setCoverLetter('');
       setDiploma('');

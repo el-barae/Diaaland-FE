@@ -22,6 +22,7 @@ interface ModalProps {
   }
 
   export default function Modal({ isOpen, id, name, startDate, endDate, onClose, setXpData }: ModalProps) {
+    const token = localStorage.getItem("token");
   const [modifiedName, setModifiedName] = useState(name);
   const [modifiedStartDate, setModifiedStartDate] = useState(startDate);
   const [modifiedEndDate, setModifiedEndDate] = useState(endDate);
@@ -43,6 +44,10 @@ interface ModalProps {
           candidate: {
             id: idC,
           },
+        }, {
+          headers: {
+            'Authorization': 'Bearer ' + token
+          }
         })
           setXpData(prevXpData => {
             const updatedXpData = prevXpData.map(xp => {

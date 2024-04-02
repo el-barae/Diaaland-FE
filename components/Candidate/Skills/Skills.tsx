@@ -1,7 +1,6 @@
 'use client'
 import './Skills.scss'
 import { useState, useEffect } from "react"
-import Cookies from "js-cookie";
 import axios from "axios";
 import API_URL from '@/config';
 
@@ -28,15 +27,23 @@ const Skills = () => {
     const [skill,setSkill] = useState('')
     const [skillsAll,setSkillsAll] = useState<skill[]>([])
     const [skillsData,setSkillsData] = useState<skill[]>([])
-
+    const token = localStorage.getItem("token");
     const handleAddSkill = async (e:any, sname:string)  =>{
       e.preventDefault()
       setSkill('');
-      const id = Cookies.get("id");
-      const response = await axios.get(API_URL+'/api/v1/skills/id/'+sname);
+      var ID = localStorage.getItem("ID");
+      const response = await axios.get(API_URL+'/api/v1/skills/id/'+sname, {
+        headers: {
+          'Authorization': 'Bearer ' + token
+        }
+      });
       const skillId = response.data.id;
       try{
-        const res = await axios.get(API_URL+'/api/v1/skills/'+String(response.data)).then(function (res) {
+        const res = await axios.get(API_URL+'/api/v1/skills/'+String(response.data), {
+          headers: {
+            'Authorization': 'Bearer ' + token
+          }
+        }).then(function (res) {
         setSkillsData(prevSkillsData => [...prevSkillsData, res.data]);
         console.log(res);
         })
@@ -47,16 +54,16 @@ const Skills = () => {
         "name": name,
         "score": score,
         "candidate": {
-          "id": id
+          "id": ID
         },
         "skill": {
           "id": skillId
         }
-        }/*, {
+        }, {
           headers: {
-            Authorization: `Bearer ${authToken}`,
-          },
-        }*/)
+            'Authorization': 'Bearer ' + token
+          }
+        })
         .then(function (response) {
         const updatedSkillsAll = skillsAll.filter(skill => skill.id !== skillId)
         setSkillsAll(updatedSkillsAll)
@@ -71,9 +78,12 @@ const Skills = () => {
       const handleDelete = async (e:any, idS:number) =>{
         e.preventDefault()
         try{
-        Cookies.set("id","1")
-        const idC = Cookies.get("id");
-        axios.delete(API_URL+'/api/v1/candidate-skills/'+String(idC)+'/'+String(idS))
+          var ID = localStorage.getItem("ID");
+        axios.delete(API_URL+'/api/v1/candidate-skills/'+String(ID)+'/'+String(idS), {
+          headers: {
+            'Authorization': 'Bearer ' + token
+          }
+        });
         const updatedSkillsData = skillsData.filter(skill => skill.id !== idS)
         setSkillsData(updatedSkillsData)
         }catch (error) {
@@ -84,11 +94,18 @@ const Skills = () => {
       useEffect(() => {
           const fetchData = async () => {
             try {
-              Cookies.set("id","1")
-              const id = Cookies.get("id");
-              const response = await axios.get(API_URL+'/api/v1/candidate-skills/byCandidate/' + String(id));
+              var ID = localStorage.getItem("ID");
+              const response = await axios.get(API_URL+'/api/v1/candidate-skills/byCandidate/' + String(ID), {
+                headers: {
+                  'Authorization': 'Bearer ' + token
+                }
+              });
               const candidateSkills: skill[] = response.data;
-              const res = await axios.get(API_URL+'/api/v1/skills');
+              const res = await axios.get(API_URL+'/api/v1/skills', {
+                headers: {
+                  'Authorization': 'Bearer ' + token
+                }
+              });
               const allSkills: skill[] = res.data;
               const skillsAll = allSkills.filter(skill => !candidateSkills.some(candidateSkill => candidateSkill.id === skill.id));
               setSkillsData(candidateSkills);

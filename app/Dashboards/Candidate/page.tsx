@@ -3,7 +3,6 @@ import React from 'react';
 import './style.scss';
 import { useState ,useEffect} from 'react';
 import { useRouter } from 'next/navigation';
-import Cookies from 'js-cookie';
 import axios from 'axios';
 import {ThemeProvider} from 'next-themes'
 import Navbar from '@/components/HomePage/Navbar/Navbar'
@@ -94,9 +93,8 @@ const Candidate = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        Cookies.set("id","1")
-        const id = Cookies.get("id");
-        const response = await axios.get(API_URL+'/api/v1/candidates/name/'+String(id), {
+        var ID = localStorage.getItem("ID");
+        const response = await axios.get(API_URL+'/api/v1/candidates/name/'+String(ID), {
           headers: {
             'Authorization': 'Bearer ' + token
           }

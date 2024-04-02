@@ -26,6 +26,7 @@ interface ModalProps {
   }
 
   export default function Modal({ isOpen, id, name, startDate, endDate, description, onClose, setProjectsData }: ModalProps) {
+    const token = localStorage.getItem("token");
   const [modifiedName, setModifiedName] = useState(name);
   const [modifiedStartDate, setModifiedStartDate] = useState(startDate);
   const [modifiedEndDate, setModifiedEndDate] = useState(endDate);
@@ -47,6 +48,10 @@ interface ModalProps {
           description: modifiedDescription,
           candidate: {
             id: idC
+          }
+        }, {
+          headers: {
+            'Authorization': 'Bearer ' + token
           }
         });
         setProjectsData(prevProjectsData => {

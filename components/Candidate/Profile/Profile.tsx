@@ -54,7 +54,7 @@ const passwordStrength = (password: string) => {
 	return res;
 }
 const Profile = () =>{
-
+	const token = localStorage.getItem("token");
     const firstnameErrorRef = useRef<HTMLParagraphElement>(null);
 	const lastnameErrorRef = useRef<HTMLParagraphElement>(null);
 	const emailErrorRef = useRef<HTMLParagraphElement>(null);
@@ -102,6 +102,10 @@ const [image, setImage] = useState<string>(''); // Je suppose que "image" est un
 			"adress": adress,
 			"logo": logo,
 			"role": "CLIENT"
+		  }, {
+			headers: {
+			  'Authorization': 'Bearer ' + token
+			}
 		  })
 		  .then(function (response) {
 			console.log(response);
@@ -129,7 +133,11 @@ const [image, setImage] = useState<string>(''); // Je suppose que "image" est un
 			  try {
 				Cookies.set("id","1")
 				const id = Cookies.get("id");
-				const response = await axios.get(API_URL+'/api/v1/candidates/tostring/'+String(id));         
+				const response = await axios.get(API_URL+'/api/v1/candidates/tostring/'+String(id), {
+					headers: {
+					  'Authorization': 'Bearer ' + token
+					}
+				  });       
 				setCandidate(response.data);
 			  } catch (error) {
 				console.error('Erreur lors de la récupération des données :', error);
@@ -141,7 +149,11 @@ const [image, setImage] = useState<string>(''); // Je suppose que "image" est un
 				try {
 				  Cookies.set("id","1")
 				  const id = Cookies.get("id");
-				  const response = await axios.get(API_URL+'/api/v1/candidates/name/'+String(id));         
+				  const response = await axios.get(API_URL+'/api/v1/candidates/name/'+String(id), {
+					headers: {
+					  'Authorization': 'Bearer ' + token
+					}
+				  });         
 				  
 				} catch (error) {
 				  console.error('Erreur lors de la récupération des données :', error);

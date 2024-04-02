@@ -2,7 +2,6 @@ import './jobs.scss'
 import { useState ,useEffect} from "react"
 import axios from 'axios'
 import React from 'react';
-import Cookies from 'js-cookie';
 import API_URL from '@/config'
 
 interface Job {
@@ -36,11 +35,15 @@ interface Job {
         </>
       )
     }
+    const token = localStorage.getItem("token");
     const handleDelete = async (e:any, idJ:number) =>{
       e.preventDefault()
-      Cookies.set("id","1")
-      const idC = Cookies.get("id");
-      axios.delete(API_URL+'/api/v1/candidate-jobs/'+String(idC)+'/'+String(idJ))
+      var ID = localStorage.getItem("ID");
+      axios.delete(API_URL+'/api/v1/candidate-jobs/'+String(ID)+'/'+String(idJ), {
+        headers: {
+          'Authorization': 'Bearer ' + token
+        }
+      })
        .catch(function (error) {
         console.log(error);
        });
@@ -51,9 +54,12 @@ const Jobs = () =>{
     useEffect(() => {
         const fetchData = async () => {
           try {
-            Cookies.set("id","1")
-            const id = Cookies.get("id");
-            const response = await axios.get(API_URL+'/api/v1/candidate-jobs/byCandidate/'+String(id));         
+            var ID = localStorage.getItem("ID");
+            const response = await axios.get(API_URL+'/api/v1/candidate-jobs/byCandidate/'+String(ID), {
+              headers: {
+                'Authorization': 'Bearer ' + token
+              }
+            });     
             setJobsData(response.data);
           } catch (error) {
             console.error('Erreur lors de la récupération des données :', error);
