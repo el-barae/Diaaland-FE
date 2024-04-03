@@ -80,7 +80,7 @@
     }
 
     }
-    @media(max-width:650px){
+    @media(max-width:700px){
         .add{
             display: flex;
             flex-direction: column;
@@ -98,12 +98,12 @@
         margin-left: 10%;
         margin-top: 10px;
         margin-bottom: 10px;
-        width: 80%;
+        width: 90%;
         border-collapse: collapse;
     }
 
     table thead td {
-        font-size: 32px;
+        font-size: 28px;
       }
       
     
@@ -111,5 +111,9 @@
 @media(max-width:991px){
     .jobs{
         padding: 1rem;
+        table{
+            margin-left: 0%;
+            width: 100%;
+        }
     }
 }

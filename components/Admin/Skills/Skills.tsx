@@ -11,7 +11,7 @@ interface skill{
     type : string;
 }
 
-interface RepeatClassNTimesProps {
+/*interface RepeatClassNTimesProps {
     className: string;
     n: number;
     filteredSkills: skill[];
@@ -21,7 +21,7 @@ interface RepeatClassNTimesProps {
     n: number;
     skillsAll: skill[];
   }
-
+*/
   interface Skills {
     n: number;
     filteredSkills: skill[];
@@ -105,7 +105,7 @@ const Skills = () => {
           fetchData();
     }, []);
   
-    const RepeatClassNTimes: React.FC<RepeatClassNTimesProps> = ({ className, n, filteredSkills }) => {
+    /*const RepeatClassNTimes: React.FC<RepeatClassNTimesProps> = ({ className, n, filteredSkills }) => {
       if (filteredSkills.length !== 0)
         return (
           <>
@@ -118,7 +118,7 @@ const Skills = () => {
             ))}
           </>
         );
-    };
+    };*/
     
     const AllSkills: React.FC<Skills> = ({ n, filteredSkills }) => {
       const skills = filteredSkills;
@@ -128,7 +128,7 @@ const Skills = () => {
             <tr key={skill.id}>
               <td>{skill.name}</td>
               <td>{skill.type}</td>
-              <td><button onClick={(e) => handleDelete(e, skill.id)}>Delete</button></td>
+              <td><button onClick={(e) => handleDelete(e, skill.id)}>    Delete</button></td>
             </tr>
           ))}
         </>
@@ -172,9 +172,11 @@ const Skills = () => {
                     <AllSkills n={filteredSkills.length} filteredSkills={filteredSkills} /> 
                     </tbody>
                 </table>
+                {/*
                 <div className='lists-skills'>
                   <RepeatClassNTimes className="list-skill" n={filteredSkills.length} filteredSkills={filteredSkills} />
                 </div>
+                */}
             </div>
         </>
     )

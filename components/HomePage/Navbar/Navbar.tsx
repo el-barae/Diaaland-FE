@@ -54,7 +54,11 @@ const Navbar = () => {
     const token = localStorage.getItem('token')
 		axios.post(API_URL+'/api/v1/auth/logout', {
 			"token" : token
-		  })
+		  }, {
+        headers: {
+          'Authorization': 'Bearer ' + token
+        }
+      })
 		  .then(function (response) {
 			Cookies.set("loggedin", "false");
 			router.push('/login')
