@@ -1,3 +1,20 @@
+@import '@/app/globals.scss';
+
 .jobs{
     padding: 0px;
+    .filtre{
+        display: flex;
+        margin: 15px;
+        h2{
+            color: $footer-bg;
+        }
+        select{
+            height: 3rem;
+            border-radius: 10px;
+            border: 1px solid $footer-bg;
+            font-size: 20px;
+            min-width: 10rem;
+            margin: 5px 20px 0px 30px;
+        }
+    }
 }
