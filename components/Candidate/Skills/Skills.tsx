@@ -30,6 +30,7 @@ const Skills = () => {
     const token = localStorage.getItem("token");
     const handleAddSkill = async (e:any, sname:string)  =>{
       e.preventDefault()
+      console.log(skill);
       setSkill('');
       var ID = localStorage.getItem("ID");
       const response = await axios.get(API_URL+'/api/v1/skills/id/'+sname, {
@@ -37,7 +38,7 @@ const Skills = () => {
           'Authorization': 'Bearer ' + token
         }
       });
-      const skillId = response.data.id;
+      const skillId = response.data;
       try{
         const res = await axios.get(API_URL+'/api/v1/skills/'+String(response.data), {
           headers: {
@@ -51,7 +52,6 @@ const Skills = () => {
         console.log(error);
        };
       axios.post(API_URL+'/api/v1/candidate-skills', {
-        "name": name,
         "score": score,
         "candidate": {
           "id": ID
@@ -67,6 +67,9 @@ const Skills = () => {
         .then(function (response) {
         const updatedSkillsAll = skillsAll.filter(skill => skill.id !== skillId)
         setSkillsAll(updatedSkillsAll)
+        if (skillsAll.length > 0) {
+          setSkill(skillsAll[0].name);
+        }
         console.log(response);
         alert("Your post had been sent to admin ")
         })
@@ -107,9 +110,18 @@ const Skills = () => {
                 }
               });
               const allSkills: skill[] = res.data;
-              const skillsAll = allSkills.filter(skill => !candidateSkills.some(candidateSkill => candidateSkill.id === skill.id));
               setSkillsData(candidateSkills);
-              setSkillsAll(skillsAll);
+              if(candidateSkills !== null && candidateSkills.length > 0){
+                const skillAll = allSkills.filter(skill => !candidateSkills.some(candidateSkill => candidateSkill.id === skill.id));             
+                setSkillsAll(skillAll);
+              }
+              else{
+                setSkillsAll(allSkills);
+              }
+                setSkill(skillsAll[0].name);
+              
+              console.log("skillAll: "+skillsAll[0].name);
+              console.log("skill: "+skill);
             } catch (error) {
               console.error('Erreur lors de la récupération des données :', error);
             }

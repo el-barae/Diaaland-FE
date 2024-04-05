@@ -77,7 +77,7 @@ const [candidateResume, setCandidateResume] = useState<string>('');
 const [candidateImage, setCandidateImage] = useState<string>('');
 const [modalOpen, setModalOpen] = useState(false);
 
-const [skill,setSkill] = useState('')
+const [skill,setSkill] = useState('Java')
 const [skillsAll,setSkillsAll] = useState<skill[]>([])
 
 const handleModify = (id: number, firstName: string, lastName: string, email: string, city: string, country: string, address: string, accountStatus: string, phone: string, jobStatus: string, expectedSalary: number, linkedin: string, github: string, portfolio: string, blog: string, resume: string, image: string) => {
@@ -139,6 +139,7 @@ const RepeatClassNTimes: React.FC<RepeatClassNTimesProps> = ({ className, n, can
         <p>
           Email: {c.email} <br/> Job statut: {c.jobStatus} 
         </p>
+
         <button onClick={(e) => handleDelete(e, c.id)}>Delete</button>
         <button onClick={() => handleModify(c.id, c.firstName, c.lastName, c.email, c.city, c.country, c.adress, c.accountStatus, c.phone, c.jobStatus, c.expectedSalary, c.linkedin, c.github, c.portofolio, c.blog, c.resume, c.image)}>Modify</button>
         <Modal isOpen={modalOpen} id={candidateId} firstName={candidateFirstName} lastName={candidateLastName} email={candidateEmail} city={candidateCity} country={candidateCountry} adress={candidateAddress} accountStatus={candidateAccountStatus} phone={candidatePhone} jobStatus={candidateJobStatus} expectedSalary={candidateExpectedSalary} linkedin={candidateLinkedin} github={candidateGithub} portofolio={candidatePortfolio} blog={candidateBlog} resume={candidateResume} image={candidateImage} onClose={() => setModalOpen(false)} setCandidatesData={setCandidatesData} />
@@ -196,7 +197,7 @@ const RepeatClassNTimes: React.FC<RepeatClassNTimesProps> = ({ className, n, can
           <select id="skills" name="skills" value={skill} onChange={(e) => setSkill(e.target.value)}>
                     <RepeatClassNTimes1 className="list" n={skillsAll.length} skillsAll={skillsAll} />
                 </select>
-          <button onClick={(e) => handleFiltre()}>Filtre</button>
+          <button onClick={(e) => handleFiltre()}>Filter</button>
         </div>
         <div className='lists'>
                   <RepeatClassNTimes className="list" n={candidatesData.length} candidatesData={candidatesData} />

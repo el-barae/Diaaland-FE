@@ -24,6 +24,18 @@ interface Candidate{
 	image:string;
 }
 
+interface skill{
+  id: number;
+  name : string;
+  type : string;
+}
+
+interface RepeatClassNTimesProps {
+  className: string;
+  n: number;
+  skillsData: skill[];
+}
+
 
 interface ModalProps {
     isOpen: boolean;
@@ -65,11 +77,52 @@ interface ModalProps {
     const [McandidateBlog, setCandidateBlog] = useState(blog);
     const [McandidateResume, setCandidateResume] = useState(resume);
     const [McandidateImage, setCandidateImage] = useState(image);
+    const [score, setScore] = useState(0);
+    const [skillsData,setSkillsData] = useState<skill[]>([])
     const token = localStorage.getItem("token")
 
     const toggleModal = () => {
       onClose();
     };
+
+    const handleDelete = async (e:any, idS:number) =>{
+      e.preventDefault()
+      try{
+      axios.delete(API_URL+'/api/v1/candidate-skills/'+String(id)+'/'+String(idS), {
+        headers: {
+          'Authorization': 'Bearer ' + token
+        }
+      });
+      const updatedSkillsData = skillsData.filter(skill => skill.id !== idS)
+      setSkillsData(updatedSkillsData)
+      }catch (error) {
+      console.log(error);
+     };
+    }
+
+    const handleScore = async (e:any, idS:number) =>{
+      e.preventDefault()
+      try{
+      axios.put(API_URL+'/api/v1/candidate-skills/'+String(idS), {
+        "id": 2,
+        "score": score,
+        "candidate": {
+          "id": id
+        },
+        "skill": {
+          "id": idS
+        }
+        }, {
+        headers: {
+          'Authorization': 'Bearer ' + token
+        }
+      });
+      const updatedSkillsData = skillsData.filter(skill => skill.id !== idS)
+      setSkillsData(updatedSkillsData)
+      }catch (error) {
+      console.log(error);
+     };
+    }
 
     const handleModify = async (e: any) => {
       e.preventDefault();
@@ -140,6 +193,21 @@ image: McandidateImage
       } else {
         document.body.classList.remove('active-modal');
       }
+      const fetchData = async () => {
+      try {
+        const response = await axios.get(API_URL+'/api/v1/candidate-skills/byCandidate/' + id, {
+          headers: {
+            'Authorization': 'Bearer ' + token
+          }
+        });
+        const candidateSkills: skill[] = response.data;
+        setSkillsData(candidateSkills);
+        
+      } catch (error) {
+        console.error('Erreur lors de la récupération des données :', error);
+      }
+    }
+    fetchData();
   
       return () => {
         document.body.classList.remove('active-modal');
@@ -225,6 +293,24 @@ image: McandidateImage
       const value = e.target.value;
       setCandidateImage(value);
     };
+
+    const RepeatClassNTimes: React.FC<RepeatClassNTimesProps> = ({ className, n, skillsData }) => {
+      if(skillsData.length != 0)
+        return(
+          <>
+          {skillsData.map((skill) => (
+            <div key={skill.id} className={className}>
+            <h1>{skill.name} :</h1>
+            <p>type: {skill.type} </p>
+            <label htmlFor="score">Score:</label>
+            <input type="number" id="score" placeholder="Enter score" value={score} onChange={(e) => setScore(parseInt(e.target.value))} />
+            <button onClick={(e) => handleDelete(e, skill.id)}>Delete</button>
+            <button onClick={(e) => handleScore(e, skill.id)}>Set score</button>
+          </div>
+          ))}
+          </>
+        )
+      }
     
 
     return (
@@ -258,7 +344,7 @@ image: McandidateImage
 
 <label htmlFor="candidatePhone">Phone:</label>
 <input type="text" id="candidatePhone" placeholder="Enter phone" value={McandidatePhone} onChange={(e) => setCandidatePhone(e.target.value)} />
-
+<button onClick={handleModify}>Modify Candidate</button>
                     </div><div className="div-2">
 
 <label htmlFor="candidateJobStatus">Job Status:</label>
@@ -285,8 +371,14 @@ image: McandidateImage
 <label htmlFor="candidateImage">Image:</label>
 <input type="text" id="candidateImage" placeholder="Enter image URL" value={McandidateImage} onChange={(e) => setCandidateImage(e.target.value)} />
 
-<button onClick={handleModify}>Modify Candidate</button>
+
                   </div>  
+                  <div className="div-skills">
+                  <h1>Skills</h1>
+                <div className='lists'>
+                  <RepeatClassNTimes className="list" n={skillsData.length} skillsData={skillsData} />
+                </div>
+                  </div>
               </div>
           </div>
         )}
