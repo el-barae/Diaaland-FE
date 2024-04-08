@@ -36,7 +36,6 @@ export default function Login() {
 			const ID = JSON.stringify(resp.data);
 			console.log(String(ID));
 			localStorage.setItem('ID',ID)
-			//Cookies.set("id", String(ID));
 		  } catch (error) {
 			console.error('Erreur lors de la récupération des données :', error);
 		  }
@@ -134,9 +133,9 @@ export default function Login() {
 										<label className='inline-block checkbox-label mt-6 mb-2' htmlFor="remember-me">remember me</label>
 										<div className="submit-btn">
 											<button type="submit" onClick={handleSubmit}>Sign in</button>
-											<button onClick={()=>signIn("google" , {callbackUrl:'/#home-section'})}>
+											{/*<button onClick={()=>signIn("google" , {callbackUrl:'/#home-section'})}>
 												Login with Google
-											</button>
+											</button>*/}
 										</div>
 										<div ref={SubmitErrorRef} className="email-error error"></div>
 										<div className="register-link">

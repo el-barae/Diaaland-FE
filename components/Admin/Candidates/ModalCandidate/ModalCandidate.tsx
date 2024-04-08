@@ -1,6 +1,6 @@
 import React, { useState,useEffect } from "react";
 import axios from "axios";
-import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
 import "./ModalCandidate.scss"
 import API_URL from "@/config";
 
@@ -84,6 +84,13 @@ interface ModalProps {
     const toggleModal = () => {
       onClose();
     };
+
+    const router = useRouter();
+
+    const handleMore = async () =>{
+      router.push('/Dashboards/Candidate');
+      localStorage.setItem('ID',String(id));
+    }
 
     const handleDelete = async (e:any, idS:number) =>{
       e.preventDefault()
@@ -378,6 +385,7 @@ image: McandidateImage
                 <div className='lists'>
                   <RepeatClassNTimes className="list" n={skillsData.length} skillsData={skillsData} />
                 </div>
+                <button onClick={handleMore}>More details</button>
                   </div>
               </div>
           </div>
