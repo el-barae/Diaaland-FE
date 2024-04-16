@@ -9,6 +9,7 @@ import Dashboard from '@/components/Admin/Dashboard/Dashboard'
 import Candidates from '@/components/Admin/Candidates/Candidates'
 import Customers from '@/components/Admin/Customers/Customer'
 import Skills from '@/components/Admin/Skills/Skills'
+import Messages from '@/components/Admin/Messages/Messages'
 
 const Admin = () =>{
     var [x,setX] = useState("Dashboard");
@@ -33,6 +34,9 @@ const Admin = () =>{
           }
           if (x === "Skills") {
             return <Skills/>;
+          }
+          if (x === "Messages") {
+            return <Messages/>;
           }
       }
 
@@ -73,28 +77,17 @@ const Admin = () =>{
             </li>
 
             <li>
-                <a href="#">
-                    <span className="title">Matches</span>
-                </a>
-            </li>
-
-            <li>
-                <a href="#">
-                    <span className="title">Settings</span>
-                </a>
-            </li>
-
-            <li>
-                <a href="#">
+                <a href="#" onClick={() => handleClick("Messages")}>
                     <span className="title">Messages</span>
                 </a>
             </li>
 
             <li>
                 <a href="#">
-                    <span className="title">Report</span>
+                    <span className="title">Matches</span>
                 </a>
             </li>
+
         </ul>
     </div>
     <div className="main">
