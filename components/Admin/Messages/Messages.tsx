@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import API_URL from "@/config";
+import './Messages.scss'
 
 interface Message {
     id: number;
@@ -36,11 +37,12 @@ interface Message {
         <>
         {messagesData.map((m) => (
           <div key={m.id} className={className}>
-          <h1>{m.subject} :</h1>
+          <h1>{m.email}</h1>
           <p>
-            Email: {m.email} <br/> Date: {m.date} 
+            Subject: {m.subject} <br/> Date: {m.date} 
           </p>
-          <p>Message: {m.message}</p>
+          <span> Message:</span>
+          <p className="text ml-8">    {m.message}</p>
           <button onClick={(e) => handleDelete(e, m.id)}>Delete</button>
         </div>
         ))}
@@ -70,7 +72,7 @@ const Messages = () =>{
     return (
         <div className='jobs'>
         <h1>Messages</h1>
-                <div className='lists'>
+                <div className='lists' id="messages">
                   <RepeatClassNTimes className="list" n={messagesData.length} messagesData={messagesData} />
                 </div>
          </div>

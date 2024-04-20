@@ -39,6 +39,20 @@
     border-left: 10px solid $main-color;
     transition: 0.5s;
     overflow: hidden;
+    .badge {
+      position: absolute;
+      font-size: 12px;
+      top: 8px;
+      right: -8px;
+      width: 10px;
+      height: 10px;
+      background: red;
+      color: #ffffff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 50%;
+    }
   }
   .navigation.active {
     width: 80px;

@@ -10,12 +10,36 @@ import Candidates from '@/components/Admin/Candidates/Candidates'
 import Customers from '@/components/Admin/Customers/Customer'
 import Skills from '@/components/Admin/Skills/Skills'
 import Messages from '@/components/Admin/Messages/Messages'
+import axios from "axios";
+import API_URL from "@/config";
 
 const Admin = () =>{
     var [x,setX] = useState("Dashboard");
+    const [notif,setNotif] = useState(false); 
+
+    useEffect(() => {
+        axios.get(API_URL+'/api/v1/messages/viewed')
+          .then(response => {
+            setNotif(response.data);
+          })
+          .catch(error => {
+            console.error('Error fetching message status:', error);
+          });
+    }, []);
+
+    const markAllMessagesViewed = () => {
+        axios.put(API_URL+'/api/v1/messages/mark-viewed')
+          .catch(error => {
+            console.error('Error marking messages as viewed:', error);
+        });
+    };
 
     const handleClick = (value : string) => {
         setX(value);
+        if (value === "Messages") {
+            markAllMessagesViewed();
+            setNotif(false);
+        }
         y();
       };
 
@@ -39,6 +63,8 @@ const Admin = () =>{
             return <Messages/>;
           }
       }
+
+
 
     return (
         <ThemeProvider enableSystem={true} attribute="class">
@@ -78,7 +104,9 @@ const Admin = () =>{
 
             <li>
                 <a href="#" onClick={() => handleClick("Messages")}>
-                    <span className="title">Messages</span>
+                    <span className="title">Messages
+                    {notif === false ? null : <span className="badge">{notif}</span>}
+                    </span>
                 </a>
             </li>
 

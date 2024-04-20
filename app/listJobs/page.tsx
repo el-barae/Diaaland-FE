@@ -41,12 +41,7 @@ const ListJobs = () => {
  useEffect(() => {
     const fetchData = async () => {
       try {
-        const token = localStorage.getItem("token");
-        const response = await axios.get(API_URL+"/api/v1/jobs/list", {
-          headers: {
-            'Authorization': 'Bearer ' + token
-          }
-        });
+        const response = await axios.get(API_URL+"/api/v1/jobs/list");
         setJobsData(response.data);
         setFilteredJobs(response.data);
       } catch (error) {

@@ -1,17 +1,35 @@
 'use client'
 import React from 'react'
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import Image from 'next/image'
+import axios from 'axios'
 import Contact from '@/public/images/contactus.png'
 import { MdMail, MdTimer, MdPhone, MdLocationPin } from 'react-icons/md'
 import './ContactUs.scss'
-// console.log()
+import swal from 'sweetalert'
+import API_URL from '@/config'
 
 export default function ContactUs() {
 
   const emailError = useRef<HTMLParagraphElement>(null);
   const passwordError = useRef<HTMLParagraphElement>(null);
   const messageError = useRef<HTMLParagraphElement>(null);
+
+  const [email, setEmail] = useState('');
+  const [subject, setSubject] = useState('');
+  const [message, setMessage] = useState('');
+  
+  const handleEmailChange = (e:any) => {
+    setEmail(e.target.value);
+  };
+  
+  const handleSubjectChange = (e:any) => {
+    setSubject(e.target.value);
+  };
+  
+  const handleMessageChange = (e:any) => {
+    setMessage(e.target.value);
+  };
 
   const emailHandleError = (e : any) => {
     e.preventDefault();
@@ -30,6 +48,24 @@ export default function ContactUs() {
     if (e.target.validationMessage.length && messageError.current)
       messageError.current.innerText = e.target.validationMessage;
   }
+
+  const handleSubmit = async (e:any) => {
+    e.preventDefault();
+    
+    try {
+      await axios.post(API_URL+'/api/v1/messages', {
+        "email": email,
+        "subject": subject,
+        "date": "2024-04-16T12:00:00",
+        "message": message,
+        "view": false
+      });
+      swal('Email sent', '', 'success');
+    } catch (error) {
+      swal('Email not send', '', 'error');
+      console.error('Error submitting message:', error);
+    }
+  };
 
   return (
     <div id="contact-section" className="contact">
@@ -65,17 +101,17 @@ export default function ContactUs() {
           </div>
         </div>
         <div className="form">
-          <form action="">
+          <form action="" onSubmit={handleSubmit}>
             <label htmlFor="email">email address:</label>
-            <input id='email' type="email" placeholder='enter your email' required onInvalid={emailHandleError} />
+            <input id='email' type="email" placeholder='enter your email' value={email} onChange={handleEmailChange} required onInvalid={emailHandleError} />
             <p ref={emailError} className='errorEmail'></p>
             <label htmlFor="subject">subject:</label>
-            <input id='subject' type="text" placeholder='Enter your subject' required onInvalid={passwordHandleError} />
+            <input id='subject' type="text" placeholder='Enter your subject' value={subject} onChange={handleSubjectChange} required onInvalid={passwordHandleError} />
             <p ref={passwordError} className='errorPassword'></p>
             <label htmlFor="message">message:</label>
-            <textarea name="" id="message" cols={30} rows={10} placeholder='Type your message here...' required onInvalid={messageHandleError} ></textarea>
+            <textarea name="" id="message" cols={30} rows={10} placeholder='Type your message here...' value={message} onChange={handleMessageChange} required onInvalid={messageHandleError} ></textarea>
             <p ref={messageError} className='errorMessage'></p>
-            <button>send my message</button>
+            <button type="submit">send my message</button>
           </form>
         </div>
       </div>
