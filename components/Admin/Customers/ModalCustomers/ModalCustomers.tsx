@@ -1,6 +1,7 @@
 import React, { useState,useEffect } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
 import "../../jobs/ModalJobs/ModalJobs.scss";
 import API_URL from "@/config";
 
@@ -37,11 +38,17 @@ interface ModalProps {
     const [McustomerCountry, setCustomerCountry] = useState(country);
     const [McustomerDescription, setCustomerDescription] = useState(description);
     const [McustomerLogo, setCustomerLogo] = useState(logo);
+    const router = useRouter();
     const token = localStorage.getItem("token")
 
     const toggleModal = () => {
       onClose();
     };
+
+    const goToCustomer = async (e: any) => {
+      e.preventDefault();
+      router.push('/Dashboards/Customer');
+    }
 
     const handleModifyCustomer = async (e: any) => {
       e.preventDefault();
@@ -122,6 +129,7 @@ interface ModalProps {
   <label htmlFor="customerLogo">Customer Logo:</label>
   <input type="text" id="customerLogo" placeholder="Enter customer logo URL" value={McustomerLogo} onChange={(e) => setCustomerLogo(e.target.value)} />
   <button onClick={handleModifyCustomer}>Modify Customer</button>
+  <button onClick={goToCustomer}>More modififactions</button>
               </div>
           </div>
         )}

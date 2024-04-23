@@ -10,6 +10,7 @@ import Candidates from '@/components/Admin/Candidates/Candidates'
 import Customers from '@/components/Admin/Customers/Customer'
 import Skills from '@/components/Admin/Skills/Skills'
 import Messages from '@/components/Admin/Messages/Messages'
+import Applies from '@/components/Admin/Applies/Applies'
 import axios from "axios";
 import API_URL from "@/config";
 
@@ -47,8 +48,11 @@ const Admin = () =>{
         if (x === "Jobs") {
           return <Jobs />;
         }
+        if (x === "Applies") {
+            return <Applies />;
+        }
         if (x === "Dashboard") {
-            return <Dashboard/>;
+            return <Dashboard handleClick={handleClick}/>;
           }
           if (x === "Candidates") {
             return <Candidates/>;
@@ -85,6 +89,12 @@ const Admin = () =>{
             </li>
 
             <li>
+                <a href="#" onClick={() => handleClick("Applies")}>
+                    <span className="title">Applies</span>
+                </a>
+            </li>
+
+            <li>
                 <a href="#" onClick={() => handleClick("Customers")}>
                     <span className="title">Customers</span>
                 </a>
@@ -109,13 +119,13 @@ const Admin = () =>{
                     </span>
                 </a>
             </li>
-
+            
             <li>
                 <a href="#">
                     <span className="title">Matches</span>
                 </a>
             </li>
-
+            
         </ul>
     </div>
     <div className="main">

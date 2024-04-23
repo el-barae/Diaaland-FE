@@ -37,15 +37,13 @@ function getStatusClass(status: string) {
     }
   }
 
-const Dashboard = () =>{
+const Dashboard = ({ handleClick }: { handleClick: (value: string) => void }) => {
 
     const [appliedCandidatesData, setAppliedCandidatesData] = useState<appliedCandidates[]>([]);
     const [jobsData, setJobsData] = useState<Job[]>([]);
     const [countJobs, setCountJobs] = useState(0);
     const [countCandidates, setCountCandidates] = useState(0);
     const [countCustomers, setCountCustomers] = useState(0);
-
-
     
     useEffect(() => {
         const token = localStorage.getItem("token")
@@ -133,6 +131,13 @@ const Dashboard = () =>{
         );
       }
 
+      const [x, setX] = useState(""); // State variable to store the value of x
+
+  const handle = (value : string) => {
+    handleClick(value); // Call handleClick function with the value
+    setX(value); // Update the value of x
+  }
+
     return(
         <>
         <div className="topbar">
@@ -144,21 +149,21 @@ const Dashboard = () =>{
         </div>
 
         <div className="cardBox">
-            <div className="card">
+            <div className="card" onClick={() => handle("Candidates")}>
                 <div>
                     <div className="numbers">{countCandidates}</div>
                     <div className="cardName">Candidates</div>
                 </div>
             </div>
 
-            <div className="card">
+            <div className="card" onClick={() => handle("Customers")}>
                 <div>
                     <div className="numbers">{countCustomers}</div>
                     <div className="cardName">Customers</div>
                 </div>
             </div>
 
-            <div className="card">
+            <div className="card" onClick={() => handle("Jobs")}>
                 <div>
                     <div className="numbers">{countJobs}</div>
                     <div className="cardName">Jobs</div>
@@ -170,7 +175,7 @@ const Dashboard = () =>{
             <div className="recentOrders">
                 <div className="cardHeader">
                     <h2>Last applied candidates</h2>
-                    <a href="#" className="btn">View All</a>
+                    <a href="#" className="btn" onClick={() => handle("Applies")}>View All</a>
                 </div>
 
                 <table>
