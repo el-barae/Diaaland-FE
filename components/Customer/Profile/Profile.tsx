@@ -85,13 +85,18 @@ const Profile = () =>{
 			setPassState('hide');
 		}
 	}
+	const token = localStorage.getItem("token");
 
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
 			  Cookies.set("id","1")
 			  const id = Cookies.get("id");
-			  const response = await axios.get(API_URL+'/api/v1/customers/tostring/'+String(id));         
+			  const response = await axios.get(API_URL+'/api/v1/customers/tostring/'+1, {
+				headers: {
+				  'Authorization': 'Bearer ' + token
+				}
+			  });        
 			  setCustomer(response.data);
 			  console.log(customer);
 			} catch (error) {

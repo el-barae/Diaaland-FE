@@ -74,8 +74,7 @@ interface Candidate {
 
 const Customer = () => {
   const token = localStorage.getItem("token");
-    const [candidatesData, setCandidatesData] = useState<Candidate[]>([]);
-    const [jobsData, setJobsData] = useState<Job[]>([]);
+    const [customerData, setCustomer] = useState('');
 
     var [x,setX] = useState("Profile"); 
 
@@ -105,41 +104,27 @@ const Customer = () => {
     }
 
     useEffect(() => {
-        const fetchCandidateData = async () => {
+        const fetchCustomerData = async () => {
           try {
-            const response = await axios.get(API_URL+'/api/v1/candidate-jobs/byJob/2', {
+            const response = await axios.get(API_URL+'/api/v1/customers/name/1', {
               headers: {
                 'Authorization': 'Bearer ' + token
               }
             });
             
-            setCandidatesData(response.data);
+            setCustomer(response.data);
           } catch (error) {
             console.error('Erreur lors de la récupération des données :', error);
           }
         };
-        const fetchJobData = async () => {
-          try {
-            Cookies.set("id","1")
-            const id = Cookies.get("id");
-            const response = await axios.get(API_URL+'/api/v1/jobs/byCustomer/'+String(id), {
-              headers: {
-                'Authorization': 'Bearer ' + token
-              }
-            });         
-            setJobsData(response.data);
-          } catch (error) {
-            console.error('Erreur lors de la récupération des données :', error);
-          }
-        };
-        fetchJobData();
+        fetchCustomerData();
   }, []);
     return (
       <ThemeProvider enableSystem={true} attribute="class">
       <Navbar/>
       <div className='Customer'>
               <div className='header'>
-                <h1>Customer</h1>
+                <h1>{customerData}</h1>
                 <button onClick={handleToggle}>
                 <Image 
 									src={Notif}
