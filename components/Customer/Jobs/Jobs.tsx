@@ -20,6 +20,8 @@ interface Job {
   remoteStatus: string;
 }
 
+const token = localStorage.getItem("token");
+
   interface RepeatClassNTimesProps {
     className: string;
     n: number;
@@ -30,7 +32,11 @@ interface Job {
       e.preventDefault()
       Cookies.set("id","1")
       const idC = Cookies.get("id");
-      axios.delete(API_URL+'/api/v1/candidate-jobs/'+String(idC)+'/'+String(idJ))
+      axios.delete(API_URL+'/api/v1/candidate-jobs/'+String(idC)+'/'+String(idJ), {
+				headers: {
+				  'Authorization': 'Bearer ' + token
+				}
+			  })
        .catch(function (error) {
         console.log(error);
        });
@@ -43,7 +49,11 @@ const Jobs = () =>{
           try {
             Cookies.set("id","1")
             const id = Cookies.get("id");
-            const response = await axios.get(API_URL+'/api/v1/jobs/byCustomer/'+String(id));         
+            const response = await axios.get(API_URL+'/api/v1/jobs/byCustomer/'+String(id), {
+              headers: {
+                'Authorization': 'Bearer ' + token
+              }
+              });              
             setJobsData(response.data);
           } catch (error) {
             console.error('Erreur lors de la récupération des données :', error);

@@ -44,6 +44,7 @@ const Candidate = () => {
     y();
   };
   const token = localStorage.getItem("token");
+  const [loading, setLoading] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
   const [notif,setNotif] = useState(2); 
   const options = ['Message 1', 'Message 2', 'Message 3'];
@@ -91,25 +92,34 @@ const Candidate = () => {
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        var ID = localStorage.getItem("ID");
-        const response = await axios.get(API_URL+'/api/v1/candidates/name/'+String(ID), {
-          headers: {
-            'Authorization': 'Bearer ' + token
-          }
-        });         
-        setCandidateData(response.data);
-      } catch (error) {
-        console.error('Erreur lors de la récupération des données :', error);
-      }
-    };
-    fetchData();
-}, []);
-
+    const role = localStorage.getItem('role');
+        if (role !== "CANDIDAT") {
+            alert("Authenticate yourself when you are a CANDIDATE");
+            router.push('/');
+        } else {
+      const fetchData = async () => {
+        try {
+          var ID = localStorage.getItem('ID');
+          const response = await axios.get(API_URL+'/api/v1/candidates/name/'+String(ID), {
+            headers: {
+              'Authorization': 'Bearer ' + token
+            }
+          });
+          setCandidateData(response.data);
+          setTimeout(() => {
+            setLoading(false);
+          }, 1500);
+        } catch (error) {
+          console.error('Erreur lors de la récupération des données :', error);
+        }
+      };
+      fetchData();
+    }
+  }, []);
     return (
         <ThemeProvider enableSystem={true} attribute="class">
           <Navbar/>
+          {!loading && (
             <div className='Candidate'>
               <div className='header'>
                 {candidateData}
@@ -147,6 +157,10 @@ const Candidate = () => {
                 </div>
               </div>
             </div>
+            )}
+            {loading && (
+                <div className="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+            )}
         </ThemeProvider>
     );
   }

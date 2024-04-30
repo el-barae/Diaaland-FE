@@ -4,6 +4,7 @@ import React from 'react';
 import './style.scss';
 import {ThemeProvider} from 'next-themes'
 import Navbar from '@/components/HomePage/Navbar/Navbar'
+import { useRouter } from "next/navigation";
 import Jobs from '@/components/Admin/jobs/jobs'
 import Dashboard from '@/components/Admin/Dashboard/Dashboard'
 import Candidates from '@/components/Admin/Candidates/Candidates'
@@ -17,15 +18,28 @@ import API_URL from "@/config";
 const Admin = () =>{
     var [x,setX] = useState("Dashboard");
     const [notif,setNotif] = useState(false); 
+    const [loading, setLoading] = useState(true);
+    const router = useRouter();
 
     useEffect(() => {
-        axios.get(API_URL+'/api/v1/messages/viewed')
+        const role = localStorage.getItem('role');
+        if (role !== "ADMIN") {
+            alert("Authenticate yourself when you are a ADMIN");
+            router.push('/');
+        }
+        else{
+            axios.get(API_URL+'/api/v1/messages/viewed')
           .then(response => {
             setNotif(response.data);
           })
           .catch(error => {
             console.error('Error fetching message status:', error);
           });
+          setTimeout(() => {
+            setLoading(false);
+          }, 1500);
+        }
+        
     }, []);
 
     const markAllMessagesViewed = () => {
@@ -73,7 +87,8 @@ const Admin = () =>{
     return (
         <ThemeProvider enableSystem={true} attribute="class">
             <Navbar/>
-            <div className="admin">
+            {!loading && (
+            <div className="admin">   
     <div className="navigation">
         <ul>
             <li>
@@ -131,9 +146,12 @@ const Admin = () =>{
     <div className="main">
         {y()}
     </div>
+    
 </div>
-
-
+            )}
+            {loading && (
+                <div className="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+            )}
         </ThemeProvider>
     );
 }

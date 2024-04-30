@@ -19,6 +19,8 @@ interface Candidate {
     candidatesData: Candidate[];
   }
 
+  const token = localStorage.getItem("token");
+
   const RepeatClassNTimes: React.FC<RepeatClassNTimesProps> = ({ className, n, candidatesData }) => {
     if(candidatesData.length != 0)
       return(
@@ -42,7 +44,11 @@ const Candidates = () =>{
           try {
             Cookies.set("id","1")
             const id = Cookies.get("id");
-            const response = await axios.get(API_URL+'/api/v1/candidate-jobs/byCustomer/'+String(id));   
+            const response = await axios.get(API_URL+'/api/v1/candidate-jobs/byCustomer/'+String(id), {
+              headers: {
+                'Authorization': 'Bearer ' + token
+              }
+              });        
                   
             setCandidatesData(response.data);
           } catch (error) {

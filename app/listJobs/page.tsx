@@ -25,6 +25,7 @@ var c=0;
 const ListJobs = () => {
  const [searchTerm, setSearchTerm] = useState('');
  const [filteredJobs, setFilteredJobs] = useState<Job[]>([]);
+ const [loading, setLoading] = useState(true);
 
  // Fonction de recherche
  const handleSearch = () => {
@@ -44,6 +45,9 @@ const ListJobs = () => {
         const response = await axios.get(API_URL+"/api/v1/jobs/list");
         setJobsData(response.data);
         setFilteredJobs(response.data);
+        setTimeout(() => {
+          setLoading(false);
+        }, 1500);
       } catch (error) {
         console.error('Erreur lors de la récupération des données :', error);
       }
@@ -90,6 +94,7 @@ const ListJobs = () => {
     return (
     <ThemeProvider enableSystem={true} attribute="class">
         <Navbar/>
+        {!loading && (
             <div className='listJobs'>
                 <div className='container'>
                  <div className='header'>
@@ -131,6 +136,10 @@ const ListJobs = () => {
                     </div>
                 </div>
             </div>
+            )}
+            {loading && (
+                <div className="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+            )}
     </ThemeProvider>
     );
  }

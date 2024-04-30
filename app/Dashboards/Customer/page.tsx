@@ -1,6 +1,7 @@
 'use client'
 import Image from 'next/image'
 import { useState ,useEffect} from "react"
+import { useRouter } from 'next/navigation'
 import axios from 'axios'
 import React from 'react';
 import Cookies from 'js-cookie';
@@ -74,7 +75,9 @@ interface Candidate {
 
 const Customer = () => {
   const token = localStorage.getItem("token");
+  const [loading, setLoading] = useState(true);
     const [customerData, setCustomer] = useState('');
+    const router = useRouter();
 
     var [x,setX] = useState("Profile"); 
 
@@ -104,6 +107,11 @@ const Customer = () => {
     }
 
     useEffect(() => {
+      const role = localStorage.getItem('role');
+      if (role !== "CUSTOMER") {
+        alert("Authenticate yourself when you are a CUSTOMER");
+        router.push('/');
+    } else {
         const fetchCustomerData = async () => {
           try {
             const response = await axios.get(API_URL+'/api/v1/customers/name/1', {
@@ -113,15 +121,20 @@ const Customer = () => {
             });
             
             setCustomer(response.data);
+            setTimeout(() => {
+              setLoading(false);
+            }, 1500);
           } catch (error) {
             console.error('Erreur lors de la récupération des données :', error);
           }
         };
         fetchCustomerData();
+    }
   }, []);
     return (
       <ThemeProvider enableSystem={true} attribute="class">
       <Navbar/>
+      {!loading && (
       <div className='Customer'>
               <div className='header'>
                 <h1>{customerData}</h1>
@@ -155,6 +168,10 @@ const Customer = () => {
                 </div>
               </div>
         </div>
+        )}
+        {loading && (
+            <div className="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+        )}
   </ThemeProvider>
   )
   }

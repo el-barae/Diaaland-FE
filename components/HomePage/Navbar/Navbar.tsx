@@ -20,6 +20,7 @@ import API_URL from '@/config';
 const Navbar = () => {
 
   const [isOpen, setIsOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const options = ['Candidate', 'Customer', 'Admin'];
 
@@ -38,6 +39,7 @@ const Navbar = () => {
       router.push('/Dashboards/Admin');
   }
     setIsOpen(false);
+    setIsLoading(true);
   };
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const { data: session } = useSession();
@@ -143,7 +145,8 @@ const Navbar = () => {
                         alt='image of profile'
                       />
               </button>
-              {isOpen && (
+              {isLoading && <div className="lds-ellipsis"><div></div><div></div><div></div><div></div></div>}
+      {isOpen && (
         <ul className="dropdown-list">
           {options.map((option) => (
             <li key={option} onClick={() => handleOptionClick(option)}>
