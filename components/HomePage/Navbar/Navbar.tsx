@@ -22,10 +22,34 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
+  const [showMenu, setShowMenu] = useState(false);
+
   const options = ['Candidate', 'Customer', 'Admin'];
+  const menu = ['Home', 'Services', 'Contact', 'About'];
+
+
+  const toggleMenu = () => {
+    setShowMenu(!showMenu);
+  };
 
   const handleToggle = () => {
     setIsOpen(!isOpen);
+  };
+
+  const handleMenuClick = (option: string) => {
+    if (option==='Home'){
+      scrollToHome();
+  }
+  else if (option==='About'){
+      scrollToAbout();
+  }
+  else if (option==='Services'){
+      scrollToServices();
+  }
+  else if (option==='Contact'){
+    scrollToContact();
+}
+    setIsOpen(false);
   };
 
   const handleOptionClick = (option: string) => {
@@ -71,9 +95,6 @@ const Navbar = () => {
     localStorage.removeItem('token');
   }
 
-
-  /*
-  const router = useRouter();
   const scrollToHome = () => {
     const goalsSection = document.getElementById('home-section');
 
@@ -94,8 +115,6 @@ const Navbar = () => {
     const goalsSection = document.getElementById('services-section');
 
     if (goalsSection) {
-      router.push('/')
-      goalsSection.scrollIntoView();
       goalsSection.scrollIntoView({ behavior: 'smooth' });
     }
   };
@@ -106,37 +125,30 @@ const Navbar = () => {
       goalsSection.scrollIntoView({ behavior: 'smooth' });
     }
   };
-  #services-section
-  */
 
   return (
     <>
       <div className="navbar py-4">
         <div className="container">
           <Logo />
-          <div className="list">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
-              <path fillRule="evenodd" d="M3 6.75A.75.75 0 013.75 6h16.5a.75.75 0 010 1.5H3.75A.75.75 0 013 6.75zM3 12a.75.75 0 01.75-.75h16.5a.75.75 0 010 1.5H3.75A.75.75 0 013 12zm0 5.25a.75.75 0 01.75-.75h16.5a.75.75 0 010 1.5H3.75a.75.75 0 01-.75-.75z" clipRule="evenodd" />
-            </svg>
-          </div>
           <ul >
             <Link href="/#home-section" >home</Link>
             <Link href="/#services-section" >services</Link>
-            {/*<Link href="/blog" >blog</Link>*/}
             <Link href="/#contact-section" >contact us</Link>
-            <Link href="/#about-section" >about us</Link>
+            <Link href="/#about-section" id='about'>about us</Link>
           </ul>
+          
           <div className='right'>
-            {session ? (
+          {session ? (
               <li>
-                <button onClick={() => { signOut(); logout();}}>Logout</button>
+                <button className='btnlogin' onClick={() => { signOut(); logout();}}>Logout</button>
               </li>
             ) : (
               <li>
-                <a href="/login">Sign In</a>
+                <a className='btnlogin' href="/login">Sign In</a>
               </li>
             )}
-              <NavbarTools />
+          <NavbarTools />
               <button onClick={handleToggle}>
               <Image
                         src={ImageP}
@@ -150,6 +162,21 @@ const Navbar = () => {
         <ul className="dropdown-list">
           {options.map((option) => (
             <li key={option} onClick={() => handleOptionClick(option)}>
+              {option}
+            </li>
+          ))}
+        </ul>
+      )}
+
+          <button className='list' onClick={toggleMenu}>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-8 h-8">
+              <path fillRule="evenodd" d="M3 6.75A.75.75 0 013.75 6h16.5a.75.75 0 010 1.5H3.75A.75.75 0 013 6.75zM3 12a.75.75 0 01.75-.75h16.5a.75.75 0 010 1.5H3.75A.75.75 0 013 12zm0 5.25a.75.75 0 01.75-.75h16.5a.75.75 0 010 1.5H3.75a.75.75 0 01-.75-.75z" clipRule="evenodd" />
+            </svg>
+          </button>
+          {showMenu && (
+        <ul className="dropdown-list">
+          {menu.map((option) => (
+            <li key={option} onClick={() => handleMenuClick(option)}>
               {option}
             </li>
           ))}

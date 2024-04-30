@@ -1,7 +1,7 @@
 
 
 import { useTheme } from "next-themes";
-import { SunIcon, MoonIcon } from "@heroicons/react/solid"; // Import from the same library
+import { SunIcon, MoonIcon } from "@heroicons/react/solid";
 
 const NavbarTools = () => {
   const { systemTheme, theme, setTheme } = useTheme();
