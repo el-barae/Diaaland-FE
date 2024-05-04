@@ -34,7 +34,6 @@ export default function Login() {
 				}
 			});
 			const ID = JSON.stringify(resp.data);
-			console.log(String(ID));
 			localStorage.setItem('ID',ID)
 		  } catch (error) {
 			console.error('Erreur lors de la récupération des données :', error);
@@ -50,10 +49,15 @@ export default function Login() {
 		  .then(function (response) {
 			localStorage.setItem('token',response.data.token)
 			localStorage.setItem('role',response.data.role)
-			//localStorage.setItem('loggedIn',"true")
 			Cookies.set("loggedin", "true");
 			fetchID();
-			router.push('/addPost')
+			if(response.data.role === 'CANDIDAT')
+				router.push('Dashbords/Candidate')
+			else{ if(response.data.role === 'CUSTOMER')
+					router.push('Dashbords/Customer')
+				else(response.data.role === 'ADMIN')
+					router.push('Dashbords/Admin')
+			}
 		  })
 		  .catch(function (error) {
 			console.log(error);

@@ -14,6 +14,7 @@ import Messages from '@/components/Admin/Messages/Messages'
 import Applies from '@/components/Admin/Applies/Applies'
 import axios from "axios";
 import API_URL from "@/config";
+import swal from "sweetalert";
 
 const Admin = () =>{
     var [x,setX] = useState("Dashboard");
@@ -24,7 +25,7 @@ const Admin = () =>{
     useEffect(() => {
         const role = localStorage.getItem('role');
         if (role !== "ADMIN") {
-            alert("Authenticate yourself when you are a ADMIN");
+            swal('Authenticate yourself when you are a ADMIN', '', 'error');
             router.push('/');
         }
         else{

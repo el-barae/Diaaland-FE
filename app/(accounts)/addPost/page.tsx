@@ -9,6 +9,7 @@ import axios from 'axios'
 import { ThemeProvider } from 'next-themes'
 import { useRouter } from 'next/navigation';
 import API_URL from '@/config'
+import swal from 'sweetalert'
 
 export default function AddPost() {
   
@@ -47,10 +48,10 @@ export default function AddPost() {
 			})
 		  .then(function (response) {
 			console.log(response);
-      alert("Your post had been sent to admin ")
+      swal('Your post had been sent to admin', '', 'success');
 		  })
 		  .catch(function (error) {
-			alert(error.message);
+        swal(error.message, '', 'error');
 		  });
 	}
 

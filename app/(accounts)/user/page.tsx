@@ -48,6 +48,7 @@ export default function Register() {
 	const [name, setName] = useState('')
 	const [password, setPassword] = useState('')
 	const [email, setEmail] = useState('')
+	const [phoneNumber, setPhoneNumber] = useState('')
 	const [city, setCity] = useState('')
 	const [country, setCountry] = useState('')
 	const [url, setUrl] = useState('')
@@ -55,32 +56,39 @@ export default function Register() {
 	const [logo, setLogo] = useState('')
 
 	const [passState, setPassState] = useState('hide');
+
+	const fetchID = async () => {
+		try {
+			const token = localStorage.getItem("token");
+			const resp = await axios.get(API_URL+'/api/v1/users/relatedId/'+String(email), {
+				headers: {
+					'Authorization': 'Bearer ' + token
+				}
+			});
+			const ID = JSON.stringify(resp.data);
+			localStorage.setItem('ID',ID)
+		  } catch (error) {
+			console.error('Erreur lors de la récupération des données :', error);
+		  }
+		}
 	
 	const handleSubmit = async (e:any)  =>{
 		e.preventDefault()
-		try{
-			const response1 = axios.post(API_URL+'/api/v1/auth/register', {
+			const response = axios.post(API_URL+'/api/v1/auth/register/customer', {
 				"name": name,
 				"email":email,
+				"phoneNumber": phoneNumber,
 				"password": password,
 				"role": "CUSTOMER"
-			});
-			const response2 = axios.post(API_URL+'/api/v1/auth/register', {
-			"name": name,
-			"email":email,
-			"city": city,
-			"country": country,
-			"url": url,
-			"adress": adress,
-			"logo": logo
-		  })
-			//console.log(response);
-			Cookies.set("loggedin", "true");
-			router.push('/addPost')
-		  }
-		  catch(error) {
+			}).then(function (response) {
+		  localStorage.setItem('token',response.data.token)
+		  localStorage.setItem('role',response.data.role)
+		  Cookies.set("loggedin", "true");
+		  fetchID();
+		  router.push('Dashbords/Customer')
+		}). catch(function (error) {
 			console.log(error);
-		  };
+		  });
 	}
 
 	const handleIconClick = () => {
@@ -180,6 +188,9 @@ export default function Register() {
 										<label htmlFor="email">Email</label>
 										<input type="email" name="email" id="email" placeholder="Enter your email" required onInvalid={invalidEmail} onChange={(e) => setEmail(e.target.value)} />
 										<p ref={emailErrorRef} className="error email-error"></p>
+										<label htmlFor="phoneNumber">Phone number:</label>
+											<input type="text" id="phoneNumber" placeholder="Enter your phonr number" name="phoneNumber" required onChange={(e) => setPhoneNumber(e.target.value)}/>
+										{/*
 										<div className="nation">
 											<label htmlFor="city">City:</label>
 											<input type="text" name="city" id="city" required onChange={(e) => setCity(e.target.value)}  />
@@ -194,7 +205,8 @@ export default function Register() {
 										</div>
 											<label htmlFor="logo">Select the logo file:</label>
 											<input type="file" id="fileInput" name="fileInput" required onChange={(e) => setLogo(e.target.value)}/>
-										<label htmlFor="password">Password</label>
+										*/}
+											<label htmlFor="password">Password</label>
 										<div className="password-input">
 											<input type={passState === 'show' ? 'text' : 'password'} name="password" id="password" placeholder="Enter your password" onChange={handlePasswordChange} required onInvalid={invalidPassword} />
 											<div className="icon" onClick={handleIconClick}>

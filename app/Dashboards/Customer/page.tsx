@@ -4,7 +4,7 @@ import { useState ,useEffect} from "react"
 import { useRouter } from 'next/navigation'
 import axios from 'axios'
 import React from 'react';
-import Cookies from 'js-cookie';
+import swal from 'sweetalert'
 import './style.scss';
 import Profile from '@/components/Customer/Profile/Profile';
 import Jobs from '@/components/Customer/Jobs/Jobs'
@@ -109,7 +109,7 @@ const Customer = () => {
     useEffect(() => {
       const role = localStorage.getItem('role');
       if (role !== "CUSTOMER") {
-        alert("Authenticate yourself when you are a CUSTOMER");
+        swal('Authenticate yourself when you are a CUSTOMER', '', 'error');
         router.push('/');
     } else {
         const fetchCustomerData = async () => {

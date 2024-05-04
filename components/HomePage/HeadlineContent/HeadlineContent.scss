@@ -27,6 +27,9 @@
         align-items: center;
         gap: 1rem;
         margin-top: 3rem;
+        .lds-roller{
+          margin: 0px;
+        }
         a {
           font-size: .9rem;
           text-transform: capitalize;

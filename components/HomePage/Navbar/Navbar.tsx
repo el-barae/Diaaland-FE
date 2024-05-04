@@ -174,12 +174,19 @@ const Navbar = () => {
             </svg>
           </button>
           {showMenu && (
-        <ul className="dropdown-list">
-          {menu.map((option) => (
-            <li key={option} onClick={() => handleMenuClick(option)}>
-              {option}
+        <ul className="dropdown-list">  
+            <li >
+            <Link href="/#home-section" >home</Link>
             </li>
-          ))}
+            <li >
+            <Link href="/#services-section" >services</Link>
+            </li>
+            <li >
+            <Link href="/#contact-section" >contact us</Link>
+            </li>
+            <li >
+            <Link href="/#about-section" id='about'>about us</Link>
+            </li>       
         </ul>
       )}
           </div>

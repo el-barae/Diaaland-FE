@@ -38,12 +38,7 @@ const passwordStrength = (password: string) => {
 export default function Register() {
 	const [firstName, setFirstName] = useState('')
 	const [lastName, setLastName] = useState('')
-	const [city, setCity] = useState('')
-	const [country, setCountry] = useState('')
-	const [url, setUrl] = useState('')
-	const [adress, setAdress] = useState('')
-	const [logo, setLogo] = useState('')
-	const [candidate, setCandidate] = useState('')
+	const [resume, setResume] = useState('')
 
 	const firstnameErrorRef = useRef<HTMLParagraphElement>(null);
 	const lastnameErrorRef = useRef<HTMLParagraphElement>(null);
@@ -54,24 +49,43 @@ export default function Register() {
 
 	const passwordMessageRef = useRef<HTMLDivElement>(null);
 
-	const [firstname, setFirstname] = useState('')
-	const [lastname, setLastname] = useState('')
 	const [password, setPassword] = useState('')
 	const [email, setEmail] = useState('')
 
 	const [passState, setPassState] = useState('hide');
+
+	const fetchID = async () => {
+		try {
+			const token = localStorage.getItem("token");
+			const resp = await axios.get(API_URL+'/api/v1/users/relatedId/'+String(email), {
+				headers: {
+					'Authorization': 'Bearer ' + token
+				}
+			});
+			const ID = JSON.stringify(resp.data);
+			localStorage.setItem('ID',ID)
+		  } catch (error) {
+			console.error('Erreur lors de la récupération des données :', error);
+		  }
+		}
 	
 	const handleSubmit = async (e:any)  =>{
 		e.preventDefault()
-		axios.post(API_URL+'/api/v1/auth/register', {
+		axios.post(API_URL+'/api/v1/auth/register/candidate', {
+			"firstName": firstName,
+			"lastName": lastName,
 			"email":email,
+			"resumeLink": resume,
 			"password": password,
-			"role": "USER"
+			"role": "CANDIDAT"
 		  })
 		  .then(function (response) {
 			console.log(response);
+			localStorage.setItem('token',response.data.token)
+			localStorage.setItem('role',response.data.role)
 			Cookies.set("loggedin", "true");
-			router.push('/addPost')
+			fetchID();
+			router.push('Dashbords/Candidate')
 		  })
 		  .catch(function (error) {
 			console.log(error);
@@ -187,7 +201,7 @@ export default function Register() {
 										<input type="email" name="email" id="email" placeholder="Enter your email" value={email} required onInvalid={invalidEmail} onChange={(e) => setEmail(e.target.value)} />
 										<p ref={emailErrorRef} className="error email-error"></p>
 										<label htmlFor="url">Resume:</label>
-										<input type="file" id="fileInput" name="fileInput" required onChange={(e) => setUrl(e.target.value)}/>
+										<input type="file" id="fileInput" name="fileInput" value={resume} required onChange={(e) => setResume(e.target.value)}/>
 										<label htmlFor="password">Password</label>
 										<div className="password-input">
 											<input type={passState === 'show' ? 'text' : 'password'} name="password" id="password" placeholder="Enter your password" onChange={handlePasswordChange} required onInvalid={invalidPassword} />
@@ -238,7 +252,7 @@ export default function Register() {
 										<p ref={termsErrorRef} className='error terms-error'></p>
 										<button className='block' type="submit" onClick={handleSubmit}>Register</button>
 										<p className='have-account'>
-											Already have an account? <Link href="/login">Login</Link>Or <Link href='/user'>Register as a customer</Link>
+											Already have an account? <Link href="/login">Login</Link>Or <Link href='/user'>Register as a employer</Link>
 										</p>
 										</div>
 									</div>
