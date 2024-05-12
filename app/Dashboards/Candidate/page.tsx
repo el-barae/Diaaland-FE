@@ -93,7 +93,7 @@ const Candidate = () => {
 
   useEffect(() => {
     const role = localStorage.getItem('role');
-        if (role !== "CANDIDAT") {
+        if (role !== "CANDIDAT" && role !== "ADMIN") {
             alert("Authenticate yourself when you are a CANDIDATE");
             router.push('/');
         } else {

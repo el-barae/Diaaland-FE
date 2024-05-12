@@ -85,7 +85,7 @@ export default function Register() {
 			localStorage.setItem('role',response.data.role)
 			Cookies.set("loggedin", "true");
 			fetchID();
-			router.push('Dashbords/Candidate')
+			router.push('Dashboards/Candidate')
 		  })
 		  .catch(function (error) {
 			console.log(error);

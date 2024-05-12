@@ -108,7 +108,7 @@ const Customer = () => {
 
     useEffect(() => {
       const role = localStorage.getItem('role');
-      if (role !== "CUSTOMER") {
+      if (role !== "CUSTOMER" && role !== "ADMIN") {
         swal('Authenticate yourself when you are a CUSTOMER', '', 'error');
         router.push('/');
     } else {

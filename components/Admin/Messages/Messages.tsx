@@ -18,40 +18,43 @@ interface Message {
   }
   const token = localStorage.getItem("token");
 
-  const handleDelete = async (e:any, idM:number) =>{
-    e.preventDefault()
-    var ID = localStorage.getItem("ID");
-    axios.delete(API_URL+'/api/v1/messages/'+String(idM), {
-      headers: {
-        'Authorization': 'Bearer ' + token
-      }
-    })
-     .catch(function (error) {
-      console.log(error);
-     });
-  }
-
-  const RepeatClassNTimes: React.FC<RepeatClassNTimesProps> = ({ className, n, messagesData }) => {
-    if(messagesData.length != 0)
-      return(
-        <>
-        {messagesData.map((m) => (
-          <div key={m.id} className={className}>
-          <h1>{m.email}</h1>
-          <p>
-            Subject: {m.subject} <br/> Date: {m.date} 
-          </p>
-          <span> Message:</span>
-          <p className="text ml-8">    {m.message}</p>
-          <button onClick={(e) => handleDelete(e, m.id)}>Delete</button>
-        </div>
-        ))}
-        </>
-      )
-    }
-
 const Messages = () =>{
     const [messagesData, setMessagesData] = useState<Message[]>([]);
+
+    const handleDelete = async (e:any, idM:number) =>{
+      e.preventDefault()
+      var ID = localStorage.getItem("ID");
+      try{
+      axios.delete(API_URL+'/api/v1/messages/'+String(idM), {
+        headers: {
+          'Authorization': 'Bearer ' + token
+        }
+      })
+      const updatedMessagesData = messagesData.filter(m => m.id !== idM)
+          setMessagesData(updatedMessagesData)
+      }catch(error) {
+        console.log(error);
+       };
+    }
+
+    const RepeatClassNTimes: React.FC<RepeatClassNTimesProps> = ({ className, n, messagesData }) => {
+      if(messagesData.length != 0)
+        return(
+          <>
+          {messagesData.map((m) => (
+            <div key={m.id} className={className}>
+            <h1>{m.email}</h1>
+            <p>
+              Subject: {m.subject} <br/> Date: {m.date} 
+            </p>
+            <span> Message:</span>
+            <p className="text ml-8">    {m.message}</p>
+            <button onClick={(e) => handleDelete(e, m.id)}>Delete</button>
+          </div>
+          ))}
+          </>
+        )
+      }
 
     useEffect(() => {
         const fetchData = async () => {

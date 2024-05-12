@@ -85,7 +85,7 @@ export default function Register() {
 		  localStorage.setItem('role',response.data.role)
 		  Cookies.set("loggedin", "true");
 		  fetchID();
-		  router.push('Dashbords/Customer')
+		  router.push('Dashboards/Customer')
 		}). catch(function (error) {
 			console.log(error);
 		  });

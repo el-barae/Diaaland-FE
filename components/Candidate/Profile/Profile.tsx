@@ -11,6 +11,7 @@ import Image from 'next/image'
 import RegisterImg from '@/public/images/registeration.png'
 import Candidate from '@/app/Dashboards/Candidate/page';
 import API_URL from '@/config'
+import { Diplomata } from 'next/font/google';
 
 interface candidate{
 	firstName:string;
@@ -68,6 +69,7 @@ const Profile = () =>{
 	const [lastName, setLastName] = useState('')
 	const [password, setPassword] = useState('')
 	const [email, setEmail] = useState('')
+	const [desc, setDesc] = useState('')
 	const [city, setCity] = useState('')
 	const [country, setCountry] = useState('')
 	const [url, setUrl] = useState('')
@@ -131,9 +133,8 @@ const [image, setImage] = useState<string>(''); // Je suppose que "image" est un
 
 			const fetchData = async () => {
 			  try {
-				Cookies.set("id","1")
-				const id = Cookies.get("id");
-				const response = await axios.get(API_URL+'/api/v1/candidates/tostring/'+String(id), {
+				const id = localStorage.getItem("ID");
+				const response = await axios.get(API_URL+'/api/v1/candidates/tostring/'+String(1), {
 					headers: {
 					  'Authorization': 'Bearer ' + token
 					}
@@ -187,20 +188,21 @@ const [image, setImage] = useState<string>(''); // Je suppose que "image" est un
 			const candidateAttributes = candidate.split('|~');
 			setFirstName(candidateAttributes[0]);
 			setLastName(candidateAttributes[1]);
-			setEmail(candidateAttributes[3]);
-			setCity(candidateAttributes[2]);
-			setCountry(candidateAttributes[3]);
+			setEmail(candidateAttributes[2]);
+			setDesc(candidateAttributes[3]);
+			setCity(candidateAttributes[5]);
+			setCountry(candidateAttributes[6]);
 			setAddress(candidateAttributes[4]);
-			setAccountStatus(candidateAttributes[5]);
-			setPhone(candidateAttributes[6]);
-			setJobStatus(candidateAttributes[7]);
-			setExpectedSalary(parseFloat(candidateAttributes[8])); // Converting string to number
-			setLinkedin(candidateAttributes[9]);
-			setGithub(candidateAttributes[10]);
-			setPortfolio(candidateAttributes[11]);
-			setBlog(candidateAttributes[12]);
-			setResume(candidateAttributes[13]);
-			setImage(candidateAttributes[14]);
+			setAccountStatus(candidateAttributes[8]);
+			setPhone(candidateAttributes[7]);
+			setJobStatus(candidateAttributes[10]);
+			setExpectedSalary(parseFloat(candidateAttributes[15])); // Converting string to number
+			setLinkedin(candidateAttributes[11]);
+			setGithub(candidateAttributes[12]);
+			setPortfolio(candidateAttributes[13]);
+			setBlog(candidateAttributes[14]);
+			setResume(candidateAttributes[16]);
+			setImage(candidateAttributes[17]);
 		}
 	}, [candidate]);
 
@@ -264,49 +266,40 @@ const [image, setImage] = useState<string>(''); // Je suppose que "image" est un
 											<label htmlFor="city">City:</label>
 											<input type="text" name="city" id="city" placeholder='Enter your city' value={city} required onChange={(e) => setCity(e.target.value)}  />
 											<label htmlFor="country">Country:</label>
-											<input type="text" name="country" id="country" required onChange={(e) => setCountry(e.target.value)}  />
+											<input type="text" name="country" id="country" value={country} required onChange={(e) => setCountry(e.target.value)}  />
 										</div>
 										<div className="url-adress">
-											<label htmlFor="adress">Adress:</label>
+											<label htmlFor="adress">Address:</label>
 											<div className="info-image">
-							</div>		<input type="text" name="adress" id="adress" required onChange={(e) => setAdress(e.target.value)}  />
+							</div>		<input type="text" name="adress" id="adress" value={address} required onChange={(e) => setAddress(e.target.value)}  />
 										</div>
 										<label htmlFor="url">Account statut:</label>
-											<input type="text" name="url" required onChange={(e) => setUrl(e.target.value)}  />
+											<input type="text" name="url" value={accountStatus} required onChange={(e) => setAccountStatus(e.target.value)}  />
 											<label htmlFor="url">Phone:</label>
-											<input type="text" name="url" required onChange={(e) => setUrl(e.target.value)}  />
+											<input type="text" name="url" value={phone} required onChange={(e) => setPhone(e.target.value)}  />
 											<label htmlFor="url">Job statut:</label>
-											<input type="text" name="url" required onChange={(e) => setUrl(e.target.value)}  />
-											<label htmlFor="url">Expected salary:</label>
-											<input type="text" name="url" required onChange={(e) => setUrl(e.target.value)}  />
+											<input type="text" name="url" value={jobStatus} required onChange={(e) => setJobStatus(e.target.value)}  />
+							
 					</div>
 					<div className='div2'>									
-								
+
+											<label htmlFor="url">Expected salary:</label>
+											<input type="text" name="url" value={expectedSalary} required onChange={(e) => setExpectedSalary(expectedSalary)}  />
 											<label htmlFor="url">Linkedin:</label>
-											<input type="text" name="url" required onChange={(e) => setUrl(e.target.value)}  />
+											<input type="text" name="url" value={linkedin} required onChange={(e) => setLinkedin(e.target.value)}  />
 											<label htmlFor="url">Github:</label>
-											<input type="text" name="url" required onChange={(e) => setUrl(e.target.value)}  />
+											<input type="text" name="url" value={github} required onChange={(e) => setGithub(e.target.value)}  />
 											<label htmlFor="url">Portofolio:</label>
-											<input type="text" name="url" required onChange={(e) => setUrl(e.target.value)}  />
+											<input type="text" name="url" value={portfolio} required onChange={(e) => setPortfolio(e.target.value)}  />
 											<label htmlFor="url">Blog:</label>
-											<input type="text" name="url" required onChange={(e) => setUrl(e.target.value)}  />
+											<input type="text" name="url" value={blog} required onChange={(e) => setBlog(e.target.value)}  />
+											<label htmlFor="logo">Description:</label>
+											<input type="textarea" id="desc" name="desc" value={desc} required onChange={(e) => setDesc(e.target.value)}/>
 											<label htmlFor="url">Resume:</label>
-											<input type="text" name="url" required onChange={(e) => setUrl(e.target.value)}  />
+											<input type="text" name="url" value={resume} required onChange={(e) => setResume(e.target.value)}  />
 											<label htmlFor="logo">Image:</label>
-											<input type="file" id="fileInput" name="fileInput" required onChange={(e) => setLogo(e.target.value)}/>
-											<label htmlFor="logo">Diplome:</label>
-											<input type="file" id="fileInput" name="fileInput" required onChange={(e) => setLogo(e.target.value)}/>
-										<label htmlFor="password">New password</label>
-										<div className="password-input">
-											<input type={passState === 'show' ? 'text' : 'password'} name="password" id="password" placeholder="Enter your password" onChange={handlePasswordChange} required onInvalid={invalidPassword} />
-											<div className="icon" onClick={handleIconClick}>
-												{passState === 'hide' ? <FaEyeSlash /> : <FaEye />}
-											</div>
-										</div>										<p ref={passwordErrorRef} className="error password-error"></p>
-										<div className="password-strength">
-											<div ref={passwordMessageRef} className="message hidden">
-											</div>
-										</div>
+											<input type="file" id="fileInput" name="fileInput" required onChange={(e) => setImage(e.target.value)}/>
+											
 										<input className='inline checkbox' type="checkbox" name="term-of-use" id="term-of-use" required onInvalid={invalidTerms} />
 										<p ref={termsErrorRef} className='error terms-error'></p>
 										<button className='block' type="submit" onClick={handleSubmit}>Modify</button>

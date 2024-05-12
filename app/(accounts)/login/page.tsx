@@ -52,11 +52,11 @@ export default function Login() {
 			Cookies.set("loggedin", "true");
 			fetchID();
 			if(response.data.role === 'CANDIDAT')
-				router.push('Dashbords/Candidate')
+				router.push('Dashboards/Candidate')
 			else{ if(response.data.role === 'CUSTOMER')
-					router.push('Dashbords/Customer')
+					router.push('Dashboards/Customer')
 				else(response.data.role === 'ADMIN')
-					router.push('Dashbords/Admin')
+					router.push('Dashboards/Admin')
 			}
 		  })
 		  .catch(function (error) {
