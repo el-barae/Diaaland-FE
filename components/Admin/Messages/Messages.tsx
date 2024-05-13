@@ -59,7 +59,7 @@ const Messages = () =>{
     useEffect(() => {
         const fetchData = async () => {
           try {
-            const response = await axios.get(API_URL+'/api/v1/messages', {
+            const response = await axios.get(API_URL+'/api/v1/messages/recipient/DIAALAND', {
               headers: {
                 'Authorization': 'Bearer ' + token
               }

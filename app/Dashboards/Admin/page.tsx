@@ -18,7 +18,7 @@ import swal from "sweetalert";
 
 const Admin = () =>{
     var [x,setX] = useState("Dashboard");
-    const [notif,setNotif] = useState(false); 
+    const [notif,setNotif] = useState(true); 
     const [loading, setLoading] = useState(true);
     const router = useRouter();
 
@@ -29,22 +29,22 @@ const Admin = () =>{
             router.push('/');
         }
         else{
-            axios.get(API_URL+'/api/v1/messages/viewed')
+            setTimeout(() => {
+                setLoading(false);
+              }, 1500);
+            axios.get(API_URL+'/api/v1/messages/viewed/DIAALAND')
           .then(response => {
             setNotif(response.data);
           })
           .catch(error => {
             console.error('Error fetching message status:', error);
           });
-          setTimeout(() => {
-            setLoading(false);
-          }, 1500);
         }
         
     }, []);
 
     const markAllMessagesViewed = () => {
-        axios.put(API_URL+'/api/v1/messages/mark-viewed')
+        axios.put(API_URL+'/api/v1/messages/mark-viewed/DIAALAND')
           .catch(error => {
             console.error('Error marking messages as viewed:', error);
         });
