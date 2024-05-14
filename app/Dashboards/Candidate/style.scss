@@ -20,6 +20,10 @@
             position: absolute;
             right: 50px;
         }
+        .clear{
+            position: absolute;
+            right: 100px;
+        }
         .dropdown-button {
             padding: 8px 12px;
             cursor: pointer;
@@ -30,6 +34,7 @@
             font-size: 1.2rem;
             flex-direction: column;
             position: absolute;
+            width: 30rem;
             top: 100%;
             right: 0;
             list-style: none;
@@ -41,7 +46,6 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
               gap: 0rem;
           }
-          
           .dropdown-list li {
             color: black;
             padding: 8px 12px;

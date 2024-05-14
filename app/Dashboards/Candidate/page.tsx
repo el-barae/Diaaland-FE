@@ -16,24 +16,13 @@ import Links from '@/components/Candidate/Links/Links';
 import Image from 'next/image'
 import Notif from '@/public/images/notif.png'
 import API_URL from '@/config';
-  
-interface candidate{
-  id:number;
-	name:string;
-	email:string;
-	city:string;
-	country:string;
-	adress:string;
-	accountStatus:string;
-	phone:string;
-	jobStatus:string;
-	expectedSalary:number;
-	linkedin:string;
-	github:string;
-	portofolio:string;
-	blog:string;
-	resume:string;
-	image:string;
+
+interface Message {
+  id: number;
+  email: string;
+  subject: string;
+  message: string;
+  date: string;
 }
 
 const Candidate = () => {
@@ -46,25 +35,39 @@ const Candidate = () => {
   const token = localStorage.getItem("token");
   const [loading, setLoading] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
-  const [notif,setNotif] = useState(2); 
-  const options = ['Message 1', 'Message 2', 'Message 3'];
-  const handleToggle = () => {
+  const [notif,setNotif] = useState(false); 
+  const [messagesData, setMessagesData] = useState<Message[]>([]);
+  const email = localStorage.getItem('email');
+  const handleToggle = async () => {
     setIsOpen(!isOpen);
-    setNotif(0);
-  };
+    axios.put(API_URL+'/api/v1/messages/mark-viewed/'+email)
+          .catch(error => {
+            console.error('Error marking messages as viewed:', error);
+        });
+    setNotif(false);
+    try {
+      const response = await axios.get(API_URL+'/api/v1/messages/recipient/'+email, {
+        headers: {
+          'Authorization': 'Bearer ' + token
+        }
+      });         
+      setMessagesData(response.data);
+    } catch (error) {
+      console.error('Erreur lors de la récupération des données :', error);
+    }
+}
 
-  const handleOptionClick = (option: string) => {
-    if (option==='Candidate'){
-      router.push('/Dashboards/Candidate');
-  }
-  else if (option==='Customer'){
-      router.push('/Dashboards/Customer');
-  }
-  else if (option==='Admin'){
-      router.push('/Dashboards/Admin');
-  }
-    setIsOpen(false);
-  };
+const handleDelete = async (e:any) =>{
+  try{
+  axios.delete(API_URL+'/api/v1/messages/recipient/'+email)
+  const updatedMessagesData = messagesData.filter(m => m.email !== email)
+      setMessagesData(updatedMessagesData)
+  }catch(error) {
+    console.log(error);
+   };
+
+   setIsOpen(!isOpen);
+}
   const router = useRouter();
 
   const y = () => {
@@ -106,6 +109,11 @@ const Candidate = () => {
             }
           });
           setCandidateData(response.data);
+          axios.get(API_URL+'/api/v1/messages/viewed/'+email)
+          .then(response => {
+            setNotif(response.data);
+          });
+
           setTimeout(() => {
             setLoading(false);
           }, 1500);
@@ -123,6 +131,7 @@ const Candidate = () => {
             <div className='Candidate'>
               <div className='header'>
                 {candidateData}
+                {isOpen && (<button className='clear' onClick={(e) => handleDelete(e)}>🗑</button>)}
                 <button onClick={handleToggle}>
                 <Image 
 									src={Notif}
@@ -130,15 +139,17 @@ const Candidate = () => {
 									height={50}
 									alt="login image"
 								/>
-                {notif === 0 ? null : <span className="badge">{notif}</span>}
+                {notif === false ? null : <span className="badge">{notif}</span>}
                 </button>
                 {isOpen && (
+                  
         <ul className="dropdown-list">
-          {options.map((option) => (
-            <li key={option} onClick={() => handleOptionClick(option)}>
-              {option}
-            </li>
-          ))}
+          {messagesData.map(message => (
+          <li key={message.id}>
+            <p><strong>Sujet :</strong> {message.subject}</p>
+            <p><strong>Message :</strong> {message.message}</p>
+          </li>
+        ))}
         </ul>
       )}
               </div>

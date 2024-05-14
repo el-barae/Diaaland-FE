@@ -49,6 +49,7 @@ export default function Login() {
 		  .then(function (response) {
 			localStorage.setItem('token',response.data.token)
 			localStorage.setItem('role',response.data.role)
+			localStorage.setItem('email',email)
 			Cookies.set("loggedin", "true");
 			fetchID();
 			if(response.data.role === 'CANDIDAT')
