@@ -1,3 +1,6 @@
-#messages{
-    grid-template-columns: repeat(1,1fr);
+.panel{
+    padding: 1rem 1rem 1rem 0rem;
+    #messages{
+        grid-template-columns: repeat(1,1fr);
+    }
 }

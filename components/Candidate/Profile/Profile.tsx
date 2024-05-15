@@ -72,11 +72,7 @@ const Profile = () =>{
 	const [desc, setDesc] = useState('')
 	const [city, setCity] = useState('')
 	const [country, setCountry] = useState('')
-	const [url, setUrl] = useState('')
-	const [adress, setAdress] = useState('')
-	const [logo, setLogo] = useState('')
 	const [candidate, setCandidate] = useState('')
-	const [candidateData,setCandidateData] = useState<string[]>([])
 const [address, setAddress] = useState<string>('');
 const [accountStatus, setAccountStatus] = useState<string>('');
 const [phone, setPhone] = useState<string>('');
@@ -87,7 +83,7 @@ const [github, setGithub] = useState<string>('');
 const [portfolio, setPortfolio] = useState<string>('');
 const [blog, setBlog] = useState<string>('');
 const [resume, setResume] = useState<string>('');
-const [image, setImage] = useState<string>(''); // Je suppose que "image" est un lien URL
+const [image, setImage] = useState<string>('');
 
 
 	const [passState, setPassState] = useState('hide');
@@ -100,9 +96,6 @@ const [image, setImage] = useState<string>(''); // Je suppose que "image" est un
 			"password": password,
 			"city": city,
 			"country": country,
-			"url": url,
-			"adress": adress,
-			"logo": logo,
 			"role": "CLIENT"
 		  }, {
 			headers: {
@@ -296,7 +289,7 @@ const [image, setImage] = useState<string>(''); // Je suppose que "image" est un
 											<label htmlFor="logo">Description:</label>
 											<input type="textarea" id="desc" name="desc" value={desc} required onChange={(e) => setDesc(e.target.value)}/>
 											<label htmlFor="url">Resume:</label>
-											<input type="text" name="url" value={resume} required onChange={(e) => setResume(e.target.value)}  />
+											<input type="file" id="fileInput" name="fileInput" required onChange={(e) => setResume(e.target.value)}/>
 											<label htmlFor="logo">Image:</label>
 											<input type="file" id="fileInput" name="fileInput" required onChange={(e) => setImage(e.target.value)}/>
 											

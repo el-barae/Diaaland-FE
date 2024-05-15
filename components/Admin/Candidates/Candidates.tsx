@@ -184,7 +184,7 @@ const RepeatClassNTimes: React.FC<RepeatClassNTimesProps> = ({ className, n, can
     }
 
     return(
-    <div className="jobs">
+    <div className="panel">
         <div className='head'>
           <h1>Candidates</h1>
           <button type="button" className="button">

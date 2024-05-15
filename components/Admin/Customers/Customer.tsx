@@ -97,7 +97,7 @@ const RepeatClassNTimes: React.FC<RepeatClassNTimesProps> = ({ className, n, cus
 
   return(
     <>
-    <div className='jobs'>
+    <div className='panel'>
     <div className='head'>
           <h1>Customers</h1>
           <button type="button" className="button">

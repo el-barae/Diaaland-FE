@@ -14,7 +14,7 @@ import { signIn, useSession } from 'next-auth/react';
 import Cookies from 'js-cookie';
 import API_URL from '@/config';
 
-export default function Login() {
+const Login = () =>  {
 
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
@@ -157,3 +157,5 @@ export default function Login() {
 		</ThemeProvider>
 	)
 }
+
+export default Login;

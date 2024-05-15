@@ -29,6 +29,13 @@ interface Candidate {
     closeDate: string;
   }
 
+  interface Message {
+    id: number;
+    email: string;
+    subject: string;
+    message: string;
+  }
+
   interface RepeatClassNTimesProps {
     className: string;
     n: number;
@@ -77,6 +84,42 @@ const Customer = () => {
   const token = localStorage.getItem("token");
   const [loading, setLoading] = useState(true);
     const [customerData, setCustomer] = useState('');
+  const [isOpen, setIsOpen] = useState(false);
+  const [notif,setNotif] = useState(false);
+    const [messagesData, setMessagesData] = useState<Message[]>([]);
+  const email = localStorage.getItem('email');
+  const handleToggle = async () => {
+    setIsOpen(!isOpen);
+    axios.put(API_URL+'/api/v1/messages/mark-viewed/'+email)
+          .catch(error => {
+            console.error('Error marking messages as viewed:', error);
+        });
+    setNotif(false);
+    try {
+      const response = await axios.get(API_URL+'/api/v1/messages/recipient/'+email, {
+        headers: {
+          'Authorization': 'Bearer ' + token
+        }
+      });         
+      setMessagesData(response.data);
+    } catch (error) {
+      console.error('Erreur lors de la récupération des données :', error);
+    }
+}
+
+const handleDelete = async (e:any) =>{
+  try{
+  axios.delete(API_URL+'/api/v1/messages/recipient/'+email)
+  const updatedMessagesData = messagesData.filter(m => m.email !== email)
+      setMessagesData(updatedMessagesData)
+  }catch(error) {
+    console.log(error);
+   };
+
+   setIsOpen(!isOpen);
+}
+
+
     const router = useRouter();
 
     var [x,setX] = useState("Profile"); 
@@ -85,14 +128,8 @@ const Customer = () => {
     setX(value);
     y();
   };
-
-  const [isOpen, setIsOpen] = useState(false);
-  const [notif,setNotif] = useState(2); 
+ 
   const options = ['Message 1', 'Message 2', 'Message 3'];
-  const handleToggle = () => {
-    setIsOpen(!isOpen);
-    setNotif(0);
-  };
 
     const y = () => {
       if (x === "Profile"){ 
@@ -119,8 +156,11 @@ const Customer = () => {
                 'Authorization': 'Bearer ' + token
               }
             });
-            
             setCustomer(response.data);
+            axios.get(API_URL+'/api/v1/messages/viewed/'+email)
+          .then(response => {
+            setNotif(response.data);
+          });
             setTimeout(() => {
               setLoading(false);
             }, 1500);
@@ -138,6 +178,12 @@ const Customer = () => {
       <div className='Customer'>
               <div className='header'>
                 <h1>{customerData}</h1>
+                {isOpen && (
+                <button className="btn" onClick={(e) => handleDelete(e)}>
+                <svg viewBox="0 0 15 17.5" height="17.5" width="15" xmlns="http://www.w3.org/2000/svg" className="icon">
+                <path transform="translate(-2.5 -1.25)" d="M15,18.75H5A1.251,1.251,0,0,1,3.75,17.5V5H2.5V3.75h15V5H16.25V17.5A1.251,1.251,0,0,1,15,18.75ZM5,5V17.5H15V5Zm7.5,10H11.25V7.5H12.5V15ZM8.75,15H7.5V7.5H8.75V15ZM12.5,2.5h-5V1.25h5V2.5Z" id="Fill"></path>
+              </svg>
+              </button>)}
                 <button onClick={handleToggle}>
                 <Image 
 									src={Notif}
@@ -145,15 +191,16 @@ const Customer = () => {
 									height={50}
 									alt="login image"
 								/>
-                {notif === 0 ? null : <span className="badge">{notif}</span>}
+                {notif === false ? null : <span className="badge">{notif}</span>}
                 </button>
                 {isOpen && (
         <ul className="dropdown-list">
-          {options.map((option) => (
-            <li key={option} >
-              {option}
-            </li>
-          ))}
+          {messagesData.map(message => (
+          <li key={message.id}>
+            <p><strong>Sujet :</strong> {message.subject}</p>
+            <p><strong>Message :</strong> {message.message}</p>
+          </li>
+        ))}
         </ul>
       )}
               </div>

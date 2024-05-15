@@ -129,7 +129,7 @@ const handleModifyClick = (e: any, id: number, name: string, minSalary: number, 
 
   return(
     <>
-    <div className='jobs'>
+    <div className='panel'>
         <div className='head'>
           <h1>Jobs</h1>
           <button type="button" className="button" onClick={handleAddClick}>

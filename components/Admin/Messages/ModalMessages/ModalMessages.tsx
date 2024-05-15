@@ -95,7 +95,7 @@ interface ModalProps {
           value={message}
           onChange={(e) => setMessage(e.target.value)}
         />
-        <label htmlFor="recipient">Recipient:</label>
+        <label htmlFor="recipient">Recipient(email):</label>
         <input
           type="text"
           id="recipient"

@@ -139,7 +139,7 @@ const Navbar = () => {
           </ul>
           
           <div className='right'>
-          {session ? (
+          {isLoggedIn ? (
               <li>
                 <button className='btnlogin' onClick={() => { signOut(); logout();}}>Logout</button>
               </li>

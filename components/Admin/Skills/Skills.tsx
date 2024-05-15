@@ -138,7 +138,7 @@ const Skills = () => {
 
     return(
         <>
-            <div className="jobs">
+            <div className="panel">
             <h1>Add skills</h1>
               <div className="add">
                 <div className='list'>

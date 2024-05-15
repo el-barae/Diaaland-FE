@@ -79,7 +79,7 @@ const Messages = () =>{
   }
     
     return (
-        <div className='jobs'>
+        <div className='panel'>
         <h1>Messages</h1>
         <button type="button" className="button" onClick={() => handleAdd()}>
           <span className="button__text">Add</span>

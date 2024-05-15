@@ -1,13 +1,22 @@
 @import '@/app/globals.scss';
 
-#Applies-h {
-    margin-top: 20px;
-    font-size: 2.8rem;
-    font-weight: 400;
-    color: $primary;
-}
 
-#Applies{
-    margin-top: 50px;
-    width: 100%;
+.recentOrders{
+    .cardHeader{
+        #Applies-h {
+            margin-top: 20px;
+            font-size: 2.8rem;
+            font-weight: 400;
+            color: $primary;
+        }
+    }
+    #Applies{
+        margin-top: 50px;
+        width: 100%;
+        thead td {
+            font-weight: 600;
+            font-size: 1.2rem;
+            padding: 20px;
+        }
+    }
 }
