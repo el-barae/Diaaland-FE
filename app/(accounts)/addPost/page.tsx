@@ -1,13 +1,13 @@
 'use client'
 import React from 'react'
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { useRouter } from 'next/navigation'
 import "./addpost.scss"
 import Navbar from '@/components/HomePage/Navbar/Navbar'
 import Image from 'next/image'
 import LoginImage from '@/public/images/login-info.svg'
 import axios from 'axios'
 import { ThemeProvider } from 'next-themes'
-import { useRouter } from 'next/navigation';
 import API_URL from '@/config'
 import swal from 'sweetalert'
 
@@ -23,9 +23,22 @@ export default function AddPost() {
  const [adress , setAdress] = useState(''); 
  const [Experience, setExperience] = useState('InterShip');
  const [jobType, setJobType] = useState('remote');
- const router = useRouter();  
+ const [loading, setLoading] = useState(true);
+ const router = useRouter();
 
- const authToken = localStorage.getItem('token');
+ useEffect(() => {
+  const role = localStorage.getItem('role');
+  if (role !== "ADMIN" && role !== "CUSTOMER") {
+      swal('Authenticate yourself when you are a EMPLOYER', '', 'error');
+      router.push('/');
+  }
+  else{
+      setTimeout(() => {
+          setLoading(false);
+        }, 1500);
+  }
+  
+}, []);
  
   const handleSubmit = async (e:any)  =>{
 		e.preventDefault()
@@ -47,7 +60,6 @@ export default function AddPost() {
 				}
 			})
 		  .then(function (response) {
-			console.log(response);
       swal('Your post had been sent to admin', '', 'success');
 		  })
 		  .catch(function (error) {
@@ -61,6 +73,7 @@ export default function AddPost() {
 
 
   <Navbar/>
+  {!loading && (
   <div className="addpost">
     <div className="container">
       <div className="addpost-box">
@@ -183,6 +196,10 @@ export default function AddPost() {
       </div>
     </div>
   </div>
+  )}
+  {loading && (
+      <div className="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+  )}
 </ThemeProvider>
 </>
  );

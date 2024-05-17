@@ -6,13 +6,13 @@ import { useRouter } from 'next/navigation';
 import Logo from './../Logo/Logo';
 import ImageP from '@/public/images/profile.png'
 import Image from 'next/image';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
 import React, { useRef } from "react";
 import axios from 'axios';
 import './Navbar.scss'
-import SigninButton from './SigninButton';
-import { useSession, signIn, signOut } from 'next-auth/react';
+//import SigninButton from './SigninButton';
+//import { useSession, signIn, signOut } from 'next-auth/react';
 import API_URL from '@/config';
 
 
@@ -66,15 +66,8 @@ const Navbar = () => {
     setIsLoading(true);
   };
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const { data: session } = useSession();
+  //const { data: session } = useSession();
   const router = useRouter();
-
-  // Fonction pour gérer le clic sur le bouton
-  const handleClick = () => {
-    // Inverser l'état actuel
-    setIsLoggedIn(!isLoggedIn);
-  };
-  const buttonText = isLoggedIn ? 'Logout' : 'Login';
 
   const logout = async ()=>{
     const token = localStorage.getItem('token')
@@ -86,6 +79,12 @@ const Navbar = () => {
         }
       })
 		  .then(function (response) {
+        localStorage.removeItem('token');
+        localStorage.removeItem('role');
+        localStorage.removeItem('email');
+        localStorage.removeItem('ID');
+    setIsLoggedIn(false);
+    setIsLoading(true);
 			Cookies.set("loggedin", "false");
 			router.push('/login')
 		  })
@@ -93,6 +92,11 @@ const Navbar = () => {
 			console.log(error);
 		  });
     localStorage.removeItem('token');
+  }
+
+  const signin = () => {
+    setIsLoading(true);
+    router.push('/login');
   }
 
   const scrollToHome = () => {
@@ -126,6 +130,11 @@ const Navbar = () => {
     }
   };
 
+  useEffect(() => {
+    const loggedIn = Cookies.get("loggedin") === "true";
+    setIsLoggedIn(loggedIn);
+  }, []);
+
   return (
     <>
       <div className="navbar py-4">
@@ -140,14 +149,15 @@ const Navbar = () => {
           
           <div className='right'>
           {isLoggedIn ? (
-              <li>
-                <button className='btnlogin' onClick={() => { signOut(); logout();}}>Logout</button>
-              </li>
-            ) : (
-              <li>
-                <a className='btnlogin' href="/login">Sign In</a>
-              </li>
-            )}
+            <li>
+              <button className='btnlogin' onClick={logout}>Sign Out</button>
+            </li>
+          ) : (
+            <li>
+              <button className='btnlogin' onClick={signin}>Sign In</button>
+            </li>
+          )}
+          
           <NavbarTools />
               <button onClick={handleToggle}>
               <Image
@@ -186,7 +196,7 @@ const Navbar = () => {
             </li>
             <li >
             <Link href="/#about-section" id='about'>about us</Link>
-            </li>       
+            </li>    
         </ul>
       )}
           </div>

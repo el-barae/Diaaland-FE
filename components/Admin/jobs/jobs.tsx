@@ -27,7 +27,12 @@ interface Job {
     filteredJobs: Job[];
   }
 
-  const token = localStorage.getItem("token")
+const Jobs = () =>{
+    const [jobsData, setJobsData] = useState<Job[]>([]);
+    const router = useRouter();
+    const [searchTerm, setSearchTerm] = useState('');
+
+    const token = localStorage.getItem("token");
 
     const handleDelete = async (e:any, idJ:number) =>{
       e.preventDefault()
@@ -42,11 +47,6 @@ interface Job {
         console.log(error);
        });
     }
-
-const Jobs = () =>{
-    const [jobsData, setJobsData] = useState<Job[]>([]);
-    const router = useRouter();
-    const [searchTerm, setSearchTerm] = useState('');
     useEffect(() => {
         const fetchData = async () => {
           try {

@@ -112,7 +112,7 @@ const Admin = () =>{
 
             <li>
                 <a href="#" onClick={() => handleClick("Customers")}>
-                    <span className="title">Customers</span>
+                    <span className="title">Employers</span>
                 </a>
             </li>
 

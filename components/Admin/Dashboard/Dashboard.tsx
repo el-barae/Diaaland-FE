@@ -159,7 +159,7 @@ const Dashboard = ({ handleClick }: { handleClick: (value: string) => void }) =>
             <div className="card" onClick={() => handle("Customers")}>
                 <div>
                     <div className="numbers">{countCustomers}</div>
-                    <div className="cardName">Customers</div>
+                    <div className="cardName">Employers</div>
                 </div>
             </div>
 

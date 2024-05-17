@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import axios from 'axios'
 import React from 'react';
 import API_URL from '@/config'
-import Modal from './ModalCustomers/ModalCustomers';
+import AddCustomer from "./AddCustomer/AddCustomer"
 
 interface Customer {
     id: number;
@@ -41,6 +41,10 @@ interface Customer {
 const Customers = () =>{
     const [customersData, setCustomersData] = useState<Customer[]>([]);
     const router = useRouter();
+    const [modalAddOpen, setModalAddOpen] = useState(false);
+    const handleAdd = () => {
+      setModalAddOpen(true);
+    };
 
 const handleModifyClick = (e:any, id:number) => {
   localStorage.setItem('ID',String(id))
@@ -84,11 +88,12 @@ const RepeatClassNTimes: React.FC<RepeatClassNTimesProps> = ({ className, n, cus
     <>
     <div className='panel'>
     <div className='head'>
-          <h1>Customers</h1>
-          <button type="button" className="button">
+          <h1>Empkoyers</h1>
+          <button type="button" className="button" onClick={handleAdd}>
           <span className="button__text">Add</span>
           <span className="button__icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" viewBox="0 0 24 24" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" stroke="currentColor" height="24" fill="none" className="svg"><line y2="19" y1="5" x2="12" x1="12"></line><line y2="12" y1="12" x2="19" x1="5"></line></svg></span>
           </button>
+          <AddCustomer isOpen={modalAddOpen} onClose={() => setModalAddOpen(false)}/>
         </div>
                 <div className='lists'>
                   <RepeatClassNTimes className="list" n={customersData.length} customersData={customersData} />

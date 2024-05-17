@@ -10,7 +10,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import LoginImage from '@/public/images/login-info.svg'
 import { FaEye, FaEyeSlash } from 'react-icons/fa'
-import { signIn, useSession } from 'next-auth/react';
+//import { signIn, useSession } from 'next-auth/react';
 import Cookies from 'js-cookie';
 import API_URL from '@/config';
 

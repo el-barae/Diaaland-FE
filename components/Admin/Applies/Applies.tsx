@@ -83,7 +83,7 @@ const Applies = () =>{
                 <tr>
                     <td>Name</td>
                     <td>Job</td>
-                    <td>Customer</td>
+                    <td>Employer</td>
                     <td>Status</td>
                 </tr>
             </thead>

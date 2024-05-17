@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import Cookies from "js-cookie";
 
 export default function middleware(req){
     let url = req.url;
@@ -15,16 +14,4 @@ export default function middleware(req){
             return NextResponse.redirect("http://localhost:3000/login");
     }
     }
-
-    let verify = req.cookies.get("loggedin");
-    
-    if(!verify && url.includes('/addPost')){
-        return NextResponse.redirect("http://localhost:3000/login");
-    }
-
-   /* if (url.includes('/login/reset')) {
-        if (resetToken) {
-            return NextResponse.redirect(`http://localhost:3000/login/reset/ChangePass?token=`+String(resetToken));
-        }
-    }*/
 }
