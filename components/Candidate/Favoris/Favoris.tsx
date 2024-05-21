@@ -18,6 +18,11 @@ interface Job {
     n: number;
     jobsData: Job[];
   }
+
+const Favoris = () =>{  
+
+  const [jobsData, setJobsData] = useState<Job[]>([]);
+
   const token = localStorage.getItem("token");
 
   const handleApply = async (e:any, id:number) =>{
@@ -41,10 +46,6 @@ interface Job {
 			console.log(error);
 		 });
 	}
-
-const Favoris = () =>{  
-
-  const [jobsData, setJobsData] = useState<Job[]>([]);
 
   const RepeatClassNTimes: React.FC<RepeatClassNTimesProps> = ({ className, n, jobsData }) => {
     if(jobsData.length != 0)

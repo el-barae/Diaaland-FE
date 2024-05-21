@@ -2,7 +2,6 @@ import './jobs.scss'
 import { useState ,useEffect} from "react"
 import axios from 'axios'
 import React from 'react';
-import Cookies from 'js-cookie';
 import API_URL from '@/config';
 import Modal from './ModalJobs/ModalJobs';
 
@@ -20,18 +19,19 @@ interface Job {
   remoteStatus: string;
 }
 
-const token = localStorage.getItem("token");
-
   interface RepeatClassNTimesProps {
     className: string;
     n: number;
     jobsData: Job[];
   }
 
+const Jobs = () =>{
+    const [jobsData, setJobsData] = useState<Job[]>([]);
+
     const handleDelete = async (e:any, idJ:number) =>{
       e.preventDefault()
-      Cookies.set("id","1")
-      const idC = Cookies.get("id");
+      const token = localStorage.getItem("token");
+      const idC = localStorage.getItem("ID")
       axios.delete(API_URL+'/api/v1/candidate-jobs/'+String(idC)+'/'+String(idJ), {
 				headers: {
 				  'Authorization': 'Bearer ' + token
@@ -42,13 +42,11 @@ const token = localStorage.getItem("token");
        });
     }
 
-const Jobs = () =>{
-    const [jobsData, setJobsData] = useState<Job[]>([]);
     useEffect(() => {
         const fetchData = async () => {
           try {
-            Cookies.set("id","1")
-            const id = Cookies.get("id");
+            const token = localStorage.getItem("token");
+            const id = localStorage.getItem("ID");
             const response = await axios.get(API_URL+'/api/v1/jobs/byCustomer/'+String(id), {
               headers: {
                 'Authorization': 'Bearer ' + token

@@ -2,9 +2,6 @@ import './globals.scss'
 import type { Metadata } from 'next'
 import { Montserrat } from 'next/font/google'
 import Footer from '@/components/HomePage/Footer/Footer'
-
-import { Children } from 'react'
-import Providers from '@/components/HomePage/Navbar/Providers'
 const montserrat = Montserrat({
   subsets: ['latin']
 })
@@ -29,9 +26,8 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning={true} >
       <body className={montserrat.className} suppressHydrationWarning={true} >
-      
+        {children}
         {includeFooter && <Footer />}
-        <Providers>{children}</Providers>
       </body>
     </html>
   )

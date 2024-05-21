@@ -1,0 +1,18 @@
+.jobs{
+    #addEx{
+        gap: 1.5rem;
+        label{
+            margin-top: 8px;
+        }
+        input{
+            height: 2.5rem;
+            min-width: 10rem;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+        button{
+            margin-top: none;
+        }
+        padding-bottom: 10px;
+    }
+}

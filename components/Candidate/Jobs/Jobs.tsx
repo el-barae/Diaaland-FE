@@ -18,23 +18,8 @@ interface Job {
     jobsData: Job[];
   }
 
-  const RepeatClassNTimes: React.FC<RepeatClassNTimesProps> = ({ className, n, jobsData }) => {
-    if(jobsData.length != 0)
-      return(
-        <>
-        {jobsData.map((job) => (
-          <div key={job.id} className={className}>
-          <h1>{job.name} :</h1>
-          <p>
-            Description: {job.description} <br/> Number of positions: {job.numberOfPositions} 
-          </p>
-          <p>Close Date: {job.closeDate}</p>
-          <button onClick={(e) => handleDelete(e, job.id)}>Delete</button>
-        </div>
-        ))}
-        </>
-      )
-    }
+const Jobs = () =>{
+    const [jobsData, setJobsData] = useState<Job[]>([]);
     const token = localStorage.getItem("token");
     const handleDelete = async (e:any, idJ:number) =>{
       e.preventDefault()
@@ -49,8 +34,24 @@ interface Job {
        });
     }
 
-const Jobs = () =>{
-    const [jobsData, setJobsData] = useState<Job[]>([]);
+    const RepeatClassNTimes: React.FC<RepeatClassNTimesProps> = ({ className, n, jobsData }) => {
+      if(jobsData.length != 0)
+        return(
+          <>
+          {jobsData.map((job) => (
+            <div key={job.id} className={className}>
+            <h1>{job.name} :</h1>
+            <p>
+              Description: {job.description} <br/> Number of positions: {job.numberOfPositions} 
+            </p>
+            <p>Close Date: {job.closeDate}</p>
+            <button onClick={(e) => handleDelete(e, job.id)}>Delete</button>
+          </div>
+          ))}
+          </>
+        )
+      }
+      
     useEffect(() => {
         const fetchData = async () => {
           try {

@@ -43,10 +43,19 @@ interface RepeatClassNTimesProps1 {
     n: number;
     candidatesData: Candidate[];
   }
-  const token = localStorage.getItem("token")
+
+const Candidates = () =>{
+    const [candidatesData,setCandidatesData] = useState<Candidate[]>([]);
+    const [candidateId, setCandidateId] = useState<number>(0);
+const [modalOpen, setModalOpen] = useState(false);
+const [modalAddOpen, setModalAddOpen] = useState(false);
+
+const [skill,setSkill] = useState('Java')
+const [skillsAll,setSkillsAll] = useState<skill[]>([])
 
   const handleDelete = async (e:any, idC:number) =>{
     e.preventDefault()
+    const token = localStorage.getItem("token")
     axios.delete(API_URL+'/api/v1/candidates'+'/'+String(idC), {
       headers: {
         'Authorization': 'Bearer ' + token
@@ -57,14 +66,6 @@ interface RepeatClassNTimesProps1 {
      });
   }
 
-const Candidates = () =>{
-    const [candidatesData,setCandidatesData] = useState<Candidate[]>([]);
-    const [candidateId, setCandidateId] = useState<number>(0);
-const [modalOpen, setModalOpen] = useState(false);
-const [modalAddOpen, setModalAddOpen] = useState(false);
-
-const [skill,setSkill] = useState('Java')
-const [skillsAll,setSkillsAll] = useState<skill[]>([])
 
 const handleModify = (id:number) => {
   localStorage.setItem('ID',String(id))
@@ -84,6 +85,7 @@ const handleFiltre = async () =>{
   const ID = getSkillIdByName(skill);
   if (ID !== null) {
     try {
+      const token = localStorage.getItem("token")
       const response = await axios.get(API_URL+'/api/v1/candidate-skills/bySkill/' + String(ID), {
         headers: {
           'Authorization': 'Bearer ' + token
@@ -126,6 +128,7 @@ const RepeatClassNTimes: React.FC<RepeatClassNTimesProps> = ({ className, n, can
     useEffect(() => {
         const fetchData = async () => {
           try {
+            const token = localStorage.getItem("token")
             const response = await axios.get(API_URL+'/api/v1/candidates', {
               headers: {
                 'Authorization': 'Bearer ' + token

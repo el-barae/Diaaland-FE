@@ -1,7 +1,7 @@
 'use client'
 import { useState,useEffect } from "react";
 import axios from "axios";
-import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
 import './Candidates.scss'
 import API_URL from "@/config";
 
@@ -19,7 +19,15 @@ interface Candidate {
     candidatesData: Candidate[];
   }
 
-  const token = localStorage.getItem("token");
+const Candidates = () =>{
+    const [candidatesData,setCandidatesData] = useState([])
+    const token = localStorage.getItem("token");
+    const router = useRouter();
+
+  const ViewMore = (id:number) => {
+    localStorage.setItem('IDSelected',String(id));
+    router.push("./View")
+  }
 
   const RepeatClassNTimes: React.FC<RepeatClassNTimesProps> = ({ className, n, candidatesData }) => {
     if(candidatesData.length != 0)
@@ -31,19 +39,16 @@ interface Candidate {
           <p>
             Email: {candidate.email} <br/> Job statut: {candidate.jobStatus} 
           </p>
+          <button onClick={() => ViewMore(candidate.id)}>More</button>
         </div>
         ))}
         </>
       )
     }
-
-const Candidates = () =>{
-    const [candidatesData,setCandidatesData] = useState([])
     useEffect(() => {
         const fetchData = async () => {
           try {
-            Cookies.set("id","1")
-            const id = Cookies.get("id");
+            const id = localStorage.getItem("ID");
             const response = await axios.get(API_URL+'/api/v1/candidate-jobs/byCustomer/'+String(id), {
               headers: {
                 'Authorization': 'Bearer ' + token

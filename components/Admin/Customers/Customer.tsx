@@ -24,10 +24,14 @@ interface Customer {
     customersData: Customer[];
   }
 
-  const token = localStorage.getItem("token")
+const Customers = () =>{
+    const [customersData, setCustomersData] = useState<Customer[]>([]);
+    const router = useRouter();
+    const [modalAddOpen, setModalAddOpen] = useState(false);
 
     const handleDelete = async (e:any, idC:number) =>{
       e.preventDefault()
+      const token = localStorage.getItem("token")
       axios.delete(API_URL+'/api/v1/customers'+'/'+String(idC), {
         headers: {
           'Authorization': 'Bearer ' + token
@@ -37,11 +41,6 @@ interface Customer {
         console.log(error);
        });
     }
-
-const Customers = () =>{
-    const [customersData, setCustomersData] = useState<Customer[]>([]);
-    const router = useRouter();
-    const [modalAddOpen, setModalAddOpen] = useState(false);
     const handleAdd = () => {
       setModalAddOpen(true);
     };
@@ -71,6 +70,7 @@ const RepeatClassNTimes: React.FC<RepeatClassNTimesProps> = ({ className, n, cus
     useEffect(() => {
         const fetchData = async () => {
           try{
+            const token = localStorage.getItem("token")
             const response = await axios.get(API_URL+'/api/v1/customers', {
               headers: {
                 'Authorization': 'Bearer ' + token

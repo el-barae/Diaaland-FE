@@ -10,6 +10,7 @@ import Link from 'next/link'
 import RegisterImg from '@/public/images/register-info.svg'
 import { FaEyeSlash, FaEye } from 'react-icons/fa';
 import axios from 'axios';
+import swal from 'sweetalert';
 import API_URL from '@/config';
 
 const passwordStrength = (password: string) => {
@@ -38,7 +39,7 @@ const passwordStrength = (password: string) => {
 export default function Register() {
 	const [firstName, setFirstName] = useState('')
 	const [lastName, setLastName] = useState('')
-	const [resume, setResume] = useState('')
+	const [resume, setResume] = useState('');
 
 	const firstnameErrorRef = useRef<HTMLParagraphElement>(null);
 	const lastnameErrorRef = useRef<HTMLParagraphElement>(null);
@@ -64,34 +65,55 @@ export default function Register() {
 			});
 			const ID = JSON.stringify(resp.data);
 			localStorage.setItem('ID',ID)
+			return ID;
 		  } catch (error) {
 			console.error('Erreur lors de la récupération des données :', error);
 		  }
 		}
-	
-	const handleSubmit = async (e:any)  =>{
-		e.preventDefault()
-		axios.post(API_URL+'/api/v1/auth/register/candidate', {
-			"firstName": firstName,
-			"lastName": lastName,
-			"email":email,
-			"resumeLink": resume,
-			"password": password,
-			"role": "CANDIDAT"
-		  })
-		  .then(function (response) {
-			console.log(response);
-			localStorage.setItem('token',response.data.token)
-			localStorage.setItem('role',response.data.role)
-			Cookies.set("loggedin", "true");
-			fetchID();
-			router.push('Dashboards/Candidate')
-		  })
-		  .catch(function (error) {
-			console.log(error);
-		  });
-	}
 
+		const handleFileChange = (e: any) => {
+			if (e.target.files && e.target.files[0]) {
+			  setResume(e.target.files[0]);
+			} else {
+			  setResume('');
+			}
+		  };
+	
+		  const handleSubmit = async (e:any)  =>{
+			e.preventDefault()
+			try {
+				var id;
+			axios.post(API_URL+'/api/v1/auth/register/candidate', {
+				"firstName": firstName,
+				"lastName": lastName,
+				"email":email,
+				"resumeLink": " ",
+				"password": password,
+				"role": "CANDIDAT"
+			  })
+			  .then(function (response) {
+				console.log(response);
+				localStorage.setItem('token',response.data.token)
+				localStorage.setItem('role',response.data.role)
+				Cookies.set("loggedin", "true");
+				id = fetchID();
+				router.push('Dashboards/Candidate')
+			  })
+			  .catch(function (error) {
+				console.log(error);
+			  });
+			  const formData = new FormData();
+        		formData.append('file', resume);
+        	const response = await axios.post(API_URL+'/api/v1/files/upload/'+String(id), formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            	}
+        	});
+			} catch (error) {
+				console.log(error);
+			}
+		}
+		
 	const handleIconClick = () => {
 		if (passState === 'hide') {
 			setPassState('show');
@@ -201,7 +223,7 @@ export default function Register() {
 										<input type="email" name="email" id="email" placeholder="Enter your email" value={email} required onInvalid={invalidEmail} onChange={(e) => setEmail(e.target.value)} />
 										<p ref={emailErrorRef} className="error email-error"></p>
 										<label htmlFor="url">Resume:</label>
-										<input type="file" id="fileInput" name="fileInput" value={resume} required onChange={(e) => setResume(e.target.value)}/>
+										<input type="file" id="fileInput" name="resume" required onChange={handleFileChange}/>
 										<label htmlFor="password">Password</label>
 										<div className="password-input">
 											<input type={passState === 'show' ? 'text' : 'password'} name="password" id="password" placeholder="Enter your password" onChange={handlePasswordChange} required onInvalid={invalidPassword} />

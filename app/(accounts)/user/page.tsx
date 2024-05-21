@@ -10,6 +10,7 @@ import Link from 'next/link'
 import RegisterImg from '@/public/images/register-info.svg'
 import { FaEyeSlash, FaEye } from 'react-icons/fa';
 import axios from 'axios';
+import swal from 'sweetalert';
 import API_URL from '@/config';
 
 const passwordStrength = (password: string) => {
@@ -85,8 +86,10 @@ export default function Register() {
 		  localStorage.setItem('role',response.data.role)
 		  Cookies.set("loggedin", "true");
 		  fetchID();
+		  swal('Registration successfuly', '', 'success');
 		  router.push('Dashboards/Customer')
 		}). catch(function (error) {
+			swal('Error in registration', '', 'error');
 			console.log(error);
 		  });
 	}

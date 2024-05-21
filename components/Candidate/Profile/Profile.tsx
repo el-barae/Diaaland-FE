@@ -127,7 +127,7 @@ const [image, setImage] = useState<string>('');
 			const fetchData = async () => {
 			  try {
 				const id = localStorage.getItem("ID");
-				const response = await axios.get(API_URL+'/api/v1/candidates/tostring/'+String(1), {
+				const response = await axios.get(API_URL+'/api/v1/candidates/tostring/'+String(id), {
 					headers: {
 					  'Authorization': 'Bearer ' + token
 					}
@@ -179,22 +179,39 @@ const [image, setImage] = useState<string>('');
 	useEffect(() => {
 		if (candidate) {
 			const candidateAttributes = candidate.split('|~');
+			if(candidateAttributes[0]!=="null")
 			setFirstName(candidateAttributes[0]);
+			if(candidateAttributes[1]!=="null")
 			setLastName(candidateAttributes[1]);
+			if(candidateAttributes[2]!=="null")
 			setEmail(candidateAttributes[2]);
+			if(candidateAttributes[3]!=="null")
 			setDesc(candidateAttributes[3]);
+			if(candidateAttributes[5]!=="null")
 			setCity(candidateAttributes[5]);
+			if(candidateAttributes[6]!=="null")
 			setCountry(candidateAttributes[6]);
+			if(candidateAttributes[4]!=="null")
 			setAddress(candidateAttributes[4]);
+			if(candidateAttributes[8]!=="null")
 			setAccountStatus(candidateAttributes[8]);
+			if(candidateAttributes[7]!=="null")
 			setPhone(candidateAttributes[7]);
+			if(candidateAttributes[10]!=="null")
 			setJobStatus(candidateAttributes[10]);
-			setExpectedSalary(parseFloat(candidateAttributes[15])); // Converting string to number
+			if(candidateAttributes[15]!=="0")
+			setExpectedSalary(parseFloat(candidateAttributes[15])); 
+			if(candidateAttributes[11]!=="null")
 			setLinkedin(candidateAttributes[11]);
+			if(candidateAttributes[12]!=="null")
 			setGithub(candidateAttributes[12]);
+			if(candidateAttributes[13]!=="null")
 			setPortfolio(candidateAttributes[13]);
+			if(candidateAttributes[14]!=="null")
 			setBlog(candidateAttributes[14]);
+			if(candidateAttributes[16]!=="null")
 			setResume(candidateAttributes[16]);
+			if(candidateAttributes[17]!=="null")
 			setImage(candidateAttributes[17]);
 		}
 	}, [candidate]);
@@ -259,35 +276,36 @@ const [image, setImage] = useState<string>('');
 											<label htmlFor="city">City:</label>
 											<input type="text" name="city" id="city" placeholder='Enter your city' value={city} required onChange={(e) => setCity(e.target.value)}  />
 											<label htmlFor="country">Country:</label>
-											<input type="text" name="country" id="country" value={country} required onChange={(e) => setCountry(e.target.value)}  />
+											<input type="text" name="country" id="country" placeholder='Enter your country' value={country} required onChange={(e) => setCountry(e.target.value)}  />
 										</div>
 										<div className="url-adress">
 											<label htmlFor="adress">Address:</label>
 											<div className="info-image">
-							</div>		<input type="text" name="adress" id="adress" value={address} required onChange={(e) => setAddress(e.target.value)}  />
+							</div>		<input type="text" name="adress" id="adress" placeholder='Enter your address' value={address} required onChange={(e) => setAddress(e.target.value)}  />
 										</div>
 										<label htmlFor="url">Account statut:</label>
-											<input type="text" name="url" value={accountStatus} required onChange={(e) => setAccountStatus(e.target.value)}  />
+											<input type="text" name="url" value={accountStatus} placeholder='Enter your account status' required onChange={(e) => setAccountStatus(e.target.value)}  />
 											<label htmlFor="url">Phone:</label>
-											<input type="text" name="url" value={phone} required onChange={(e) => setPhone(e.target.value)}  />
+											<input type="text" name="url" value={phone} placeholder='Enter your phone number' required onChange={(e) => setPhone(e.target.value)}  />
 											<label htmlFor="url">Job statut:</label>
-											<input type="text" name="url" value={jobStatus} required onChange={(e) => setJobStatus(e.target.value)}  />
+											<input type="text" name="url" value={jobStatus} placeholder='Enter your job stauts' required onChange={(e) => setJobStatus(e.target.value)}  />
 							
 					</div>
 					<div className='div2'>									
 
 											<label htmlFor="url">Expected salary:</label>
-											<input type="text" name="url" value={expectedSalary} required onChange={(e) => setExpectedSalary(expectedSalary)}  />
+											<input type="text" name="url" value={expectedSalary}
+											 required onChange={(e) => setExpectedSalary(expectedSalary)}  />
 											<label htmlFor="url">Linkedin:</label>
-											<input type="text" name="url" value={linkedin} required onChange={(e) => setLinkedin(e.target.value)}  />
+											<input type="text" name="url" value={linkedin} placeholder='Enter your linkedin' required onChange={(e) => setLinkedin(e.target.value)}  />
 											<label htmlFor="url">Github:</label>
-											<input type="text" name="url" value={github} required onChange={(e) => setGithub(e.target.value)}  />
+											<input type="text" name="url" value={github} placeholder='Enter your github' required onChange={(e) => setGithub(e.target.value)}  />
 											<label htmlFor="url">Portofolio:</label>
-											<input type="text" name="url" value={portfolio} required onChange={(e) => setPortfolio(e.target.value)}  />
+											<input type="text" name="url" value={portfolio} placeholder='Enter your portfolio' required onChange={(e) => setPortfolio(e.target.value)}  />
 											<label htmlFor="url">Blog:</label>
-											<input type="text" name="url" value={blog} required onChange={(e) => setBlog(e.target.value)}  />
+											<input type="text" name="url" value={blog} placeholder='Enter your blog' required onChange={(e) => setBlog(e.target.value)}  />
 											<label htmlFor="logo">Description:</label>
-											<input type="textarea" id="desc" name="desc" value={desc} required onChange={(e) => setDesc(e.target.value)}/>
+											<input type="textarea" id="desc" name="desc" placeholder='Enter your description' value={desc} required onChange={(e) => setDesc(e.target.value)}/>
 											<label htmlFor="url">Resume:</label>
 											<input type="file" id="fileInput" name="fileInput" required onChange={(e) => setResume(e.target.value)}/>
 											<label htmlFor="logo">Image:</label>

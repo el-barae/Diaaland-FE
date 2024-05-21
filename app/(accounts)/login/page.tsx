@@ -33,8 +33,8 @@ const Login = () =>  {
 					'Authorization': 'Bearer ' + token
 				}
 			});
-			const ID = JSON.stringify(resp.data);
-			localStorage.setItem('ID',ID)
+			var ID = JSON.stringify(resp.data);
+			localStorage.setItem('ID',ID);
 		  } catch (error) {
 			console.error('Erreur lors de la récupération des données :', error);
 		  }
@@ -51,14 +51,14 @@ const Login = () =>  {
 			localStorage.setItem('role',response.data.role)
 			localStorage.setItem('email',email)
 			Cookies.set("loggedin", "true");
-			fetchID();
+			if(response.data.role==="CANDIDAT"||response.data.role==="CUSTOMER")
+				fetchID();
 			if(response.data.role === 'CANDIDAT')
 				router.push('Dashboards/Candidate')
-			else{ if(response.data.role === 'CUSTOMER')
+			else if(response.data.role === 'CUSTOMER')
 					router.push('Dashboards/Customer')
-				else(response.data.role === 'ADMIN')
+			else if(response.data.role === 'ADMIN')
 					router.push('Dashboards/Admin')
-			}
 		  })
 		  .catch(function (error) {
 			console.log(error);

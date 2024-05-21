@@ -15,6 +15,7 @@ import Ex from '@/components/Candidate/Experiances/Ex';
 import Links from '@/components/Candidate/Links/Links';
 import Image from 'next/image'
 import Notif from '@/public/images/notif.png'
+import swal from 'sweetalert';
 import API_URL from '@/config';
 
 interface Message {
@@ -26,26 +27,26 @@ interface Message {
 }
 
 const Candidate = () => {
-  var [x,setX] = useState("Jobs"); 
+  var [x,setX] = useState("Skills"); 
   const [candidateData,setCandidateData] = useState('');
   const handleClick = (value : string) => {
     setX(value);
     y();
   };
-  const token = localStorage.getItem("token");
   const [loading, setLoading] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
   const [notif,setNotif] = useState(false); 
   const [messagesData, setMessagesData] = useState<Message[]>([]);
-  const email = localStorage.getItem('email');
   const handleToggle = async () => {
     setIsOpen(!isOpen);
+    const email = localStorage.getItem('email');
     axios.put(API_URL+'/api/v1/messages/mark-viewed/'+email)
           .catch(error => {
             console.error('Error marking messages as viewed:', error);
         });
     setNotif(false);
     try {
+      const token = localStorage.getItem('token');
       const response = await axios.get(API_URL+'/api/v1/messages/recipient/'+email, {
         headers: {
           'Authorization': 'Bearer ' + token
@@ -59,6 +60,7 @@ const Candidate = () => {
 
 const handleDelete = async (e:any) =>{
   try{
+    const email = localStorage.getItem('email');
   axios.delete(API_URL+'/api/v1/messages/recipient/'+email)
   const updatedMessagesData = messagesData.filter(m => m.email !== email)
       setMessagesData(updatedMessagesData)
@@ -97,11 +99,12 @@ const handleDelete = async (e:any) =>{
   useEffect(() => {
     const role = localStorage.getItem('role');
         if (role !== "CANDIDAT" && role !== "ADMIN") {
-            alert("Authenticate yourself when you are a CANDIDATE");
+          swal('Authenticate yourself when you are a CANDIDATE', '', 'error');
             router.push('/');
         } else {
       const fetchData = async () => {
         try {
+          const token = localStorage.getItem('token');
           var ID = localStorage.getItem('ID');
           const response = await axios.get(API_URL+'/api/v1/candidates/name/'+String(ID), {
             headers: {
@@ -109,6 +112,7 @@ const handleDelete = async (e:any) =>{
             }
           });
           setCandidateData(response.data);
+          const email = localStorage.getItem('email');
           axios.get(API_URL+'/api/v1/messages/viewed/'+email)
           .then(response => {
             setNotif(response.data);

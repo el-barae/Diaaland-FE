@@ -1,0 +1,110 @@
+@import '@/app/globals.scss';
+
+label{
+    margin-top: 6px;
+}
+
+.education{
+    margin-left: 20px;
+    margin-right: 20px;
+    .part1{
+        margin-right: 0px;
+    }
+    .part2{
+        margin-left: 0px;
+        #ls1{
+            display: grid;
+            grid-template-columns: repeat(2,1fr);
+            padding: 0px;         
+            .list{
+                width: 340px;
+            }
+        }
+        @media (max-width: 1400px) {
+            #ls1{
+                display: grid;
+                grid-template-columns: repeat(1,1fr);
+            }
+        }
+        @media (max-width: 1140px) {
+            #ls1{
+                display: grid;
+                grid-template-columns: auto;
+            }
+        }         
+    }
+}
+.certificats{
+        margin-left: 20px;
+        margin-right: 20px;
+        .part1{
+            margin-right: 0px;
+        }
+        .part2{
+            margin-left: 0px;
+            #ls2{
+                display: grid;
+                grid-template-columns: repeat(2,1fr);
+                padding: 0px;
+                .list{
+                    width: 340px;
+                }
+            }
+            @media (max-width: 1400px) {
+                #ls2{
+                    display: grid;
+                    grid-template-columns: repeat(1,1fr);
+                }
+            }
+            @media (max-width: 1140px) {
+                #ls2{
+                    display: grid;
+                    grid-template-columns: auto;
+                }
+            }         
+        }
+}
+.others{
+    margin-left: 20px;
+    margin-right: 20px;
+    .part1{
+        margin-right: 0px;
+    }
+    .part2{
+        margin-left: 0px;
+        #ls3{
+            display: grid;
+            grid-template-columns: repeat(2,1fr);
+            padding: 0px;
+            .list{
+                width: 340px;
+            }
+        }
+        @media (max-width: 1400px) {
+            #ls3{
+                display: grid;
+                grid-template-columns: repeat(1,1fr);
+            }
+        }
+        @media (max-width: 1140px) {
+            #ls3{
+                display: grid;
+                grid-template-columns: auto;
+            }
+        }         
+    }
+}
+@media(max-width:600px){
+    .education{
+        margin: 0px;
+        padding: 0px;
+    }
+    .certificats{
+        margin: 0px;
+        padding: 0px;
+    }
+    .others{
+        margin: 0px;
+        padding: 0px;
+    }
+}

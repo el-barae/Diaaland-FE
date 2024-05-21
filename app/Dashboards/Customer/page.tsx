@@ -119,6 +119,9 @@ const handleDelete = async (e:any) =>{
    setIsOpen(!isOpen);
 }
 
+const handleAddClick = () =>{
+  router.push("../addPost");
+}
 
     const router = useRouter();
 
@@ -178,6 +181,7 @@ const handleDelete = async (e:any) =>{
       <div className='Customer'>
               <div className='header'>
                 <h1>{customerData}</h1>
+                <button type="button" className="button" onClick={handleAddClick}>Add job</button>
                 {isOpen && (
                 <button className="btn" onClick={(e) => handleDelete(e)}>
                 <svg viewBox="0 0 15 17.5" height="17.5" width="15" xmlns="http://www.w3.org/2000/svg" className="icon">

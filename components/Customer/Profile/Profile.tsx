@@ -49,7 +49,9 @@ const Profile = () =>{
 	const [email, setEmail] = useState('')
 	const [city, setCity] = useState('')
 	const [country, setCountry] = useState('')
+	const [phone, setPhone] = useState('')
 	const [url, setUrl] = useState('')
+	const [desc, setDesc] = useState('')
 	const [adress, setAdress] = useState('')
 	const [logo, setLogo] = useState('')
 	const [customer, setCustomer] = useState('')
@@ -131,11 +133,24 @@ const Profile = () =>{
 	useEffect(() => {
 		if (customer) {
 			const customerAttributes = customer.split('|~');
+			if(customerAttributes[0]!=="null")
 			setName(customerAttributes[0]);
+			if(customerAttributes[1]!=="null")
 			setEmail(customerAttributes[1]);
+			if(customerAttributes[3]!=="null")
 			setCity(customerAttributes[3]);
+			if(customerAttributes[4]!=="null")
 			setCountry(customerAttributes[4]);
+			if(customerAttributes[2]!=="null")
 			setAdress(customerAttributes[2]);
+			if(customerAttributes[5]!=="null")
+				setPhone(customerAttributes[5]);
+			if(customerAttributes[6]!=="null")
+				setUrl(customerAttributes[6]);
+			if(customerAttributes[7]!=="null")
+				setDesc(customerAttributes[7]);
+			if(customerAttributes[8]!=="null")
+				setLogo(customerAttributes[8]);
 		}
 	}, [customer]);
 
@@ -187,18 +202,20 @@ const Profile = () =>{
 										<p ref={emailErrorRef} className="error email-error"></p>
 										<div className="nation">
 											<label htmlFor="city">City:</label>
-											<input type="text" name="city" id="city" value={city} required onChange={(e) => setCity(e.target.value)}  />
+											<input type="text" name="city" id="city" placeholder="Enter your city" value={city} required onChange={(e) => setCity(e.target.value)}  />
 											<label htmlFor="country">Country:</label>
-											<input type="text" name="country" id="country" value={country} required onChange={(e) => setCountry(e.target.value)}  />
+											<input type="text" name="country" id="country"placeholder="Enter your country" value={country} required onChange={(e) => setCountry(e.target.value)}  />
 										</div>
 										<div className="url-adress">
 											<label htmlFor="adress">Adress:</label>
-											<input type="text" name="adress" id="adress" required onChange={(e) => setAdress(e.target.value)}  />
+											<input type="text" name="adress" id="adress" placeholder="Enter your address" value={adress} required onChange={(e) => setAdress(e.target.value)}  />
 										</div>
 					</div>
 					<div className='div2'>									
 											<label htmlFor="url">Company URL:</label>
-											<input type="text" name="url" id="url" required onChange={(e) => setUrl(e.target.value)}  />
+											<input type="text" name="url" id="url"placeholder="Enter your company url" value={url} required onChange={(e) => setUrl(e.target.value)}  />
+											<label htmlFor="url">Phone number:</label>
+											<input type="text" name="phone" id="phone"placeholder="Enter your phone number" value={phone} required onChange={(e) => setPhone(e.target.value)}  />
 											<label htmlFor="logo">Select the logo file:</label>
 											<input type="file" id="fileInput" name="fileInput" required onChange={(e) => setLogo(e.target.value)}/>
 										<label htmlFor="password">Password</label>
