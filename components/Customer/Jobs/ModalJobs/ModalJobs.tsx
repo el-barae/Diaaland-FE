@@ -28,14 +28,13 @@ interface ModalProps {
     openDate: string;
     endDate: string; 
     adress: string;
-    xp: string;
     type: string;
     description: string;
     onClose: () => void;
     setJobData: React.Dispatch<React.SetStateAction<Job[]>>;
   }
 
-  export default function Modal({ isOpen, id, jobTitle, minSalary, maxSalary, positionNumber, openDate, endDate, adress, xp, type, description, onClose, setJobData }: ModalProps) {
+  export default function Modal({ isOpen, id, jobTitle, minSalary, maxSalary, positionNumber, openDate, endDate, adress, type, description, onClose, setJobData }: ModalProps) {
     const [MjobTitle, setJobTitle] = useState(jobTitle);
  const [MminSalary, setMinSalary] = useState( minSalary);
  const [MmaxSalary, setMaxSalary] = useState(maxSalary);
@@ -44,7 +43,6 @@ interface ModalProps {
  const [MjobCloseDate , setJobCloseDate] = useState(endDate);
  const [MjobDescription, setJobDescription] = useState(description);
  const [Madress , setAdress] = useState(adress); 
- const [MExperience, setExperience] = useState(xp);
  const [MjobType, setJobType] = useState(type);
  const token = localStorage.getItem("token");
 
@@ -152,8 +150,6 @@ interface ModalProps {
     <textarea className="desc" id="jobDescription" placeholder="Enter job description" value={MjobDescription} onChange={(e) => setJobDescription(e.target.value)} />
     <label htmlFor="adress">Address:</label>
     <input type="text" id="adress" placeholder="Enter address" value={Madress} onChange={(e) => setAdress(e.target.value)} />
-    <label htmlFor="experience">Experience:</label>
-    <input type="text" id="experience" placeholder="Enter experience" value={MExperience} onChange={(e) => setExperience(e.target.value)} />
     <label htmlFor="jobType">Job Type:</label>
     <input type="text" id="jobType" placeholder="Enter job type" value={MjobType} onChange={(e) => setJobType(e.target.value)} />
     <button onClick={handleModifyJob}>Modify Job</button>

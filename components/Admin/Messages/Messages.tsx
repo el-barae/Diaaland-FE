@@ -17,7 +17,6 @@ interface Message {
     n: number;
     messagesData: Message[];
   }
-  const token = localStorage.getItem("token");
 
 const Messages = () =>{
     const [messagesData, setMessagesData] = useState<Message[]>([]);
@@ -26,6 +25,7 @@ const Messages = () =>{
       e.preventDefault()
       var ID = localStorage.getItem("ID");
       try{
+        const token = localStorage.getItem("token");
       axios.delete(API_URL+'/api/v1/messages/'+String(idM), {
         headers: {
           'Authorization': 'Bearer ' + token
@@ -60,6 +60,7 @@ const Messages = () =>{
     useEffect(() => {
         const fetchData = async () => {
           try {
+            const token = localStorage.getItem("token");
             const response = await axios.get(API_URL+'/api/v1/messages/recipient/DIAALAND', {
               headers: {
                 'Authorization': 'Bearer ' + token

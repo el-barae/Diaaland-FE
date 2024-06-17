@@ -37,6 +37,9 @@ const Candidate = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [notif,setNotif] = useState(false); 
   const [messagesData, setMessagesData] = useState<Message[]>([]);
+  const handleFindClick = () =>{
+    router.push("../listJobs");
+  }
   const handleToggle = async () => {
     setIsOpen(!isOpen);
     const email = localStorage.getItem('email');
@@ -135,6 +138,7 @@ const handleDelete = async (e:any) =>{
             <div className='Candidate'>
               <div className='header'>
                 {candidateData}
+                <button type="button" className="button" onClick={handleFindClick}>Find job</button>
                 {isOpen && (
                 <button className="btn" onClick={(e) => handleDelete(e)}>
                 <svg viewBox="0 0 15 17.5" height="17.5" width="15" xmlns="http://www.w3.org/2000/svg" className="icon">

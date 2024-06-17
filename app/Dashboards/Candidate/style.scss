@@ -20,6 +20,23 @@
             position: absolute;
             right: 50px;
         }
+        .button{
+          right: 150px;
+            font-size: 17px;
+            font-weight: 300;
+            text-align: center;
+            padding: 10px;
+            background-color: $main-color;
+            color: $second-color;
+            border-radius: 20px;
+            margin: 10px;
+            transition: .3s ease-in-out;
+            &:hover {
+                font-size: 20px;
+                font-weight: 300;
+                background-color: darken($main-color, 10%);
+            }
+        }
         .btn {
             background-color: transparent;
             position: absolute;

@@ -42,6 +42,7 @@ export default function AddPost() {
  
   const handleSubmit = async (e:any)  =>{
 		e.preventDefault()
+    const id=localStorage.getItem('ID');
     const token = localStorage.getItem("token");
 		axios.post(API_URL+'/api/v1/jobs', {
 			"name": jobTitle,
@@ -53,7 +54,10 @@ export default function AddPost() {
       "closeDate": jobCloseDate,
       "numberOfPositions": positionNumber,
       "address": adress,
-      "remoteStatus": true
+      "remoteStatus": true,
+      "customer":{
+        "id": id
+      }
 		  }, {
 				headers: {
 					'Authorization': 'Bearer ' + token
@@ -65,6 +69,21 @@ export default function AddPost() {
 		  .catch(function (error) {
         swal(error.message, '', 'error');
 		  });
+      axios.post(API_URL+'/api/v1/candidate-jobs', {
+        "name": jobTitle,
+        "description": jobDescription,
+        "minSalary": minSalary,
+        }, {
+          headers: {
+            'Authorization': 'Bearer ' + token
+          }
+        })
+        .then(function (response) {
+        swal('Your post had been sent to admin', '', 'success');
+        })
+        .catch(function (error) {
+          swal(error.message, '', 'error');
+        });
 	}
 
  return (

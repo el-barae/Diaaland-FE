@@ -12,6 +12,7 @@ import Customers from '@/components/Admin/Customers/Customer'
 import Skills from '@/components/Admin/Skills/Skills'
 import Messages from '@/components/Admin/Messages/Messages'
 import Applies from '@/components/Admin/Applies/Applies'
+import Matches from '@/components/Admin/ Matches/Matches'
 import axios from "axios";
 import API_URL from "@/config";
 import swal from "sweetalert";
@@ -81,6 +82,9 @@ const Admin = () =>{
           if (x === "Messages") {
             return <Messages/>;
           }
+          if (x === "Matches") {
+            return <Matches/>;
+          }
       }
 
 
@@ -137,7 +141,7 @@ const Admin = () =>{
             </li>
             
             <li>
-                <a href="#">
+                <a href="#" onClick={() => handleClick("Matches")}>
                     <span className="title">Matches</span>
                 </a>
             </li>

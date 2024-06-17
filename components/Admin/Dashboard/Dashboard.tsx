@@ -11,17 +11,17 @@ interface Job {
     closeDate: string;
    }
 interface appliedCandidates{
-    id: number;
-    status: string;
-    candidate: {
-        id: number;
-        firstName: string;
-        lastName: string;
-    };
-    job: {
-        id: number;
-        name: string;
-    };
+  id: number;
+  status: string;
+  candidate: {
+      id: number;
+      firstName: string;
+      lastName: string;
+  } | null;
+  job: {
+      id: number;
+      name: string;
+  } | null;
 }
 
 function getStatusClass(status: string) {
@@ -120,13 +120,15 @@ const Dashboard = ({ handleClick }: { handleClick: (value: string) => void }) =>
         return (
             <>
                 {lastFourCandidateJobs.map((candidateJob) => (
-                    <tr key={candidateJob.id}>
-                        <td>{candidateJob.candidate.firstName} {candidateJob.candidate.lastName}</td>
-                        <td>{candidateJob.job.name}</td>
-                        <td>{candidateJob.candidate.firstName}</td>
-                        <td><span className={getStatusClass(candidateJob.status)}>{candidateJob.status}</span></td>
-                    </tr>
-                ))}
+                <tr key={candidateJob.id}>
+                    <td>
+                        {candidateJob.candidate?.firstName ?? 'N/A'} {candidateJob.candidate?.lastName ?? 'N/A'}
+                    </td>
+                    <td>{candidateJob.job?.name ?? 'N/A'}</td>
+                    <td>{candidateJob.candidate?.firstName ?? 'N/A'}</td>
+                    <td><span className={getStatusClass(candidateJob.status)}>{candidateJob.status}</span></td>
+                </tr>
+            ))}
             </>
         );
       }

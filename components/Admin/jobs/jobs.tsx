@@ -3,7 +3,6 @@ import { useState ,useEffect} from "react"
 import axios from 'axios'
 import { useRouter } from 'next/navigation';
 import React from 'react';
-import Cookies from 'js-cookie';
 import API_URL from '@/config';
 import Modal from './ModalJobs/ModalJobs';
 
@@ -36,8 +35,7 @@ const Jobs = () =>{
 
     const handleDelete = async (e:any, idJ:number) =>{
       e.preventDefault()
-      Cookies.set("id","1")
-      const idC = Cookies.get("id");
+      const idC = localStorage.getItem("ID");
       axios.delete(API_URL+'/api/v1/candidate-jobs/'+String(idC)+'/'+String(idJ), {
         headers: {
           'Authorization': 'Bearer ' + token
@@ -50,8 +48,7 @@ const Jobs = () =>{
     useEffect(() => {
         const fetchData = async () => {
           try {
-            Cookies.set("id","1")
-            const id = Cookies.get("id");
+            const id = localStorage.getItem("ID");
             const response = await axios.get(API_URL+'/api/v1/jobs/list', {
               headers: {
                 'Authorization': 'Bearer ' + token

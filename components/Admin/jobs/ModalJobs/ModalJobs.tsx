@@ -1,6 +1,5 @@
 import React, { useState,useEffect } from "react";
 import axios from "axios";
-import Cookies from "js-cookie";
 import "./ModalJobs.scss";
 import API_URL from "@/config";
 
@@ -53,7 +52,7 @@ interface ModalProps {
 
     const handleModifyJob = async (e: any) => {
       e.preventDefault();
-      const idC = Cookies.get('id');
+      const idC = localStorage.getItem("ID");
       axios
         .put(API_URL+'/api/v1/jobs/' + String(id), {
           id: id,

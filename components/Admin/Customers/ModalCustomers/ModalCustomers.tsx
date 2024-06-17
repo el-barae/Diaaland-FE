@@ -1,6 +1,5 @@
 import React, { useState,useEffect } from "react";
 import axios from "axios";
-import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import "../../jobs/ModalJobs/ModalJobs.scss";
 import API_URL from "@/config";
@@ -52,7 +51,7 @@ interface ModalProps {
 
     const handleModifyCustomer = async (e: any) => {
       e.preventDefault();
-      const idC = Cookies.get('id');
+      const idC = localStorage.getItem("ID");
       axios
         .put(API_URL+'/api/v1/customers/' + String(id), {
           id: id,

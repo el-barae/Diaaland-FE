@@ -27,10 +27,10 @@ const Skills = () => {
     const [skill,setSkill] = useState('')
     const [skillsAll,setSkillsAll] = useState<skill[]>([])
     const [skillsData,setSkillsData] = useState<skill[]>([])
-    const token = localStorage.getItem("token");
     const handleAddSkill = async (e:any, sname:string)  =>{
       e.preventDefault()
       console.log(skill);
+       const token = localStorage.getItem("token");
       setSkill('');
       var ID = localStorage.getItem("ID");
       const response = await axios.get(API_URL+'/api/v1/skills/id/'+sname, {
@@ -82,6 +82,7 @@ const Skills = () => {
         e.preventDefault()
         try{
           var ID = localStorage.getItem("ID");
+          const token = localStorage.getItem("token");
         axios.delete(API_URL+'/api/v1/candidate-skills/'+String(ID)+'/'+String(idS), {
           headers: {
             'Authorization': 'Bearer ' + token
@@ -98,6 +99,7 @@ const Skills = () => {
           const fetchData = async () => {
             try {
               var ID = localStorage.getItem("ID");
+              const token = localStorage.getItem("token");
               const response = await axios.get(API_URL+'/api/v1/candidate-skills/byCandidate/' + String(ID), {
                 headers: {
                   'Authorization': 'Bearer ' + token

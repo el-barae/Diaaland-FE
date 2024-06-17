@@ -1,7 +1,8 @@
-import React, { useState,useEffect } from "react";
+import React, { useState,useEffect,useRef, ChangeEvent  } from "react";
 import axios from "axios";
 import "./Modal.scss";
 import API_URL from "@/config";
+import swal from "sweetalert";
 
 interface Job {
   id: number;
@@ -19,74 +20,39 @@ interface ModalProps {
     onClose: () => void;
   }
 
+
+type FileState = File | null;
+
 export default function Modal({ isOpen, id, description, name, onClose }: ModalProps) {
-  const [isApplied, setIsApplied] = useState(false);
-  const [isFavoris, setIsFavoris] = useState(false);
+  const [file, setFile] = useState<FileState>(null);
+  const [fileName, setFileName] = useState<string | null>(null);
+  const [coverLetter, setCoverLetter] = useState<string>('');
+  const [diploma, setDiploma] = useState<FileState>(null);
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [isApplied, setIsApplied] = useState<boolean>(false);
+  const [isFavoris, setIsFavoris] = useState<boolean>(false);
   const token = localStorage.getItem("token");
-  const [showModal, setShowModal] = useState(false);
-  const [cv, setCV] = useState('');
-  const [coverLetter, setCoverLetter] = useState('');
-  const [diploma, setDiploma] = useState('');
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const diplomaInputRef = useRef<HTMLInputElement>(null);
 
     const toggleModal = () => {
       onClose();
     };
-
-    const handleSubmit = (e:any, id:number) => {
-      e.preventDefault();
-      var ID = localStorage.getItem("ID");
-    //ID = '1';
-  axios.get(API_URL+'/api/v1/candidate-skills/haveSkills/'+ID, {
-    headers: {
-      'Authorization': 'Bearer ' + token
-    }
-  })
-  .then(function (response) {
-    if (response.data === true) {
-      axios.post(API_URL+'/api/v1/candidate-jobs', {
-        "status": "pending",
-        "candidate": {
-          "id": ID
-        },
-        "job": {
-          "id": id
-        },
-        "cv": cv,
-        "diploma": diploma,
-        "coverLetter": coverLetter
-      }, {
-        headers: {
-          'Authorization': 'Bearer ' + token
-        }
-      })
-      .then(function (response) {
-        onClose();
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-    }
-    else{
-      alert("Your should add skills");
-    }
-  })
-  .catch(function (error) {
-    console.log(error);
-  });
-      setCV('');
-      setCoverLetter('');
-      setDiploma('');
-      setShowModal(false);
-    };
-    
-    const handleApply = async (e:any) =>{
+  
+    const handleApply = async (e:React.MouseEvent<HTMLButtonElement>) =>{
 		e.preventDefault()
-    setShowModal(true);
+    const role = localStorage.getItem("role");
+    if(role === "CANDIDAT")
+     setShowModal(true);
+    else
+      swal("Authenticate yourself when you are a CANDIDATE", '', "error")
 	}
 
   const handleAddFavoris = async (e:any, id:number) =>{
 		e.preventDefault()
-		axios.post(API_URL+'/api/v1/favoris', {
+    const role = localStorage.getItem("role");
+    if(role === "CANDIDAT"){
+		  axios.post(API_URL+'/api/v1/favoris', {
       "candidate": {
         "id": 1
       },
@@ -97,13 +63,16 @@ export default function Modal({ isOpen, id, description, name, onClose }: ModalP
       headers: {
         'Authorization': 'Bearer ' + token
       }
-    })
+      })
 		 .then(function (response) {
       onClose();
 		 })
 		 .catch(function (error) {
 			console.log(error);
 		 });
+    }
+    else
+      swal("Authenticate yourself when you are a CANDIDATE", '', "error")
 	}
 
     useEffect(() => {
@@ -143,6 +112,98 @@ export default function Modal({ isOpen, id, description, name, onClose }: ModalP
         document.body.classList.remove('active-modal');
       };
     }, [isOpen]);
+
+  
+    useEffect(() => {
+      const fetchCV = async () => {
+        try {
+          const token = localStorage.getItem('token');
+          if (!token) {
+            throw new Error('No token found in localStorage');
+          }
+  
+          const response = await fetch('http://localhost:7777/api/v1/candidates/resumefile/1', {
+            method: 'GET',
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json',
+            },
+          });
+  
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+  
+          const blob = await response.blob();
+          const file = new File([blob], 'cv.pdf', { type: 'application/pdf' });
+          setFile(file);
+          setFileName(file.name);  // Set the file name in the state
+        } catch (error) {
+          console.error('Error fetching the CV:', error);
+        }
+      };
+  
+      fetchCV();
+    }, []);
+
+    const handleSubmit = (e:any, id:number) => {
+      e.preventDefault();
+      var idC = localStorage.getItem("ID");
+      const token = localStorage.getItem("token");
+  axios.get(API_URL+'/api/v1/candidate-skills/haveSkills/'+idC, {
+    headers: {
+      'Authorization': 'Bearer ' + token
+    }
+  })
+  .then(function (response) {
+    if (response.data === true) {
+      if (!file || !diploma) {
+        console.error('CV or diploma file is missing');
+        return;
+      }
+  
+      const formData = new FormData();
+      formData.append('candidateId', String(idC));
+      formData.append('jobId', id.toString());
+      formData.append('cv', file);
+      formData.append('diploma', diploma);
+      formData.append('coverLetter', coverLetter);
+
+    fetch(API_URL+'/api/v1/candidate-jobs/send', {
+      method: 'POST',
+      body: formData,
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Success:', data);
+        swal("Your apply sent successfully", '', "success");
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+    }
+    else{
+      swal("Your should add skills", '', 'error');
+    }
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
+  setFile(null);
+  setFileName(null);
+  setCoverLetter('');
+  setDiploma(null);
+  setShowModal(false);
+ };
+  
+    const handleFileSelect = () => {
+      if (fileInputRef.current) {
+        fileInputRef.current.click();
+      }
+    };
   
     return (
       <>
@@ -153,19 +214,38 @@ export default function Modal({ isOpen, id, description, name, onClose }: ModalP
               <div className="modal-content">
                 <h1>{name}</h1>
                 <p>{description}</p>
-                {!showModal && !isApplied && <button id="apply-btn" onClick={(e) => handleApply(e)}>Apply</button>}
-                {!showModal && !isFavoris && <button id="favoris-btn" onClick={(e) => handleAddFavoris(e, id)}>Add favoris</button>}
-                {showModal && (
+                {!showModal && !isApplied && <button id="apply-btn" onClick={handleApply}>Apply</button>}
+            {!showModal && !isFavoris && <button id="favoris-btn" onClick={(e) => handleAddFavoris(e, 1)}>Add to favoris</button>}
+            {showModal && (
               <div className="form-apply">
                 <label>CV:</label>
-                <input type="text" value={cv} onChange={(e) => setCV(e.target.value)} />
+                <input
+        type="file"
+        ref={fileInputRef}
+        style={{ display: 'none' }}
+      />
+      {/* Custom file input button */}
+      <button id="btn-file" onClick={handleFileSelect}>
+        {fileName ? `${fileName}` : 'Choose File'}
+      </button>
+      {fileName && (
+        <div>
+          <a href={URL.createObjectURL(file!)} download={fileName}>
+            Download {fileName}
+          </a>
+        </div>
+      )}
                 <label>Cover Letter:</label>
                 <input type="text" value={coverLetter} onChange={(e) => setCoverLetter(e.target.value)} />
                 <label>Diploma:</label>
-                <input type="text" value={diploma} onChange={(e) => setDiploma(e.target.value)} />
-                <button type="submit" onClick={(e) =>handleSubmit(e, id)}>Submit</button>
+                <input type="file" id="fileInput" name="diploma" ref={diplomaInputRef}
+                  onChange={(e) => {
+                    const file = e.target.files ? e.target.files[0] : null;
+                    setDiploma(file);
+                  }} required />
+                <button type="submit" onClick={(e) => handleSubmit(e, 1)}>Submit</button>
               </div>
-      )}
+            )}
               </div>
           </div>
         )}

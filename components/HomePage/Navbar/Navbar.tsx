@@ -23,8 +23,6 @@ const Navbar = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const [showMenu, setShowMenu] = useState(false);
-
-  const options = ['Candidate', 'Customer', 'Admin'];
   const menu = ['Home', 'Services', 'Contact', 'About'];
 
 
@@ -33,7 +31,21 @@ const Navbar = () => {
   };
 
   const handleToggle = () => {
-    setIsOpen(!isOpen);
+    const option = localStorage.getItem("role");
+    if (option==='CANDIDAT'){
+      router.push('/Dashboards/Candidate');
+  }
+  else if (option==='CUSTOMER'){
+      router.push('/Dashboards/Customer');
+  }
+  else if (option==='ADMIN'){
+      router.push('/Dashboards/Admin');
+  }
+  else{
+    router.push('/login');
+  }
+
+    setIsLoading(true);
   };
 
   const handleMenuClick = (option: string) => {
@@ -52,19 +64,6 @@ const Navbar = () => {
     setIsOpen(false);
   };
 
-  const handleOptionClick = (option: string) => {
-    if (option==='Candidate'){
-      router.push('/Dashboards/Candidate');
-  }
-  else if (option==='Customer'){
-      router.push('/Dashboards/Customer');
-  }
-  else if (option==='Admin'){
-      router.push('/Dashboards/Admin');
-  }
-    setIsOpen(false);
-    setIsLoading(true);
-  };
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   //const { data: session } = useSession();
   const router = useRouter();
@@ -168,15 +167,6 @@ const Navbar = () => {
                       />
               </button>
               {isLoading && <div className="lds-ellipsis"><div></div><div></div><div></div><div></div></div>}
-      {isOpen && (
-        <ul className="dropdown-list">
-          {options.map((option) => (
-            <li key={option} onClick={() => handleOptionClick(option)}>
-              {option}
-            </li>
-          ))}
-        </ul>
-      )}
 
           <button className='list' onClick={toggleMenu}>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-8 h-8">
