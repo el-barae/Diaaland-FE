@@ -101,7 +101,7 @@ const handleModifyClick = (e: any, id: number, name: string, minSalary: number, 
           <p>Close Date: {job.closeDate}</p>
           <button onClick={(e) => handleDelete(e, job.id)}>Delete</button>
           <button onClick={(e) => handleModifyClick(e, job.id, job.name, job.minSalary, job.maxSalary, job.numberOfPositions, job.openDate, job.closeDate, job.address, job.remoteStatus, job.type, job.description)}>Modify</button>
-          <Modal isOpen={modalOpen} id={jobId} jobTitle={jobTitle} minSalary={minSalary} maxSalary={maxSalary} positionNumber={positionNumber} openDate={openDate} endDate={endDate} adress={address} xp={xp} type={type} description={description} onClose={() => setModalOpen(false)} setJobData={setJobsData}/>
+          <Modal isOpen={modalOpen} id={jobId} jobTitle={jobTitle} minSalary={minSalary} maxSalary={maxSalary} positionNumber={positionNumber} openDate={openDate} endDate={endDate} adress={address} type={type} description={description} onClose={() => setModalOpen(false)} setJobData={setJobsData}/>
         </div>
         ))}
         </>

@@ -128,7 +128,7 @@ const Dashboard = ({ handleClick }: { handleClick: (value: string) => void }) =>
                     <td>{candidateJob.candidate?.firstName ?? 'N/A'}</td>
                     <td><span className={getStatusClass(candidateJob.status)}>{candidateJob.status}</span></td>
                 </tr>
-            ))}
+            ))}1
             </>
         );
       }

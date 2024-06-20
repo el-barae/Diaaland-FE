@@ -48,7 +48,6 @@ const Jobs = () =>{
     useEffect(() => {
         const fetchData = async () => {
           try {
-            const id = localStorage.getItem("ID");
             const response = await axios.get(API_URL+'/api/v1/jobs/list', {
               headers: {
                 'Authorization': 'Bearer ' + token

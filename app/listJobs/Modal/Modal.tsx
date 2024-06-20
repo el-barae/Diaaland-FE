@@ -77,6 +77,8 @@ export default function Modal({ isOpen, id, description, name, onClose }: ModalP
 
     useEffect(() => {
       async function fetchData() {
+        const role = localStorage.getItem("role");
+        if(role === "CANDIDAT"){
         try {
           const response = await axios.get(API_URL + '/api/v1/candidate-jobs/itsApplied/' + 1 + '/' + id, {
             headers: {
@@ -87,9 +89,12 @@ export default function Modal({ isOpen, id, description, name, onClose }: ModalP
         } catch (error) {
           console.error('Error fetching data:', error);
         }
+        }
       }
       fetchData();
       async function fetchData1() {
+        const role = localStorage.getItem("role");
+        if(role === "CANDIDAT"){
         try {
           const response1 = await axios.get(API_URL + '/api/v1/favoris/itsFavoris/' + 1 + '/' + id, {
             headers: {
@@ -99,6 +104,7 @@ export default function Modal({ isOpen, id, description, name, onClose }: ModalP
           setIsFavoris(response1.data); 
         } catch (error) {
           console.error('Error fetching data:', error);
+        }
         }
       }
       fetchData1();
@@ -116,6 +122,8 @@ export default function Modal({ isOpen, id, description, name, onClose }: ModalP
   
     useEffect(() => {
       const fetchCV = async () => {
+        const role = localStorage.getItem("role");
+        if(role === "CANDIDAT"){
         try {
           const token = localStorage.getItem('token');
           if (!token) {
@@ -137,9 +145,10 @@ export default function Modal({ isOpen, id, description, name, onClose }: ModalP
           const blob = await response.blob();
           const file = new File([blob], 'cv.pdf', { type: 'application/pdf' });
           setFile(file);
-          setFileName(file.name);  // Set the file name in the state
+          setFileName(file.name);
         } catch (error) {
           console.error('Error fetching the CV:', error);
+        }
         }
       };
   
@@ -222,23 +231,34 @@ export default function Modal({ isOpen, id, description, name, onClose }: ModalP
                 <input
         type="file"
         ref={fileInputRef}
+        accept=".pdf,.doc,.docx"
         style={{ display: 'none' }}
+        onChange={(e) => {
+          const file = e.target.files ? e.target.files[0] : null;
+          if (file) { 
+            setFile(file);
+            setFileName(file.name);
+          } else {
+            setFile(null);
+            setFileName('');
+          }
+        }}
       />
       {/* Custom file input button */}
       <button id="btn-file" onClick={handleFileSelect}>
         {fileName ? `${fileName}` : 'Choose File'}
       </button>
-      {fileName && (
+      {/*fileName && (
         <div>
           <a href={URL.createObjectURL(file!)} download={fileName}>
             Download {fileName}
           </a>
         </div>
-      )}
+      )*/}
                 <label>Cover Letter:</label>
                 <input type="text" value={coverLetter} onChange={(e) => setCoverLetter(e.target.value)} />
                 <label>Diploma:</label>
-                <input type="file" id="fileInput" name="diploma" ref={diplomaInputRef}
+                <input type="file" id="fileInput"  accept=".pdf,.doc,.docx" name="diploma" ref={diplomaInputRef}
                   onChange={(e) => {
                     const file = e.target.files ? e.target.files[0] : null;
                     setDiploma(file);
