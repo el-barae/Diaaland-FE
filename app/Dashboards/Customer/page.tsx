@@ -81,21 +81,21 @@ interface Candidate {
       }
 
 const Customer = () => {
-  const token = localStorage.getItem("token");
   const [loading, setLoading] = useState(true);
     const [customerData, setCustomer] = useState('');
   const [isOpen, setIsOpen] = useState(false);
   const [notif,setNotif] = useState(false);
     const [messagesData, setMessagesData] = useState<Message[]>([]);
-  const email = localStorage.getItem('email');
   const handleToggle = async () => {
     setIsOpen(!isOpen);
+    const email = localStorage.getItem('email');
     axios.put(API_URL+'/api/v1/messages/mark-viewed/'+email)
           .catch(error => {
             console.error('Error marking messages as viewed:', error);
         });
     setNotif(false);
     try {
+      const token = localStorage.getItem("token");
       const response = await axios.get(API_URL+'/api/v1/messages/recipient/'+email, {
         headers: {
           'Authorization': 'Bearer ' + token
@@ -109,6 +109,7 @@ const Customer = () => {
 
 const handleDelete = async (e:any) =>{
   try{
+    const email = localStorage.getItem('email');
   axios.delete(API_URL+'/api/v1/messages/recipient/'+email)
   const updatedMessagesData = messagesData.filter(m => m.email !== email)
       setMessagesData(updatedMessagesData)
@@ -154,12 +155,14 @@ const handleAddClick = () =>{
     } else {
         const fetchCustomerData = async () => {
           try {
+            const token = localStorage.getItem("token");
             const response = await axios.get(API_URL+'/api/v1/customers/name/1', {
               headers: {
                 'Authorization': 'Bearer ' + token
               }
             });
             setCustomer(response.data);
+            const email = localStorage.getItem('email');
             axios.get(API_URL+'/api/v1/messages/viewed/'+email)
           .then(response => {
             setNotif(response.data);

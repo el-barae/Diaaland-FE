@@ -1,246 +1,308 @@
 'use client'
 import { useState, useRef, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import Cookies from 'js-cookie';
 import '../../../app/(accounts)/register/style.scss';
 import './Profile.scss'
-import Link from 'next/link'
-import { FaEyeSlash, FaEye } from 'react-icons/fa';
 import Image from 'next/image'
 import RegisterImg from '@/public/images/registeration.png'
 import axios from 'axios';
+import swal from 'sweetalert';
 import API_URL from '@/config';
 
-const passwordStrength = (password: string) => {
-	let res = 0;
-
-	for (let i = 0; i < password.length; i++) {
-		if (password[i] >= '0' && password[i] <= '9') {
-			res += 8;
-		}
-		if (password[i] >= 'a' && password[i] <= 'z') {
-			res += 4;
-		}
-		if (password[i] >= 'A' && password[i] <= 'Z') {
-			res += 6;
-		}
-		if ((password[i] >= '!' && password[i] <= '/') || 
-				(password[i] >= ':' && password[i] <= '@') || 
-				(password[i] >= '[' && password[i] <= '`') || 
-				(password[i] >= '{' && password[i] <= '~')) {
-			res += 10;
-		}
-	}
-	return res;
+type Customer={
+		id: number,
+        name: string,
+        email: string,
+        address: string,
+        city: string,
+        country: string,
+        phoneNumber: string,
+        url: string,
+        description: string,
+        logo?: string
 }
-const Profile = () =>{
 
-    const firstnameErrorRef = useRef<HTMLParagraphElement>(null);
-	const lastnameErrorRef = useRef<HTMLParagraphElement>(null);
-	const emailErrorRef = useRef<HTMLParagraphElement>(null);
-	const passwordErrorRef = useRef<HTMLParagraphElement>(null);
-	const termsErrorRef = useRef<HTMLParagraphElement>(null);
-	const router = useRouter();
+const Profile = () => {
+    const [customer, setCustomer] = useState<Customer>({
+        id: 0,
+        name: '',
+        email: '',
+        address: '',
+        city: '',
+        country: '',
+        phoneNumber: '',
+        url: '',
+        description: '',
+        logo: ''
+    });
 
-	const passwordMessageRef = useRef<HTMLDivElement>(null);
+    const [logoFile, setLogoFile] = useState<File | null>(null);
+    const [logoBlob, setLogoBlob] = useState<Blob | null>(null);
+    const [logoName, setLogoName] = useState<string>('');
+    const logoInputRef = useRef<HTMLInputElement | null>(null);
 
-	const [name, setName] = useState('')
-	const [password, setPassword] = useState('')
-	const [email, setEmail] = useState('')
-	const [city, setCity] = useState('')
-	const [country, setCountry] = useState('')
-	const [phone, setPhone] = useState('')
-	const [url, setUrl] = useState('')
-	const [desc, setDesc] = useState('')
-	const [adress, setAdress] = useState('')
-	const [logo, setLogo] = useState('')
-	const [customer, setCustomer] = useState('')
-	const [passState, setPassState] = useState('hide');
-	
-	const handleSubmit = async (e:any)  =>{
-		e.preventDefault()
-		axios.post(API_URL+'/api/v1/auth/register', {
-			"name": name,
-			"email":email,
-			"password": password,
-			"city": city,
-			"country": country,
-			"url": url,
-			"adress": adress,
-			"logo": logo,
-			"role": "CLIENT"
-		  })
-		  .then(function (response) {
-			console.log(response);
-			Cookies.set("loggedin", "true");
-			router.push('/addPost')
-		  })
-		  .catch(function (error) {
-			console.log(error);
-		  });
-	}
+    useEffect(() => {
+        const fetchCustomer = async () => {
+            const id = localStorage.getItem('ID');
+			const token = localStorage.getItem('token');
+            if (!id || !token) {
+                console.error('ID or token is missing');
+                return;
+            }
 
-	const handleIconClick = () => {
-		if (passState === 'hide') {
-			setPassState('show');
-		} else {
-			setPassState('hide');
-		}
-	}
-	const token = localStorage.getItem("token");
+            try {
+                const response = await axios.get<Customer>(API_URL+"/api/v1/customers/"+id, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+                setCustomer(response.data);
 
-	useEffect(() => {
-		const fetchData = async () => {
-			try {
-			  Cookies.set("id","1")
-			  const id = Cookies.get("id");
-			  const response = await axios.get(API_URL+'/api/v1/customers/tostring/'+1, {
+                if (response.data.logo) {
+                    fetchLogoFile();
+                }
+            } catch (error) {
+                console.error('Error fetching customer data:', error);
+            }
+        };
+
+        fetchCustomer();
+    }, []);
+
+    const fetchLogoFile = async () => {
+		const id = localStorage.getItem('ID')
+        const token = localStorage.getItem('token');
+        if (!token) {
+            return;
+        }
+
+        try {
+            const response = await fetch(API_URL+'/api/v1/customers/logo/'+id, {
+                method: 'GET',
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const blob = await response.blob();
+            setLogoBlob(blob);
+            const fileName = String(customer.logo);
+            const file = new File([blob], String(fileName.split('/').pop()), { type: 'image/jpeg' });
+            setLogoFile(file);
+            setLogoName(file.name);
+        } catch (error) {
+            console.error('Error fetching logo file:', error);
+        }
+    };
+
+    const handleFileSelect = (inputRef: React.RefObject<HTMLInputElement>) => {
+        if (inputRef.current) {
+            inputRef.current.click();
+        }
+    };
+
+    const handleImgChange = (e: React.ChangeEvent<HTMLInputElement>, setFile: React.Dispatch<React.SetStateAction<File | null>>, setBlob: React.Dispatch<React.SetStateAction<Blob | null>>, setName: React.Dispatch<React.SetStateAction<string>>) => {
+        const file = e.target.files ? e.target.files[0] : null;
+        if (file) {
+            setFile(file);
+            setName(file.name);
+            setBlob(file);
+        }
+    };
+
+    const handleLogoSelect = () => handleFileSelect(logoInputRef);
+    const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => handleImgChange(e, setLogoFile, setLogoBlob, setLogoName);
+
+    const uploadFile = async (file: File | null, id: string) => {
+        if (!file) return null;
+
+        const token = localStorage.getItem('token');
+        const formData = new FormData();
+        formData.append('file', file);
+
+        try {
+            const response = await axios.post<string>(`${API_URL}/api/v1/files/uploadLogo/${id}`, formData, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+            return response.data;
+        } catch (error) {
+            console.error(`Error uploading logo:`, error);
+            return null;
+        }
+    };
+
+    const uploadLogo = async (file: File | null, id: string) => {
+        return uploadFile(file, id);
+    };
+
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        const id = localStorage.getItem('ID'); 
+
+        try {
+            let logo = customer.logo;
+			const token = localStorage.getItem('token');
+			await axios.put(`${API_URL}/api/v1/customers/${id}`, {
+				"name": customer.name,
+				"email": customer.email,
+				"address": customer.address,
+				"city": customer.city,
+				"country": customer.country,
+				"phoneNumber": customer.phoneNumber,
+				"url": customer.url,
+				"description": customer.description,
+				"logo": customer.logo
+		}, {
 				headers: {
-				  'Authorization': 'Bearer ' + token
+					Authorization: `Bearer ${token}`
 				}
-			  });        
-			  setCustomer(response.data);
-			  console.log(customer);
-			} catch (error) {
-			  console.error('Erreur lors de la récupération des données :', error);
-			}
-		  };
-		fetchData();
+			});
 
-		let messageColors = ['text-red-600', 'text-red-400', 'text-yellow-600', 'text-green-400', 'text-green-600', 'text-green-500', 'text-green-700'];
-		let res = passwordStrength(password);
-		messageColors.map((color) => {
-			passwordMessageRef.current?.classList.remove(color);
-		})
-		if (res < 30 && passwordMessageRef.current) {
-			passwordMessageRef.current.classList.add(messageColors[0]);
-			passwordMessageRef.current.innerText = 'very weak password';
-		} else if (res >= 30 && res < 50 && passwordMessageRef.current) {
-			passwordMessageRef.current.classList.add(messageColors[1]);
-			passwordMessageRef.current.innerText = 'weak password';
-		} else if (res >= 50 && res < 70 && passwordMessageRef.current) {
-			passwordMessageRef.current.classList.add(messageColors[2]);
-			passwordMessageRef.current.innerText = 'average password';
-		} else if (res >= 70 && res < 90 && passwordMessageRef.current) {
-			passwordMessageRef.current.classList.add(messageColors[3]);
-			passwordMessageRef.current.innerText = 'strong password';
-		} else if (res >= 90 && passwordMessageRef.current) {
-			passwordMessageRef.current.classList.add(messageColors[4]);
-			passwordMessageRef.current.innerText = 'very strong password';
-		}
-	}, [password])
+            if (logoFile) {
+                const uploadedLogo = await uploadLogo(logoFile, id!);
+                if (uploadedLogo) {
+                    logo = uploadedLogo;
+                }
+            }
 
-	useEffect(() => {
-		if (customer) {
-			const customerAttributes = customer.split('|~');
-			if(customerAttributes[0]!=="null")
-			setName(customerAttributes[0]);
-			if(customerAttributes[1]!=="null")
-			setEmail(customerAttributes[1]);
-			if(customerAttributes[3]!=="null")
-			setCity(customerAttributes[3]);
-			if(customerAttributes[4]!=="null")
-			setCountry(customerAttributes[4]);
-			if(customerAttributes[2]!=="null")
-			setAdress(customerAttributes[2]);
-			if(customerAttributes[5]!=="null")
-				setPhone(customerAttributes[5]);
-			if(customerAttributes[6]!=="null")
-				setUrl(customerAttributes[6]);
-			if(customerAttributes[7]!=="null")
-				setDesc(customerAttributes[7]);
-			if(customerAttributes[8]!=="null")
-				setLogo(customerAttributes[8]);
-		}
-	}, [customer]);
+            swal('Profile updated successfully!','','success');
+        } catch (error) {
+            console.error('Error updating profile:', error);
+            swal('Failed to update profile.','','error');
+        }
+    };
 
-	const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		setPassword(e.target.value);
-		passwordMessageRef.current?.classList.remove('hidden');
-	}
+	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        setCustomer({ ...customer, [e.target.name]: e.target.value });
+    };
 
-	const invalidFirstname = (e: any) => {
-		e.preventDefault();
-		if (firstnameErrorRef.current) {
-			firstnameErrorRef.current.innerText = 'firstname must be at least 6 characters long';
-		}
-	}
+    return (
+        <form onSubmit={handleSubmit} className="form-candidate">
 
-	
-	const invalidEmail = (e: any) => {
-		e.preventDefault();
-		if (emailErrorRef.current) {
-			emailErrorRef.current.innerText = 'invalid Email';
-		}
-	}
+<div className="div1">
+                <h1>Profile</h1>
+                <br />
+                <label htmlFor="name">Name</label>
+                <input
+                    type="text"
+                    name="name"
+                    id="name"
+                    placeholder="Enter your name"
+                    value={customer.name}
+                    onChange={handleInputChange}
+                />
+                <label htmlFor="email">Email</label>
+                <input
+                    type="email"
+                    name="email"
+                    id="email"
+                    placeholder="Enter your email"
+                    value={customer.email}
+                    onChange={handleInputChange}
+                    required
+                />
+                <label htmlFor="address">Address</label>
+                <input
+                    type="text"
+                    name="address"
+                    id="address"
+                    placeholder="Enter your address"
+                    value={customer.address}
+                    onChange={handleInputChange}
+                />
+                <label htmlFor="city">City</label>
+                <input
+                    type="text"
+                    name="city"
+                    id="city"
+                    placeholder="Enter your city"
+                    value={customer.city}
+                    onChange={handleInputChange}
 
-	const invalidPassword = (e: any) => {
-		e.preventDefault();
-		if (passwordErrorRef.current) {
-			passwordErrorRef.current.innerText = e.target.validationMessage;
-		}
-	}
+                />
+                <label htmlFor="country">Country</label>
+                <input
+                    type="text"
+                    name="country"
+                    id="country"
+                    placeholder="Enter your country"
+                    value={customer.country}
+                    onChange={handleInputChange}
+                />
+                <label htmlFor="phoneNumber">Phone Number</label>
+                <input
+                    type="text"
+                    name="phoneNumber"
+                    id="phoneNumber"
+                    placeholder="Enter your phone number"
+                    value={customer.phoneNumber}
+                    onChange={handleInputChange}
+                />
+                <label htmlFor="url">Website URL</label>
+                <input
+                    type="text"
+                    name="url"
+                    id="url"
+                    placeholder="Enter your website URL"
+                    value={customer.url}
+                    onChange={handleInputChange}
+                />
+            </div>
+            <div className="div2">
+                <label htmlFor="description">Description</label>
+                <textarea
+                    name="description"
+                    id="description"
+                    placeholder="Enter a description"
+                    value={customer.description}
+                    onChange={handleInputChange}
+                ></textarea>
+                <label htmlFor="logo">Logo</label>
+                <input
+                    type="file"
+                    ref={logoInputRef}
+                    accept="image/*"
+                    style={{ display: 'none' }}
+                    onChange={handleLogoChange}
+                />
+                <div onClick={handleLogoSelect} style={{ cursor: 'pointer', textAlign: 'center' }}>
+                    {logoBlob ? (
+                        <img
+                            src={URL.createObjectURL(logoBlob)}
+                            alt="Customer Logo"
+                            style={{ marginLeft: '40px', borderRadius: '20px', width: '250px', height: '280px' }}
+                        />
+                    ) : (
+                        <button
+                            type="button"
+                            onClick={handleLogoSelect}
+                            style={{ backgroundColor: 'rgb(108, 162, 209)' }}
+                        >
+                            Choose Logo
+                        </button>
+                    )}
+                </div>
 
-	const invalidTerms = (e: any) => {
-		e.preventDefault();
-		if (termsErrorRef.current) {
-			termsErrorRef.current.innerText = 'you must accept the terms of use';
-		}
-	}
+				<button type="submit">Modify</button>
+            </div>
+			<div className="div-image">
+                <Image
+                    src={RegisterImg}
+                    width={400}
+                    height={600}
+                    alt="register image"
+                />
+            </div>
 
-    return(
-        <div className="form-candidate">
-					<div className='div1'>
-					<h1>Profile</h1>
+        </form>
+    );
+};
 
-					<br></br>
-										<label htmlFor="firstname">Name</label>
-										<input type="text" name="firstname" id="firstname" placeholder="Enter your company name " value={name} autoFocus required onInvalid={invalidFirstname} onChange={(e) => setName(e.target.value)} />
-										<p ref={firstnameErrorRef} className="error username-error"></p>
-										<label htmlFor="email">Email</label>
-										<input type="email" name="email" id="email" placeholder="Enter your email" value={email} required onInvalid={invalidEmail} onChange={(e) => setEmail(e.target.value)} />
-										<p ref={emailErrorRef} className="error email-error"></p>
-										<div className="nation">
-											<label htmlFor="city">City:</label>
-											<input type="text" name="city" id="city" placeholder="Enter your city" value={city} required onChange={(e) => setCity(e.target.value)}  />
-											<label htmlFor="country">Country:</label>
-											<input type="text" name="country" id="country"placeholder="Enter your country" value={country} required onChange={(e) => setCountry(e.target.value)}  />
-										</div>
-										<div className="url-adress">
-											<label htmlFor="adress">Adress:</label>
-											<input type="text" name="adress" id="adress" placeholder="Enter your address" value={adress} required onChange={(e) => setAdress(e.target.value)}  />
-										</div>
-					</div>
-					<div className='div2'>									
-											<label htmlFor="url">Company URL:</label>
-											<input type="text" name="url" id="url"placeholder="Enter your company url" value={url} required onChange={(e) => setUrl(e.target.value)}  />
-											<label htmlFor="url">Phone number:</label>
-											<input type="text" name="phone" id="phone"placeholder="Enter your phone number" value={phone} required onChange={(e) => setPhone(e.target.value)}  />
-											<label htmlFor="logo">Select the logo file:</label>
-											<input type="file" id="fileInput" name="fileInput" required onChange={(e) => setLogo(e.target.value)}/>
-										<label htmlFor="password">Password</label>
-										<div className="password-input">
-											<input type={passState === 'show' ? 'text' : 'password'} name="password" id="password" placeholder="Enter your password" onChange={handlePasswordChange} required onInvalid={invalidPassword} />
-											<div className="icon" onClick={handleIconClick}>
-												{passState === 'hide' ? <FaEyeSlash /> : <FaEye />}
-											</div>
-										</div>										<p ref={passwordErrorRef} className="error password-error"></p>
-										<div className="password-strength">
-											<div ref={passwordMessageRef} className="message hidden">
-											</div>
-										</div>
-										<p ref={termsErrorRef} className='error terms-error'></p>
-										<button className='block' type="submit" onClick={handleSubmit}>Modify</button>
-					</div>
-					<div className="div-image">
-								<Image 
-									src={RegisterImg}
-									width={400}
-									height={600}
-									alt="register image"
-								/>
-							</div>
-		</div>
-    )
-}
 export default Profile;
