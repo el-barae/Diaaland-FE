@@ -13,6 +13,7 @@ import Skills from '@/components/Candidate/Skills/Skills';
 import Projects from '@/components/Candidate/Projects/Projects';
 import Ex from '@/components/Candidate/Experiances/Ex';
 import Links from '@/components/Candidate/Links/Links';
+import Matches from '@/components/Candidate/ Matches/Matches'
 import Image from 'next/image'
 import Notif from '@/public/images/notif.png'
 import swal from 'sweetalert';
@@ -97,6 +98,9 @@ const handleDelete = async (e:any) =>{
     if (x === "Links") {
       return <Links />;
     }
+    if (x === "Matches") {
+      return <Matches/>;
+    }
   };
 
   useEffect(() => {
@@ -175,6 +179,7 @@ const handleDelete = async (e:any) =>{
                   <button onClick={() => handleClick("Projects")}>Projects</button>
                   <button onClick={() => handleClick("Ex")}>Xp</button>
                   <button onClick={() => handleClick("Links")}>Links</button>
+                  <button onClick={() => handleClick("Matches")}>Matches</button>
                 </div>
                 <div className='Candidate-box'>
                     {y()}

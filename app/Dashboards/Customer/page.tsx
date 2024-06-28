@@ -8,6 +8,8 @@ import swal from 'sweetalert'
 import './style.scss';
 import Profile from '@/components/Customer/Profile/Profile';
 import Jobs from '@/components/Customer/Jobs/Jobs'
+import Applies from '@/components/Customer/Applies/Applies'
+import Matches from '@/components/Customer/ Matches/Matches'
 import Candidates from '@/components/Customer/Candidates/Candidates'
 import {ThemeProvider} from 'next-themes'
 import Navbar from '@/components/HomePage/Navbar/Navbar'
@@ -142,8 +144,14 @@ const handleAddClick = () =>{
       if (x === "Jobs") {
         return <Jobs />;
       }
+      if (x === "Applies") {
+        return <Applies />;
+      }
       if (x === "Candidates") {
         return <Candidates />;
+      }
+      if (x === "Matches") {
+        return <Matches/>;
       }
     }
 
@@ -215,7 +223,9 @@ const handleAddClick = () =>{
                 <div className='Menu'>
                   <button onClick={() => handleClick("Profile")}>Profile</button>
                   <button onClick={() => handleClick("Jobs")}>My jobs</button>
+                  <button onClick={() => handleClick("Applies")}>Applies</button>
                   <button onClick={() => handleClick("Candidates")}>Candidates</button>
+                  <button onClick={() => handleClick("Matches")}>Matches</button>
                 </div>
                 <div className='Customer-box'>
                    {y()} 

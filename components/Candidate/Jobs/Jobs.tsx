@@ -41,10 +41,9 @@ const Jobs = () =>{
           {jobsData.map((job) => (
             <div key={job.id} className={className}>
             <h1>{job.name} :</h1>
-            <p>
-              Description: {job.description} <br/> Number of positions: {job.numberOfPositions} 
-            </p>
-            <p>Close Date: {job.closeDate}</p>
+            <span> Description: </span>{job.description}
+            <p><span> Number of positions: </span> {job.numberOfPositions} </p>
+            <p><span> Close Date: </span>{job.closeDate}</p>
             <button onClick={(e) => handleDelete(e, job.id)}>Delete</button>
           </div>
           ))}

@@ -21,6 +21,10 @@ interface appliedCandidates{
   job: {
       id: number;
       name: string;
+      customer: {
+        id: number;
+        name: string;
+      } | null;
   } | null;
 }
 
@@ -125,7 +129,7 @@ const Dashboard = ({ handleClick }: { handleClick: (value: string) => void }) =>
                         {candidateJob.candidate?.firstName ?? 'N/A'} {candidateJob.candidate?.lastName ?? 'N/A'}
                     </td>
                     <td>{candidateJob.job?.name ?? 'N/A'}</td>
-                    <td>{candidateJob.candidate?.firstName ?? 'N/A'}</td>
+                    <td>{candidateJob.job?.customer?.name ?? 'N/A'}</td>
                     <td><span className={getStatusClass(candidateJob.status)}>{candidateJob.status}</span></td>
                 </tr>
             ))}1
@@ -183,9 +187,9 @@ const Dashboard = ({ handleClick }: { handleClick: (value: string) => void }) =>
                 <table>
                     <thead>
                         <tr>
-                            <td>Name</td>
+                            <td>Candidate</td>
                             <td>Job</td>
-                            <td>Customer</td>
+                            <td>Employer</td>
                             <td>Status</td>
                         </tr>
                     </thead>

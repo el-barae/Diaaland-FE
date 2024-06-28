@@ -5,9 +5,9 @@ import { useState, useEffect } from "react"
 import Select,{ SingleValue } from "react-select"
 import './Matches.scss'
 
-interface appliedCandidates{
+interface Matching{
     id: number;
-    status: string;
+    score: number;
     candidate: {
         id: number;
         firstName: string;
@@ -16,6 +16,10 @@ interface appliedCandidates{
     job: {
         id: number;
         name: string;
+        customer:{
+          id: number;
+          name: string;
+        }
     };
 }
 
@@ -35,7 +39,8 @@ const Applies = () =>{
     const [jobsData, setJobsData] = useState<Job[]>([]);
     const [selectedCandidate, setSelectedCandidate] = useState<SingleValue<{ value: number; label: string }> | null>(null);
     const [selectedJob, setSelectedJob] = useState<SingleValue<{ value: number; label: string }> | null>(null);
-    const [appliedCandidatesData, setAppliedCandidatesData] = useState<appliedCandidates[]>([]);
+    const [matchingData, setMatchingData] = useState<Matching[]>([]);
+    const [filteredData, setFilteredData] = useState<Matching[]>([]);
     useEffect(() => {
         const fetchData = async () => {
           try {
@@ -52,12 +57,13 @@ const Applies = () =>{
               });         
               setJobsData(res.data);
             setCandidatesData(response.data);
-            const response1 = await axios.get<appliedCandidates[]>(API_URL+'/api/v1/candidate-jobs', {
+            const response1 = await axios.get<Matching[]>(API_URL+'/api/v1/matching', {
                 headers: {
                   'Authorization': 'Bearer ' + token
                 }
               });
-            setAppliedCandidatesData(response1.data);
+            setMatchingData(response1.data);
+            setFilteredData(response1.data);
           } catch (error) {
             console.error('Erreur lors de la récupération des données :', error);
           }
@@ -67,45 +73,59 @@ const Applies = () =>{
 
      interface LastCandidates {
         n: number;
-        appliedCandidatesData: appliedCandidates[];
+        matchingData: Matching[];
      }
 
-     const ListAppliedCandidates: React.FC<LastCandidates> = ({ n, appliedCandidatesData }) => {
-        const lastFourCandidateJobs = appliedCandidatesData.slice(-6);
-
+     const ListMatching: React.FC<LastCandidates> = ({ n, matchingData }) => {
+      if (matchingData.length !== 0)
         return (
-            <>
-                {lastFourCandidateJobs.map((candidateJob) => (
-                    <tr key={candidateJob.id}>
-                        <td>
-                        {candidateJob.candidate?.firstName ?? 'N/A'} {candidateJob.candidate?.lastName ?? 'N/A'}
-                    </td>
-                    <td>{candidateJob.job?.name ?? 'N/A'}</td>
-                    <td>{candidateJob.candidate?.firstName ?? 'N/A'}</td>
-                        <td><span >{candidateJob.status}</span></td>
-                    </tr>
-                ))}
-            </>
+          <>
+            {matchingData.map((m) => (
+              <tr key={m.id}>
+                <td>{m.candidate?.firstName ?? 'N/A'} {m.candidate?.lastName ?? 'N/A'}</td>
+                <td>{m.job?.name ?? 'N/A'}</td>
+                <td>{m.job?.customer?.name ?? 'N/A'}</td>
+                <td><span>{m.score}</span></td>
+              </tr>
+            ))}
+          </>
         );
+      return null;
+    };
+
+    const filterMatchingData = (candidateId: number | undefined, jobId: number | undefined) => {
+      let filtered = matchingData;
+  
+      if (candidateId) {
+        filtered = filtered.filter((m) => m.candidate.id === candidateId);
       }
-
-      const handleCandidateChange = (newValue: SingleValue<{ value: number; label: string }>) => {
-        setSelectedCandidate(newValue);
-      };
-    
-      const handleJobChange = (newValue: SingleValue<{ value: number; label: string }>) => {
-        setSelectedJob(newValue);
-      };
-    
-      const candidateOptions = candidatesData.map(candidate => ({
-        value: candidate.id,
-        label: `${candidate.firstName} ${candidate.lastName}`
-      }));
-
-      const jobOptions = jobsData.map(job => ({
-        value: job.id,
-        label: job.name
-      }));
+  
+      if (jobId) {
+        filtered = filtered.filter((m) => m.job.id === jobId);
+      }
+  
+      setFilteredData(filtered);
+    };
+  
+    const handleCandidateChange = (newValue: SingleValue<{ value: number; label: string }>) => {
+      setSelectedCandidate(newValue);
+      filterMatchingData(newValue?.value, selectedJob?.value);
+    };
+  
+    const handleJobChange = (newValue: SingleValue<{ value: number; label: string }>) => {
+      setSelectedJob(newValue);
+      filterMatchingData(selectedCandidate?.value, newValue?.value);
+    };
+  
+    const candidateOptions = candidatesData.map(candidate => ({
+      value: candidate.id,
+      label: `${candidate.firstName} ${candidate.lastName}`
+    }));
+  
+    const jobOptions = jobsData.map(job => ({
+      value: job.id,
+      label: job.name
+    }));
 
       return (
         <div className="recentOrders">
@@ -133,12 +153,18 @@ const Applies = () =>{
                     <td>Candidate</td>
                     <td>Job</td>
                     <td>Employer</td>
-                    <td>Status</td>
+                    <td>Score matching</td>
                 </tr>
             </thead>
 
             <tbody>
-                <ListAppliedCandidates n={appliedCandidatesData.length} appliedCandidatesData={appliedCandidatesData} />
+            {filteredData.length > 0 ? (
+            <ListMatching n={filteredData.length} matchingData={filteredData} />
+          ) : (
+            <tr>
+              <td colSpan={4}>No matching data available</td>
+            </tr>
+          )}
             </tbody>
         </table>
     </div>

@@ -277,7 +277,7 @@ const Profile = () => {
                         <img
                             src={URL.createObjectURL(logoBlob)}
                             alt="Customer Logo"
-                            style={{ marginLeft: '40px', borderRadius: '20px', width: '250px', height: '280px' }}
+                            style={{ marginLeft: '40px', borderRadius: '20px', width: '200px', height: '220px' }}
                         />
                     ) : (
                         <button

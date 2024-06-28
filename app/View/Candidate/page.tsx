@@ -5,11 +5,11 @@ import { useState ,useEffect} from 'react';
 import axios from 'axios';
 import {ThemeProvider} from 'next-themes'
 import Navbar from '@/components/HomePage/Navbar/Navbar'
-import Profile from './Candidate/Profile/Profile';
-import Skills from './Candidate/Skills/Skills';
-import Projects from './Candidate/Projects/Projects';
-import Ex from './Candidate/Experiances/Ex';
-import Links from './Candidate/Links/Links';
+import Profile from './Profile/Profile';
+import Skills from './Skills/Skills';
+import Projects from './Projects/Projects';
+import Ex from './Experiances/Ex';
+import Links from './Links/Links';
 import API_URL from '@/config';
 
 const ViewCandidate = () => {

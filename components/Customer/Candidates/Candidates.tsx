@@ -21,12 +21,11 @@ interface Candidate {
 
 const Candidates = () =>{
     const [candidatesData,setCandidatesData] = useState([])
-    const token = localStorage.getItem("token");
     const router = useRouter();
 
   const ViewMore = (id:number) => {
     localStorage.setItem('IDSelected',String(id));
-    router.push("./View")
+    router.push("../View/Candidate")
   }
 
   const RepeatClassNTimes: React.FC<RepeatClassNTimesProps> = ({ className, n, candidatesData }) => {
@@ -36,9 +35,8 @@ const Candidates = () =>{
         {candidatesData.map((candidate) => (
           <div key={candidate.id} className={className}>
           <h1>{candidate.firstName} {candidate.lastName}:</h1>
-          <p>
-            Email: {candidate.email} <br/> Job statut: {candidate.jobStatus} 
-          </p>
+          <span> Email: </span>{candidate.email}
+          <p><span> Job statut: </span> {candidate.jobStatus}  </p>
           <button onClick={() => ViewMore(candidate.id)}>More</button>
         </div>
         ))}
@@ -49,6 +47,7 @@ const Candidates = () =>{
         const fetchData = async () => {
           try {
             const id = localStorage.getItem("ID");
+            const token = localStorage.getItem("token");
             const response = await axios.get(API_URL+'/api/v1/candidate-jobs/byCustomer/'+String(id), {
               headers: {
                 'Authorization': 'Bearer ' + token

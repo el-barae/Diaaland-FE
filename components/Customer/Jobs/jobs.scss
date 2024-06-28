@@ -10,8 +10,8 @@
                 color: $primary;
             }
             h2{
-                font-size: 27px;
-                font-weight: 300;
+                font-size: 20px;
+                font-weight: 200;
                 color: rgb(65, 19, 214);
             }
             .lists{
@@ -38,6 +38,11 @@
                     } 
                     p{
                         font-size: 17px;
+                        
+                    }
+                    span{
+                        font-size: 18px;
+                        color: $footer-bg;
                     }
                     button{
                         font-size: 17px;
@@ -54,6 +59,12 @@
                             font-weight: 300;
                             background-color: darken($main-color, 10%);
                         }
+                    }
+                    a{
+                        background-color: $primary;
+                        color: white;
+                        padding: 5px;
+                        border-radius: 10px;
                     }
                 }
             }

@@ -25,6 +25,52 @@ export default function AddPost() {
  const [jobType, setJobType] = useState('remote');
  const [loading, setLoading] = useState(true);
  const router = useRouter();
+ const degreesList = [
+  'Master',
+  'Bachelor',
+  'Doctor',
+  'Associate',
+  'Diploma',
+  'Bac+2',
+  'Bac+3',
+  'Bac+5',
+  'Ingener',
+  'DEUST',
+  'DEUG',
+  'Baccalaureat',
+  'Certificate',
+  'Postgraduate Diploma',
+  'Postgraduate Certificate',
+  'Professional Degree',
+  'Advanced Diploma',
+  'Graduate Diploma',
+  'Graduate Certificate',
+  'Technical Diploma',
+  'Vocational Diploma'
+];
+  const [selectedDegrees, setSelectedDegrees] = useState<string[]>([]);
+    const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
+
+    // Toggle dropdown open/close
+    const toggleDropdown = () => {
+        setDropdownOpen(!dropdownOpen);
+        console.log(selectedDegrees)
+    };
+
+    // Handle degree selection and deselection
+    const handleDegreeChange = (degree: string) => {
+        if (selectedDegrees.includes(degree)) {
+            setSelectedDegrees(selectedDegrees.filter(d => d !== degree));
+        } else {
+            setSelectedDegrees([...selectedDegrees, degree]);
+        }
+        console.log(selectedDegrees)
+    };
+
+    // Remove a degree tag
+    const handleRemoveDegree = (degree: string) => {
+        setSelectedDegrees(selectedDegrees.filter(d => d !== degree));
+    };
 
  useEffect(() => {
   const role = localStorage.getItem('role');
@@ -40,7 +86,7 @@ export default function AddPost() {
   
 }, []);
  
-  const handleSubmit = async (e:any)  =>{
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>)  =>{
 		e.preventDefault()
     const id=localStorage.getItem('ID');
     const token = localStorage.getItem("token");
@@ -55,6 +101,7 @@ export default function AddPost() {
       "numberOfPositions": positionNumber,
       "address": adress,
       "remoteStatus": true,
+      "degrees": selectedDegrees,
       "customer":{
         "id": id
       }
@@ -69,7 +116,7 @@ export default function AddPost() {
 		  .catch(function (error) {
         swal(error.message, '', 'error');
 		  });
-      axios.post(API_URL+'/api/v1/candidate-jobs', {
+      /*axios.post(API_URL+'/api/v1/candidate-jobs', {
         "name": jobTitle,
         "description": jobDescription,
         "minSalary": minSalary,
@@ -83,7 +130,7 @@ export default function AddPost() {
         })
         .catch(function (error) {
           swal(error.message, '', 'error');
-        });
+        });*/
 	}
 
  return (
@@ -197,18 +244,41 @@ export default function AddPost() {
             required
             />
           </div>
-      
+
           <div className='foot'>
             <label htmlFor="positionNumber">Number of position</label>
             <input type="number" 
             id='positionNumber'
             value={positionNumber}
             onChange={(e) => setPositionNumber(e.target.value)} 
-            required/>        
-      
-  
-            <button type="submit" id='submit'>Submit</button>
-          </div>
+            required/>   
+
+            <div className='degrees'></div>
+              <label htmlFor="degrees">Degrees</label>
+              <div className="dropdown">
+                <button type="button" onClick={toggleDropdown}>
+                    {dropdownOpen ? 'Close' : 'Select Degrees'}
+                </button>
+                {dropdownOpen && (
+                    <div className="dropdown-menu">
+                        {degreesList.map((degree, index) => (
+                            <div key={index} className="dropdown-item">
+                                <label>
+                                    <input
+                                        type="checkbox"
+                                        checked={selectedDegrees.includes(degree)}
+                                        onChange={() => handleDegreeChange(degree)}
+                                    />
+                                    {degree}
+                                </label>
+                            </div>
+                        ))}
+                    </div>
+                )}
+              </div>    
+            </div>
+
+          <button type="submit" id='submit'>Submit</button>
           
           </form>
         </div>

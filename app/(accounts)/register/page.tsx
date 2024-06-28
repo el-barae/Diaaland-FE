@@ -78,41 +78,51 @@ export default function Register() {
 			  setResume('');
 			}
 		  };
+
+		  const wait = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 	
-		  const handleSubmit = async (e:any)  =>{
-			e.preventDefault()
+		  const handleSubmit = async (e: React.FormEvent) => {
+			e.preventDefault();
 			try {
-				var id;
-			axios.post(API_URL+'/api/v1/auth/register/candidate', {
-				"firstName": firstName,
-				"lastName": lastName,
-				"email":email,
-				"resumeLink": " ",
-				"password": password,
-				"role": "CANDIDAT"
-			  })
-			  .then(function (response) {
-				console.log(response);
-				localStorage.setItem('token',response.data.token)
-				localStorage.setItem('role',response.data.role)
-				Cookies.set("loggedin", "true");
-				id = fetchID();
-				router.push('Dashboards/Candidate')
-			  })
-			  .catch(function (error) {
-				console.log(error);
+			  // Register user
+			  const registerResponse = await axios.post(`${API_URL}/api/v1/auth/register/candidate`, {
+				firstName: firstName,
+				lastName: lastName,
+				email: email,
+				resumeLink: " ",
+				password: password,
+				role: "CANDIDAT"
 			  });
+		  
+			  console.log(registerResponse);
+			  localStorage.setItem('token', registerResponse.data.token);
+			  localStorage.setItem('role', registerResponse.data.role);
+			  Cookies.set("loggedin", "true");
+			  const ID = await fetchID();
+		  
+			  // Wait for 2 seconds
+			  await wait(2000);
+		  
 			  const formData = new FormData();
-        		formData.append('file', resume);
-        	const response = await axios.post(API_URL+'/api/v1/files/upload/'+String(id), formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            	}
-        	});
+			  formData.append('file', resume);
+		  
+			  // Upload the resume
+			  const uploadResponse = await axios.post(`${API_URL}/api/v1/files/uploadCV/${ID}`, formData, {
+				headers: {
+				  'Content-Type': 'multipart/form-data'
+				}
+			  });
+		  
+			  if (uploadResponse.status === 200) {
+				router.push('Dashboards/Candidate');
+			  } else {
+				console.error('File upload failed with status:', uploadResponse.status);
+			  }
 			} catch (error) {
-				console.log(error);
+			  console.error('Error in handleSubmit:', error);
 			}
-		}
+		  };
+		  
 		
 	const handleIconClick = () => {
 		if (passState === 'hide') {
@@ -223,7 +233,7 @@ export default function Register() {
 										<input type="email" name="email" id="email" placeholder="Enter your email" value={email} required onInvalid={invalidEmail} onChange={(e) => setEmail(e.target.value)} />
 										<p ref={emailErrorRef} className="error email-error"></p>
 										<label htmlFor="url">Resume:</label>
-										<input type="file" id="fileInput" name="resume" required onChange={handleFileChange}/>
+										<input type="file" accept=".pdf,.doc,.docx" id="fileInput" name="resume" required onChange={handleFileChange}/>
 										<label htmlFor="password">Password</label>
 										<div className="password-input">
 											<input type={passState === 'show' ? 'text' : 'password'} name="password" id="password" placeholder="Enter your password" onChange={handlePasswordChange} required onInvalid={invalidPassword} />

@@ -13,9 +13,13 @@ interface appliedCandidates{
         lastName: string;
     };
     job: {
+      id: number;
+      name: string;
+      customer: {
         id: number;
         name: string;
-    };
+      } | null;
+  } | null;
 }
 
 function getStatusClass(status: string) {
@@ -66,7 +70,7 @@ const Applies = () =>{
                         {candidateJob.candidate?.firstName ?? 'N/A'} {candidateJob.candidate?.lastName ?? 'N/A'}
                     </td>
                     <td>{candidateJob.job?.name ?? 'N/A'}</td>
-                    <td>{candidateJob.candidate?.firstName ?? 'N/A'}</td>
+                    <td>{candidateJob.job?.customer?.name ?? 'N/A'}</td>
                         <td><span className={getStatusClass(candidateJob.status)}>{candidateJob.status}</span></td>
                     </tr>
                 ))}
@@ -83,7 +87,7 @@ const Applies = () =>{
         <table id="Applies">
             <thead>
                 <tr>
-                    <td>Name</td>
+                    <td>Candidate</td>
                     <td>Job</td>
                     <td>Employer</td>
                     <td>Status</td>

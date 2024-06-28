@@ -20,8 +20,8 @@
               margin-left: 14rem;
             }
             .div2{
-              margin-left: 14vh;
-              margin-right: 10vh;
+              margin-left: 16vh;
+              margin-right: 20vh;
               display: flex;
               flex-direction: column;
             }
@@ -132,6 +132,11 @@
                 font-weight: 500;
               }
             }
+            .div-image{
+              img{
+                margin-bottom: 8rem;
+              }
+            }
 }
 @media(max-width: 1000px){
   .form-candidate{
@@ -146,7 +151,7 @@
     }
   }
 }
-@media(max-width: 1300px){
+@media(max-width: 1320px){
   .div-image{
     display: none;
   }

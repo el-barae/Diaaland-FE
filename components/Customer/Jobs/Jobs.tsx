@@ -95,10 +95,9 @@ const handleModifyClick = (e: any, id: number, name: string, minSalary: number, 
         {jobsData.map((job) => (
           <div key={job.id} className={className}>
           <h1>{job.name} :</h1>
-          <p>
-            Type: {job.type} <br/> Number of positions: {job.numberOfPositions} 
-          </p>
-          <p>Close Date: {job.closeDate}</p>
+          <span> Type: </span>{job.type}
+          <p><span> Number of positions: </span> {job.numberOfPositions} </p>
+          <p><span> Close Date: </span>{job.closeDate}</p>
           <button onClick={(e) => handleDelete(e, job.id)}>Delete</button>
           <button onClick={(e) => handleModifyClick(e, job.id, job.name, job.minSalary, job.maxSalary, job.numberOfPositions, job.openDate, job.closeDate, job.address, job.remoteStatus, job.type, job.description)}>Modify</button>
           <Modal isOpen={modalOpen} id={jobId} jobTitle={jobTitle} minSalary={minSalary} maxSalary={maxSalary} positionNumber={positionNumber} openDate={openDate} endDate={endDate} adress={address} type={type} description={description} onClose={() => setModalOpen(false)} setJobData={setJobsData}/>

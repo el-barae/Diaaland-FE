@@ -19,8 +19,8 @@
               margin-left: 14rem;
             }
             .div2{
-              margin-left: 14vh;
-              margin-right: 10vh;
+              margin-left: 16vh;
+              margin-right: 20vh;
               display: flex;
               flex-direction: column;
             }
@@ -29,9 +29,12 @@
               display: block;
             }
             label {
-              font-size: .9rem;
-              font-weight: 500;
+              font-size: 1.3rem;
+              font-weight: 550;
               text-transform: capitalize;
+            }
+            p{
+              font-size: 1.1rem;
             }
             input {
               outline: none;
@@ -131,6 +134,11 @@
                 font-weight: 500;
               }
             }
+            .div-image{
+              img{
+                margin-bottom: 20rem;
+              }
+            }
 }
 @media(max-width: 1000px){
   .form-candidate{
@@ -145,7 +153,7 @@
     }
   }
 }
-@media(max-width: 1300px){
+@media(max-width: 1320px){
   .div-image{
     display: none;
   }
