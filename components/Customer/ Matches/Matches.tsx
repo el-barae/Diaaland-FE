@@ -50,14 +50,15 @@ const Applies = () =>{
               'Authorization': 'Bearer ' + token
             }
           });   
-          const res = await axios.get(API_URL+'/api/v1/jobs/list', {
+          const id = localStorage.getItem("ID");
+            const res = await axios.get(API_URL+'/api/v1/jobs/byCustomer/'+String(id), {
               headers: {
                 'Authorization': 'Bearer ' + token
               }
             });         
             setJobsData(res.data);
           setCandidatesData(response.data);
-          const response1 = await axios.get<Matching[]>(API_URL+'/api/v1/matching', {
+          const response1 = await axios.get<Matching[]>(API_URL+'/api/v1/matching/customer/'+id, {
               headers: {
                 'Authorization': 'Bearer ' + token
               }
@@ -128,9 +129,9 @@ const Applies = () =>{
   }));
 
     return (
-      <div className="recentOrders">
-      <div className="cardHeader">
-          <h2 id="Applies-h">Matches</h2>
+      <div className="cadr-matches">
+      <div className="matches">
+          <h2 id="Matches-h">Matches</h2>
       </div>
       <div className="sort">
           <h4>By job </h4>

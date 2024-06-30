@@ -63,6 +63,81 @@ body.active-modal {
         padding: .5rem;
         height: 30px;
     }
+
+    .degree-selector {
+        position: relative;
+        width: 300px;
+        margin-bottom: 20px;
+    }
+
+    .degrees{
+     margin-left: 120px;
+    }
+    
+    .dropdown {
+        position: relative;
+        display: inline-block;
+        width: 30%;
+    }
+    
+    .dropdown button {
+        width: 10rem;
+        padding: 5px;
+        background-color: $primary;
+        color: white;
+        border: none;
+        cursor: pointer;
+        text-align: left;
+        border-radius: 6px;
+    }
+    
+    .dropdown-menu {
+        position: absolute;
+        background-color: #f9f9f9;
+        border: 1px solid #ccc;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        width: 150%;
+        z-index: 1;
+        border-radius: 4px;
+        margin-top: 5px;
+        max-height: 150px; /* Set a maximum height for the dropdown */
+        overflow-y: auto; /* Enable vertical scrolling */
+        padding-right: 10px;
+    }
+    
+    .dropdown-item {
+        padding: 10px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+    }
+    
+    .dropdown-item label {
+        width: 100%;
+    }
+    
+    .degree-tags {
+        margin-top: 10px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+     }
+    
+    .degree-tag {
+        display: inline-flex;
+        align-items: center;
+        background-color: #e0e0e0;
+        padding: 5px 10px;
+        border-radius: 3px;
+    }
+    
+    .degree-tag button {
+        background: none;
+        border: none;
+        margin-left: 5px;
+        cursor: pointer;
+        color: red;
+    }
 }
 #close-btn{
     background-color: crimson;

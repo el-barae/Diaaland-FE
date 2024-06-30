@@ -45,19 +45,14 @@ const Applies = () =>{
       const fetchData = async () => {
         try {
           const token = localStorage.getItem("token")
-          const response = await axios.get(API_URL+'/api/v1/candidates', {
-            headers: {
-              'Authorization': 'Bearer ' + token
-            }
-          });   
+          const ID = localStorage.getItem("ID"); 
           const res = await axios.get(API_URL+'/api/v1/jobs/list', {
               headers: {
                 'Authorization': 'Bearer ' + token
               }
             });         
             setJobsData(res.data);
-          setCandidatesData(response.data);
-          const response1 = await axios.get<Matching[]>(API_URL+'/api/v1/matching', {
+          const response1 = await axios.get<Matching[]>(API_URL+'/api/v1/matching/candidate/'+String(ID), {
               headers: {
                 'Authorization': 'Bearer ' + token
               }
@@ -107,20 +102,10 @@ const Applies = () =>{
     setFilteredData(filtered);
   };
 
-  const handleCandidateChange = (newValue: SingleValue<{ value: number; label: string }>) => {
-    setSelectedCandidate(newValue);
-    filterMatchingData(newValue?.value, selectedJob?.value);
-  };
-
   const handleJobChange = (newValue: SingleValue<{ value: number; label: string }>) => {
     setSelectedJob(newValue);
     filterMatchingData(selectedCandidate?.value, newValue?.value);
   };
-
-  const candidateOptions = candidatesData.map(candidate => ({
-    value: candidate.id,
-    label: `${candidate.firstName} ${candidate.lastName}`
-  }));
 
   const jobOptions = jobsData.map(job => ({
     value: job.id,
@@ -128,9 +113,9 @@ const Applies = () =>{
   }));
 
     return (
-      <div className="recentOrders">
-      <div className="cardHeader">
-          <h2 id="Applies-h">Matches</h2>
+      <div className="cadr-matches">
+      <div className="matches">
+          <h2 id="Matches-h">Matches</h2>
       </div>
       <div className="sort">
           <h4>By job </h4>
@@ -139,12 +124,6 @@ const Applies = () =>{
       value={selectedJob}
       onChange={handleJobChange}
       options={jobOptions}></Select>
-          <h4>By Candidate</h4>
-          <Select  id="candidates"
-      name="candidates"
-      value={selectedCandidate}
-      onChange={handleCandidateChange}
-      options={candidateOptions}></Select>
       </div>
 
       <table id="Applies">

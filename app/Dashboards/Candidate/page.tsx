@@ -124,6 +124,16 @@ const handleDelete = async (e:any) =>{
           .then(response => {
             setNotif(response.data);
           });
+          const matching = localStorage.getItem('matching');
+          if(matching){
+            axios.get(API_URL+'/api/v1/matching/byCandidate/'+String(ID), {
+              headers: {
+                'Authorization': 'Bearer ' + token
+              }
+            }).then(response => {
+              localStorage.removeItem("matching");
+            });
+          }
 
           setTimeout(() => {
             setLoading(false);

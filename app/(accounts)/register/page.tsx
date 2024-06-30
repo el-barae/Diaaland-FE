@@ -65,6 +65,7 @@ export default function Register() {
 			});
 			const ID = JSON.stringify(resp.data);
 			localStorage.setItem('ID',ID)
+			localStorage.setItem('matching', 'true');
 			return ID;
 		  } catch (error) {
 			console.error('Erreur lors de la récupération des données :', error);

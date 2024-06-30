@@ -10,11 +10,13 @@
     box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08);
     border-radius: 20px;
     margin-left: 15rem;
+    width: 70vw;
     .matches{
         display: flex;
     justify-content: space-between;
     align-items: flex-start;
     margin: 10px 0px;
+    width: 100%;
         #Matches-h {
             margin-top: 20px;
             font-size: 2.8rem;
@@ -39,4 +41,35 @@
             padding: 20px;
         }
     }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+      }
+    table thead td {
+        font-weight: 600;
+      }
+    table tr {
+        color: var(--black1);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      }
+    table tr:last-child {
+        border-bottom: none;
+      }
+    table tbody tr:hover {
+        background: $main-color;
+        color: var(--white);
+      }
+    table tr td {
+        padding: 10px;
+      }
+    table tr td:last-child {
+        text-align: end;
+      }
+    table tr td:nth-child(2) {
+        text-align: end;
+      }
+    table tr td:nth-child(3) {
+        text-align: center;
+      }
 }

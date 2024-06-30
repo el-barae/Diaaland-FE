@@ -64,7 +64,6 @@ export default function AddPost() {
         } else {
             setSelectedDegrees([...selectedDegrees, degree]);
         }
-        console.log(selectedDegrees)
     };
 
     // Remove a degree tag
@@ -111,7 +110,8 @@ export default function AddPost() {
 				}
 			})
 		  .then(function (response) {
-      swal('Your post had been sent to admin', '', 'success');
+        localStorage.setItem('matching', 'true');
+        swal('Your post had been sent to admin', '', 'success');
 		  })
 		  .catch(function (error) {
         swal(error.message, '', 'error');

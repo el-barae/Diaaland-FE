@@ -17,6 +17,7 @@ interface Job {
   numberOfPositions: number;
   address: string;
   remoteStatus: string;
+  degrees: string;
 }
 
   interface RepeatClassNTimesProps {
@@ -31,8 +32,7 @@ const Jobs = () =>{
     const handleDelete = async (e:any, idJ:number) =>{
       e.preventDefault()
       const token = localStorage.getItem("token");
-      const idC = localStorage.getItem("ID")
-      axios.delete(API_URL+'/api/v1/candidate-jobs/'+String(idC)+'/'+String(idJ), {
+      axios.delete(API_URL+'/api/v1/jobs/'+String(idJ), {
 				headers: {
 				  'Authorization': 'Bearer ' + token
 				}
@@ -69,11 +69,12 @@ const Jobs = () =>{
     const [openDate, setOpenDate] = useState('');
     const [endDate, setEndDate] = useState(''); 
     const [address, setAddress] = useState('');
-    const [xp, setXp] = useState('');
+    const [status, setStatus] = useState('');
     const [type, setType] = useState('');
     const [description, setDescription] = useState('');
+    const [degrees, setDegrees] = useState('');
 
-const handleModifyClick = (e: any, id: number, name: string, minSalary: number, maxSalary: number, positionNumber: number, openDate: string, endDate: string, address: string, xp: string, type: string, description: string) => {
+const handleModifyClick = (e: any, id: number, name: string, minSalary: number, maxSalary: number, positionNumber: number, openDate: string, endDate: string, address: string, status: string, type: string, description: string, degrees:string) => {
     setJobId(id);
     setJobTitle(name);
     setMinSalary(minSalary);
@@ -82,9 +83,10 @@ const handleModifyClick = (e: any, id: number, name: string, minSalary: number, 
     setOpenDate(openDate);
     setEndDate(endDate);
     setAddress(address);
-    setXp(xp);
+    setStatus(status);
     setType(type);
     setDescription(description);
+    setDegrees(degrees);
     setModalOpen(true);
 };
 
@@ -99,8 +101,8 @@ const handleModifyClick = (e: any, id: number, name: string, minSalary: number, 
           <p><span> Number of positions: </span> {job.numberOfPositions} </p>
           <p><span> Close Date: </span>{job.closeDate}</p>
           <button onClick={(e) => handleDelete(e, job.id)}>Delete</button>
-          <button onClick={(e) => handleModifyClick(e, job.id, job.name, job.minSalary, job.maxSalary, job.numberOfPositions, job.openDate, job.closeDate, job.address, job.remoteStatus, job.type, job.description)}>Modify</button>
-          <Modal isOpen={modalOpen} id={jobId} jobTitle={jobTitle} minSalary={minSalary} maxSalary={maxSalary} positionNumber={positionNumber} openDate={openDate} endDate={endDate} adress={address} type={type} description={description} onClose={() => setModalOpen(false)} setJobData={setJobsData}/>
+          <button onClick={(e) => handleModifyClick(e, job.id, job.name, job.minSalary, job.maxSalary, job.numberOfPositions, job.openDate, job.closeDate, job.address, job.remoteStatus, job.type, job.description, job.degrees)}>Modify</button>
+          <Modal isOpen={modalOpen} id={jobId} jobTitle={jobTitle} minSalary={minSalary} maxSalary={maxSalary} positionNumber={positionNumber} openDate={openDate} endDate={endDate} adress={address} status={status} type={type} description={description} degrees={degrees} onClose={() => setModalOpen(false)} setJobData={setJobsData}/>
         </div>
         ))}
         </>

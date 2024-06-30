@@ -164,6 +164,9 @@ $gray: #9E9E9E;
             z-index: 1;
             border-radius: 4px;
             margin-top: 5px;
+            max-height: 150px; /* Set a maximum height for the dropdown */
+            overflow-y: auto; /* Enable vertical scrolling */
+            padding-right: 10px;
         }
         
         .dropdown-item {

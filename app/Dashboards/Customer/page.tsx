@@ -175,6 +175,22 @@ const handleAddClick = () =>{
           .then(response => {
             setNotif(response.data);
           });
+          const matching = localStorage.getItem('matching');
+          if(matching){
+            const resp = await axios.get(API_URL+'/api/v1/jobs/lastJobId', {
+              headers: {
+                'Authorization': 'Bearer ' + token
+              }
+            });
+            const jobId = JSON.stringify(resp.data);
+            axios.get(API_URL+'/api/v1/matching/byJob/'+ String(jobId), {
+              headers: {
+                'Authorization': 'Bearer ' + token
+              }
+            }).then(response => {
+              localStorage.removeItem("matching");
+            });
+          }
             setTimeout(() => {
               setLoading(false);
             }, 1500);
