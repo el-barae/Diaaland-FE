@@ -85,7 +85,7 @@ const Applies = () =>{
                 <td>{m.candidate?.firstName ?? 'N/A'} {m.candidate?.lastName ?? 'N/A'}</td>
                 <td>{m.job?.name ?? 'N/A'}</td>
                 <td>{m.job?.customer?.name ?? 'N/A'}</td>
-                <td><span>{m.score}</span></td>
+                <td><span>{(m.score * 130).toFixed(2)} %</span></td>
               </tr>
             ))}
           </>

@@ -17,7 +17,7 @@ interface Job {
   numberOfPositions: number;
   address: string;
   remoteStatus: string;
-  degrees: string;
+  degrees: string[];
 }
 
   interface RepeatClassNTimesProps {
@@ -72,23 +72,23 @@ const Jobs = () =>{
     const [status, setStatus] = useState('');
     const [type, setType] = useState('');
     const [description, setDescription] = useState('');
-    const [degrees, setDegrees] = useState('');
+    const [degrees, setDegrees] = useState<string[]>([]);
 
-const handleModifyClick = (e: any, id: number, name: string, minSalary: number, maxSalary: number, positionNumber: number, openDate: string, endDate: string, address: string, status: string, type: string, description: string, degrees:string) => {
-    setJobId(id);
-    setJobTitle(name);
-    setMinSalary(minSalary);
-    setMaxSalary(maxSalary);
-    setPositionNumber(positionNumber);
-    setOpenDate(openDate);
-    setEndDate(endDate);
-    setAddress(address);
-    setStatus(status);
-    setType(type);
-    setDescription(description);
-    setDegrees(degrees);
-    setModalOpen(true);
-};
+    const handleModifyClick = (e: any, job: Job) => {
+      setJobId(job.id);
+      setJobTitle(job.name);
+      setMinSalary(job.minSalary);
+      setMaxSalary(job.maxSalary);
+      setPositionNumber(job.numberOfPositions);
+      setOpenDate(job.openDate);
+      setEndDate(job.closeDate);
+      setAddress(job.address);
+      setStatus(job.remoteStatus);
+      setType(job.type);
+      setDescription(job.description);
+      setDegrees(job.degrees);
+      setModalOpen(true);
+    };
 
   const RepeatClassNTimes: React.FC<RepeatClassNTimesProps> = ({ className, n, jobsData }) => {
     if(jobsData.length != 0)
@@ -101,8 +101,8 @@ const handleModifyClick = (e: any, id: number, name: string, minSalary: number, 
           <p><span> Number of positions: </span> {job.numberOfPositions} </p>
           <p><span> Close Date: </span>{job.closeDate}</p>
           <button onClick={(e) => handleDelete(e, job.id)}>Delete</button>
-          <button onClick={(e) => handleModifyClick(e, job.id, job.name, job.minSalary, job.maxSalary, job.numberOfPositions, job.openDate, job.closeDate, job.address, job.remoteStatus, job.type, job.description, job.degrees)}>Modify</button>
-          <Modal isOpen={modalOpen} id={jobId} jobTitle={jobTitle} minSalary={minSalary} maxSalary={maxSalary} positionNumber={positionNumber} openDate={openDate} endDate={endDate} adress={address} status={status} type={type} description={description} degrees={degrees} onClose={() => setModalOpen(false)} setJobData={setJobsData}/>
+          <button onClick={(e) => handleModifyClick(e, job)}>Modify</button>
+          <Modal isOpen={modalOpen} id={jobId} jobTitle={jobTitle} minSalary={minSalary} maxSalary={maxSalary} positionNumber={positionNumber} openDate={openDate} endDate={endDate} address={address} status={status} type={type} description={description} degrees={degrees} onClose={() => setModalOpen(false)} setJobData={setJobsData}/>
         </div>
         ))}
         </>

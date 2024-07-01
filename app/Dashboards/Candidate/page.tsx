@@ -126,6 +126,7 @@ const handleDelete = async (e:any) =>{
           });
           const matching = localStorage.getItem('matching');
           if(matching){
+            swal('The matching process is currently running.');
             axios.get(API_URL+'/api/v1/matching/byCandidate/'+String(ID), {
               headers: {
                 'Authorization': 'Bearer ' + token

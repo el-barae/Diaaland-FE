@@ -11,48 +11,99 @@ interface Job {
   maxSalary: number;
   type: string;
   openDate: string;
-  closeDate: string; 
+  closeDate: string;
   numberOfPositions: number;
   address: string;
   remoteStatus: string;
+  degrees: string[];
+  customer: {
+    id: number;
+  };
 }
 
 interface ModalProps {
-    isOpen: boolean;
-    id: number;
-    jobTitle: string;
-    minSalary: number;
-    maxSalary: number;
-    positionNumber: number;
-    openDate: string;
-    endDate: string; 
-    adress: string;
-    xp: string;
-    type: string;
-    description: string;
-    onClose: () => void;
-    setJobData: React.Dispatch<React.SetStateAction<Job[]>>;
-  }
+  isOpen: boolean;
+  id: number;
+  jobTitle: string;
+  minSalary: number;
+  maxSalary: number;
+  positionNumber: number;
+  openDate: string;
+  endDate: string;
+  address: string;
+  status: string;
+  type: string;
+  description: string;
+  degrees: string[];
+  onClose: () => void;
+  setJobData: React.Dispatch<React.SetStateAction<Job[]>>;
+}
 
-  export default function Modal({ isOpen, id, jobTitle, minSalary, maxSalary, positionNumber, openDate, endDate, adress, xp, type, description, onClose, setJobData }: ModalProps) {
+
+  export default function Modal({ isOpen, id, jobTitle, minSalary, maxSalary, positionNumber, openDate, endDate, address, status, type, description, degrees, onClose, setJobData }: ModalProps) {
     const [MjobTitle, setJobTitle] = useState(jobTitle);
- const [MminSalary, setMinSalary] = useState( minSalary);
- const [MmaxSalary, setMaxSalary] = useState(maxSalary);
- const [MpositionNumber , setPositionNumber] = useState(positionNumber);
- const [MjobOpenDate , setJobOpenDate] = useState(openDate);
- const [MjobCloseDate , setJobCloseDate] = useState(endDate);
- const [MjobDescription, setJobDescription] = useState(description);
- const [Madress , setAdress] = useState(adress); 
- const [MExperience, setExperience] = useState(xp);
- const [MjobType, setJobType] = useState(type);
- const token = localStorage.getItem("token")
+  const [MminSalary, setMinSalary] = useState(minSalary);
+  const [MmaxSalary, setMaxSalary] = useState(maxSalary);
+  const [MpositionNumber, setPositionNumber] = useState(positionNumber);
+  const [MjobOpenDate, setJobOpenDate] = useState(openDate);
+  const [MjobCloseDate, setJobCloseDate] = useState(endDate);
+  const [MjobDescription, setJobDescription] = useState(description);
+  const [Madress, setAdress] = useState(address);
+  const [Mstatus, setStatus] = useState(status);
+  const [MjobType, setJobType] = useState(type);
+  const [selectedDegrees, setSelectedDegrees] = useState<string[]>(degrees);
+ const degreesList = [
+  'Master',
+  'Bachelor',
+  'Doctor',
+  'Associate',
+  'Diploma',
+  'Bac+2',
+  'Bac+3',
+  'Bac+5',
+  'Ingener',
+  'DEUST',
+  'DEUG',
+  'Baccalaureat',
+  'Certificate',
+  'Postgraduate Diploma',
+  'Postgraduate Certificate',
+  'Professional Degree',
+  'Advanced Diploma',
+  'Graduate Diploma',
+  'Graduate Certificate',
+  'Technical Diploma',
+  'Vocational Diploma'
+];
+    const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
+
+    // Toggle dropdown open/close
+    const toggleDropdown = () => {
+        setDropdownOpen(!dropdownOpen);
+    };
+
+    // Handle degree selection and deselection
+    const handleDegreeChange = (degree: string) => {
+        if (selectedDegrees.includes(degree)) {
+            setSelectedDegrees(selectedDegrees.filter(d => d !== degree));
+        } else {
+            setSelectedDegrees([...selectedDegrees, degree]);
+        }
+    };
+
+    // Remove a degree tag
+    const handleRemoveDegree = (degree: string) => {
+        setSelectedDegrees(selectedDegrees.filter(d => d !== degree));
+    };
+
     const toggleModal = () => {
       onClose();
     };
 
     const handleModifyJob = async (e: any) => {
       e.preventDefault();
-      const idC = localStorage.getItem("ID");
+      const token = localStorage.getItem("token");
+      const ID = localStorage.getItem("IDSelected");
       axios
         .put(API_URL+'/api/v1/jobs/' + String(id), {
           id: id,
@@ -65,7 +116,11 @@ interface ModalProps {
           "closeDate": MjobCloseDate,
           "numberOfPositions": MpositionNumber,
           "address": Madress,
-          "remoteStatus": true
+          "remoteStatus": Mstatus,
+          "degrees": selectedDegrees,
+          "customer":{
+            "id": String(ID)
+          }
         }, {
           headers: {
             'Authorization': 'Bearer ' + token
@@ -86,7 +141,8 @@ interface ModalProps {
                   closeDate: MjobCloseDate,
                   numberOfPositions: MpositionNumber,
                   address: Madress,
-                  remoteStatus: "true"
+                  remoteStatus: Mstatus,
+                  degrees: selectedDegrees
                 };
               }
               return job;
@@ -148,12 +204,33 @@ interface ModalProps {
     <input type="date" id="jobCloseDate" value={MjobCloseDate} onChange={(e) => setJobCloseDate(e.target.value)} />
     <label htmlFor="jobDescription">Job Description:</label>
     <textarea className="desc" id="jobDescription" placeholder="Enter job description" value={MjobDescription} onChange={(e) => setJobDescription(e.target.value)} />
+    <div className='degrees'></div>
+              <label htmlFor="degrees">Degrees</label>
+              <div className="dropdown">
+                <button type="button" onClick={toggleDropdown}>
+                    {dropdownOpen ? 'Close' : 'Select Degrees'}
+                </button>
+                {dropdownOpen && (
+                    <div className="dropdown-menu">
+                        {degreesList.map((degree, index) => (
+                            <div key={index} className="dropdown-item">
+                                <label>
+                                    <input
+                                        type="checkbox"
+                                        checked={selectedDegrees.includes(degree)}
+                                        onChange={() => handleDegreeChange(degree)}
+                                    />
+                                    {degree}
+                                </label>
+                            </div>
+                        ))}
+                    </div>
+                )}
+              </div> 
     <label htmlFor="adress">Address:</label>
     <input type="text" id="adress" placeholder="Enter address" value={Madress} onChange={(e) => setAdress(e.target.value)} />
-    <label htmlFor="experience">Experience:</label>
-    <input type="text" id="experience" placeholder="Enter experience" value={MExperience} onChange={(e) => setExperience(e.target.value)} />
     <label htmlFor="jobType">Job Type:</label>
-    <input type="text" id="jobType" placeholder="Enter job type" value={MjobType} onChange={(e) => setJobType(e.target.value)} />
+    <input type="text" id="jobType" placeholder="Enter job type" value={MjobType} onChange={(e) => setJobType(e.target.value)} />   
     <button onClick={handleModifyJob}>Modify Job</button>
               </div>
           </div>

@@ -12,43 +12,44 @@ interface Job {
   maxSalary: number;
   type: string;
   openDate: string;
-  closeDate: string; 
+  closeDate: string;
   numberOfPositions: number;
   address: string;
   remoteStatus: string;
-  degrees: string;
+  degrees: string[];
 }
 
 interface ModalProps {
-    isOpen: boolean;
-    id: number;
-    jobTitle: string;
-    minSalary: number;
-    maxSalary: number;
-    positionNumber: number;
-    openDate: string;
-    endDate: string; 
-    adress: string;
-    status: string;
-    type: string;
-    description: string;
-    degrees: string;
-    onClose: () => void;
-    setJobData: React.Dispatch<React.SetStateAction<Job[]>>;
-  }
+  isOpen: boolean;
+  id: number;
+  jobTitle: string;
+  minSalary: number;
+  maxSalary: number;
+  positionNumber: number;
+  openDate: string;
+  endDate: string;
+  address: string;
+  status: string;
+  type: string;
+  description: string;
+  degrees: string[];
+  onClose: () => void;
+  setJobData: React.Dispatch<React.SetStateAction<Job[]>>;
+}
 
-  export default function Modal({ isOpen, id, jobTitle, minSalary, maxSalary, positionNumber, openDate, endDate, adress, status, type, description, degrees, onClose, setJobData }: ModalProps) {
+
+  export default function Modal({ isOpen, id, jobTitle, minSalary, maxSalary, positionNumber, openDate, endDate, address, status, type, description, degrees, onClose, setJobData }: ModalProps) {
     const [MjobTitle, setJobTitle] = useState(jobTitle);
- const [MminSalary, setMinSalary] = useState( minSalary);
- const [MmaxSalary, setMaxSalary] = useState(maxSalary);
- const [MpositionNumber , setPositionNumber] = useState(positionNumber);
- const [MjobOpenDate , setJobOpenDate] = useState(openDate);
- const [MjobCloseDate , setJobCloseDate] = useState(endDate);
- const [MjobDescription, setJobDescription] = useState(description);
- const [Madress , setAdress] = useState(adress); 
- const [Mstatus , setStatus] = useState(status); 
- const [MjobType, setJobType] = useState(type);
- const [MDegrees, setDegrees] = useState(degrees);
+  const [MminSalary, setMinSalary] = useState(minSalary);
+  const [MmaxSalary, setMaxSalary] = useState(maxSalary);
+  const [MpositionNumber, setPositionNumber] = useState(positionNumber);
+  const [MjobOpenDate, setJobOpenDate] = useState(openDate);
+  const [MjobCloseDate, setJobCloseDate] = useState(endDate);
+  const [MjobDescription, setJobDescription] = useState(description);
+  const [Madress, setAdress] = useState(address);
+  const [Mstatus, setStatus] = useState(status);
+  const [MjobType, setJobType] = useState(type);
+  const [selectedDegrees, setSelectedDegrees] = useState<string[]>(degrees);
  const degreesList = [
   'Master',
   'Bachelor',
@@ -72,13 +73,11 @@ interface ModalProps {
   'Technical Diploma',
   'Vocational Diploma'
 ];
-  const [selectedDegrees, setSelectedDegrees] = useState<string[]>([]);
     const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
 
     // Toggle dropdown open/close
     const toggleDropdown = () => {
         setDropdownOpen(!dropdownOpen);
-        console.log(selectedDegrees)
     };
 
     // Handle degree selection and deselection
@@ -88,7 +87,6 @@ interface ModalProps {
         } else {
             setSelectedDegrees([...selectedDegrees, degree]);
         }
-        console.log(selectedDegrees)
     };
 
     // Remove a degree tag
@@ -142,7 +140,7 @@ interface ModalProps {
                   numberOfPositions: MpositionNumber,
                   address: Madress,
                   remoteStatus: Mstatus,
-                  degrees: MDegrees
+                  degrees: selectedDegrees
                 };
               }
               return job;

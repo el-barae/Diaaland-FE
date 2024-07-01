@@ -183,6 +183,7 @@ const handleAddClick = () =>{
               }
             });
             const jobId = JSON.stringify(resp.data);
+            swal('The matching process is currently running.');
             axios.get(API_URL+'/api/v1/matching/byJob/'+ String(jobId), {
               headers: {
                 'Authorization': 'Bearer ' + token
