@@ -20,13 +20,13 @@ interface RepeatClassNTimesProps {
 
   
 const Projects = () => {
-  const token = localStorage.getItem("token");
   const [projectsData, setProjectsData] = useState<Project[]>([]);
 
     useEffect(() => {
         const fetchData = async () => {
           try {
             const id = localStorage.getItem("IDSelected");
+            const token = localStorage.getItem("token");
             const response = await axios.get(API_URL+'/api/v1/projects/byCandidate/'+String(id), {
               headers: {
                 'Authorization': 'Bearer ' + token

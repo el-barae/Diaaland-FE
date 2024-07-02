@@ -27,7 +27,6 @@ interface ModalProps {
     const [date, setDate] = useState('');
     const [recipient, setRecipient] = useState('');
     const router = useRouter();
-    const token = localStorage.getItem("token")
 
     const toggleModal = () => {
       onClose();
@@ -36,6 +35,7 @@ interface ModalProps {
     const handleSend = async (e: any) => {
       e.preventDefault();
       const idC = Cookies.get('id');
+      const token = localStorage.getItem("token")
       axios
         .post(API_URL+'/api/v1/messages', {
           "email": "elfallous@gmail.com",

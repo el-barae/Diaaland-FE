@@ -1,7 +1,6 @@
 'use client'
 import './Projects.scss';
 import { useState,useEffect } from 'react';
-import Cookies from 'js-cookie';
 import axios from 'axios';
 import Modal from './ModalProject/ModalProject'
 import API_URL from '@/config'
@@ -23,7 +22,6 @@ interface RepeatClassNTimesProps {
 
   
 const Projects = () => {
-  const token = localStorage.getItem("token");
   const [name,setName] = useState('')
   const [startDate,setStartDate] = useState('')
   const [endDate,setEndDate] = useState('')
@@ -32,7 +30,8 @@ const Projects = () => {
 
     const handleAddProject = async (e:any)  =>{
       e.preventDefault()
-      const id = Cookies.get("id");
+      const id = localStorage.getItem("ID");
+      const token = localStorage.getItem("token");
       axios.post(API_URL+'/api/v1/projects', {
         "name": name,
         "startDate": startDate,
@@ -59,6 +58,7 @@ const Projects = () => {
     const handleDelete = async (e:any, id:number) =>{
       e.preventDefault()
       try{
+        const token = localStorage.getItem("token");
       axios.delete(API_URL+'/api/v1/projects/'+String(id), {
         headers: {
           'Authorization': 'Bearer ' + token
@@ -89,8 +89,8 @@ const Projects = () => {
     useEffect(() => {
         const fetchData = async () => {
           try {
-            Cookies.set("id","1")
-            const id = Cookies.get("id");
+            const id = localStorage.getItem("ID");
+            const token = localStorage.getItem("token");
             const response = await axios.get(API_URL+'/api/v1/projects/byCandidate/'+String(id), {
               headers: {
                 'Authorization': 'Bearer ' + token

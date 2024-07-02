@@ -38,7 +38,6 @@ interface ModalProps {
     const [McustomerDescription, setCustomerDescription] = useState(description);
     const [McustomerLogo, setCustomerLogo] = useState(logo);
     const router = useRouter();
-    const token = localStorage.getItem("token")
 
     const toggleModal = () => {
       onClose();
@@ -52,6 +51,7 @@ interface ModalProps {
     const handleModifyCustomer = async (e: any) => {
       e.preventDefault();
       const idC = localStorage.getItem("ID");
+      const token = localStorage.getItem("token")
       axios
         .put(API_URL+'/api/v1/customers/' + String(id), {
           id: id,

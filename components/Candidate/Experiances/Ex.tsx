@@ -1,7 +1,6 @@
 'use client'
 import './Ex.scss';
 import { useState,useEffect } from 'react';
-import Cookies from 'js-cookie';
 import axios from 'axios';
 import API_URL from '@/config'
 import ModalXp from './ModalXp/ModalXp'
@@ -20,7 +19,6 @@ interface RepeatClassNTimesProps {
   }
 
 const Xp = () => {
-  const token = localStorage.getItem("token");
   const [name,setName] = useState('')
   const [startDate,setStartDate] = useState('')
   const [endDate,setEndDate] = useState('')
@@ -29,7 +27,8 @@ const Xp = () => {
 
     const handleAddXp = async (e:any)  =>{
       e.preventDefault()
-      const id = Cookies.get("id");
+      const id = localStorage.getItem("ID");
+      const token = localStorage.getItem("token");
       axios.post(API_URL+'/api/v1/experiences', {
         "name": name,
         "startDate": startDate,
@@ -54,6 +53,7 @@ const Xp = () => {
 
     const handleDelete = async (e:any, id:number) =>{
       e.preventDefault()
+      const token = localStorage.getItem("token");
       axios.delete(API_URL+'/api/v1/experiences/'+String(id), {
         headers: {
           'Authorization': 'Bearer ' + token
@@ -81,8 +81,8 @@ const Xp = () => {
     useEffect(() => {
         const fetchData = async () => {
           try {
-            Cookies.set("id","1")
-            const id = Cookies.get("id");
+            const id = localStorage.getItem("ID");
+            const token = localStorage.getItem("token");
             const response = await axios.get(API_URL+'/api/v1/experiences/byCandidate/'+String(id), {
               headers: {
                 'Authorization': 'Bearer ' + token

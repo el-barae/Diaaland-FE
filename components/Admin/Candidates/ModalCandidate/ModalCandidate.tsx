@@ -26,7 +26,6 @@ interface ModalProps {
   export default function Modal({ isOpen, id, onClose}: ModalProps) {
     const [score, setScore] = useState(0);
     const [skillsData,setSkillsData] = useState<skill[]>([])
-    const token = localStorage.getItem("token")
 
     const toggleModal = () => {
       onClose();
@@ -42,6 +41,7 @@ interface ModalProps {
     const handleDelete = async (e:any, idS:number) =>{
       e.preventDefault()
       try{
+        const token = localStorage.getItem("token")
       axios.delete(API_URL+'/api/v1/candidate-skills/'+String(id)+'/'+String(idS), {
         headers: {
           'Authorization': 'Bearer ' + token
@@ -57,6 +57,7 @@ interface ModalProps {
     const handleScore = async (e:any, idS:number) =>{
       e.preventDefault()
       try{
+        const token = localStorage.getItem("token")
       axios.put(API_URL+'/api/v1/candidate-skills/'+String(idS), {
         "id": 2,
         "score": score,
@@ -87,6 +88,7 @@ interface ModalProps {
       }
       const fetchData = async () => {
       try {
+        const token = localStorage.getItem("token")
         const response = await axios.get(API_URL+'/api/v1/candidate-skills/byCandidate/' + id, {
           headers: {
             'Authorization': 'Bearer ' + token

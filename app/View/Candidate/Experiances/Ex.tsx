@@ -17,13 +17,13 @@ interface RepeatClassNTimesProps {
   }
 
 const Xp = () => {
-  const token = localStorage.getItem("token");
   const [xpData,setXpData] = useState<xp[]>([])
 
 
     useEffect(() => {
         const fetchData = async () => {
           try {
+            const token = localStorage.getItem("token");
             const id = localStorage.getItem("IDSelected");
             const response = await axios.get(API_URL+'/api/v1/experiences/byCandidate/'+String(id), {
               headers: {

@@ -1,6 +1,5 @@
 import React, { useState,useEffect } from "react";
 import axios from "axios";
-import Cookies from "js-cookie";
 import "./ModalCertificate.scss";
 import API_URL from "@/config";
 
@@ -15,7 +14,6 @@ interface ModalProps {
   }
 
   export default function Modal({ isOpen, id, name, url, domain, description, onClose }: ModalProps) {
-    const token = localStorage.getItem("token");
   const [modifiedName, setModifiedName] = useState(name);
   const [modifiedUrl, setModifiedUrl] = useState(url);
   const [modifiedDomain, setModifiedDomain] = useState(domain);
@@ -27,7 +25,8 @@ interface ModalProps {
 
     const handleModifyCertificate = async (e: any) => {
       e.preventDefault();
-      const idC = Cookies.get('id');
+      const idC = localStorage.getItem("ID");
+      const token = localStorage.getItem("token");
       axios
         .put(API_URL+'/api/v1/certificates/' + String(id), {
           id: id,

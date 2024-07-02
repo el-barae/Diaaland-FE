@@ -18,12 +18,12 @@ interface RepeatClassNTimesProps {
 
 const Skills = () => {
     const [skillsData,setSkillsData] = useState<skill[]>([])
-    const token = localStorage.getItem("token");
   
       useEffect(() => {
           const fetchData = async () => {
             try {
               var ID = localStorage.getItem("IDSelected");
+              const token = localStorage.getItem("token");
               const response = await axios.get(API_URL+'/api/v1/candidate-skills/byCandidate/' + String(ID), {
                 headers: {
                   'Authorization': 'Bearer ' + token

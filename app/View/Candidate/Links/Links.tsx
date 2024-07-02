@@ -48,7 +48,6 @@ interface Education {
   }
 
 const Links = () => {
-  const token = localStorage.getItem("token");
     const [educationsData,setEducationsData] = useState<education[]>([])
     const [certificatesData,setCertificatesData] = useState<certificate[]>([])
     const [other_linksData,setOther_LinksData] = useState<other_link[]>([])
@@ -104,6 +103,7 @@ const Links = () => {
             const fetchData = async () => {
               try {
                 const id = localStorage.getItem("ID");
+                const token = localStorage.getItem("token");
                 const response = await axios.get(API_URL+'/api/v1/educations', {
                   headers: {
                     'Authorization': 'Bearer ' + token

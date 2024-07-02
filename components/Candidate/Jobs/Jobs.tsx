@@ -20,10 +20,10 @@ interface Job {
 
 const Jobs = () =>{
     const [jobsData, setJobsData] = useState<Job[]>([]);
-    const token = localStorage.getItem("token");
     const handleDelete = async (e:any, idJ:number) =>{
       e.preventDefault()
       var ID = localStorage.getItem("ID");
+      const token = localStorage.getItem("token");
       axios.delete(API_URL+'/api/v1/candidate-jobs/'+String(ID)+'/'+String(idJ), {
         headers: {
           'Authorization': 'Bearer ' + token
@@ -55,6 +55,7 @@ const Jobs = () =>{
         const fetchData = async () => {
           try {
             var ID = localStorage.getItem("ID");
+            const token = localStorage.getItem("token");
             const response = await axios.get(API_URL+'/api/v1/candidate-jobs/byCandidate/'+String(ID), {
               headers: {
                 'Authorization': 'Bearer ' + token

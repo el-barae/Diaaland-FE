@@ -1,6 +1,5 @@
 import React, { useState,useEffect } from "react";
 import axios from "axios";
-import Cookies from "js-cookie";
 import "./ModalLink.scss";
 import API_URL from "@/config";
 
@@ -14,7 +13,6 @@ interface ModalProps {
   }
 
   export default function Modal({ isOpen, id, name, url, description, onClose }: ModalProps) {
-    const token = localStorage.getItem("token");
   const [modifiedName, setModifiedName] = useState(name);
   const [modifiedUrl, setModifiedUrl] = useState(url);
   const [modifiedDescription, setModifiedDescription] = useState(description);
@@ -25,7 +23,8 @@ interface ModalProps {
 
     const handleModifyLink = async (e: any) => {
       e.preventDefault();
-      const idC = Cookies.get('id');
+      const idC = localStorage.getItem("ID");
+      const token = localStorage.getItem("token");
       axios
         .put(API_URL+'/api/v1/other_links/' + String(id), {
           id: id,

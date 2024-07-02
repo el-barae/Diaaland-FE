@@ -2,7 +2,6 @@ import './favoris.scss'
 import { useState ,useEffect} from "react"
 import axios from 'axios'
 import React from 'react';
-import Cookies from 'js-cookie';
 import API_URL from '@/config'
 
 interface Job {
@@ -23,10 +22,9 @@ const Favoris = () =>{
 
   const [jobsData, setJobsData] = useState<Job[]>([]);
 
-  const token = localStorage.getItem("token");
-
   const handleApply = async (e:any, id:number) =>{
 		e.preventDefault()
+    const token = localStorage.getItem("token");
 		axios.post(API_URL+'/api/v1/candidate-jobs', {
 			"status": "pending",
       "candidate": {
@@ -70,8 +68,8 @@ const Favoris = () =>{
     const handleDelFavoris = async (e:any, idJ:number) =>{
       e.preventDefault()
       try {
-      Cookies.set("id","1")
-      const idC = Cookies.get("id");
+      const idC = localStorage.getItem("ID");
+      const token = localStorage.getItem("token");
       axios.delete(API_URL+'/api/v1/favoris/'+String(idC)+'/'+String(idJ), {
         headers: {
           'Authorization': 'Bearer ' + token
@@ -87,8 +85,8 @@ const Favoris = () =>{
     useEffect(() => {
          const fetchData = async () => {
     try {
-      Cookies.set("id","1")
-      const id = Cookies.get("id");
+      const id = localStorage.getItem("ID");
+      const token = localStorage.getItem("token");
       const response = await axios.get(API_URL+'/api/v1/favoris/'+String(id), {
         headers: {
           'Authorization': 'Bearer ' + token

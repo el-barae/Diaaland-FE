@@ -37,8 +37,8 @@ interface Job {
 const Applies = () =>{
   const [candidatesData,setCandidatesData] = useState<Candidate[]>([]);
   const [jobsData, setJobsData] = useState<Job[]>([]);
-  const [selectedCandidate, setSelectedCandidate] = useState<SingleValue<{ value: number; label: string }> | null>(null);
-  const [selectedJob, setSelectedJob] = useState<SingleValue<{ value: number; label: string }> | null>(null);
+  const [selectedCandidate, setSelectedCandidate] = useState<SingleValue<{ value: number | null; label: string }> | null>(null);
+    const [selectedJob, setSelectedJob] = useState<SingleValue<{ value: number | null; label: string }> | null>(null);
   const [matchingData, setMatchingData] = useState<Matching[]>([]);
   const [filteredData, setFilteredData] = useState<Matching[]>([]);
   useEffect(() => {
@@ -88,29 +88,32 @@ const Applies = () =>{
     return null;
   };
 
-  const filterMatchingData = (candidateId: number | undefined, jobId: number | undefined) => {
+  const filterMatchingData = (candidateId: number | null, jobId: number | null) => {
     let filtered = matchingData;
 
-    if (candidateId) {
+    if (candidateId !== null) {
       filtered = filtered.filter((m) => m.candidate.id === candidateId);
     }
 
-    if (jobId) {
+    if (jobId !== null) {
       filtered = filtered.filter((m) => m.job.id === jobId);
     }
 
     setFilteredData(filtered);
   };
 
-  const handleJobChange = (newValue: SingleValue<{ value: number; label: string }>) => {
+  const handleJobChange = (newValue: SingleValue<{ value: number | null; label: string }>) => {
     setSelectedJob(newValue);
-    filterMatchingData(selectedCandidate?.value, newValue?.value);
+    filterMatchingData(selectedCandidate?.value ?? null, newValue?.value ?? null);
   };
 
-  const jobOptions = jobsData.map(job => ({
-    value: job.id,
-    label: job.name
-  }));
+  const jobOptions = [
+    { value: null, label: 'All Jobs' },
+    ...jobsData.map(job => ({
+      value: job.id,
+      label: job.name
+    }))
+  ];
 
     return (
       <div className="cadr-matches">

@@ -1,6 +1,5 @@
 import React, { useState,useEffect } from "react";
 import axios from "axios";
-import Cookies from "js-cookie";
 import "./ModalEducation.scss";
 import API_URL from "@/config";
 
@@ -17,7 +16,6 @@ interface ModalProps {
   }
 
   export default function Modal({ isOpen, id, name, url, school,  startDate, endDate, description, onClose }: ModalProps) {
-    const token = localStorage.getItem("token");
   const [modifiedName, setModifiedName] = useState(name);
   const [modifiedUrl, setModifiedUrl] = useState(url);
   const [modifiedSchool, setModifiedSchool] = useState(school);
@@ -31,7 +29,8 @@ interface ModalProps {
 
     const handleModifyEducation = async (e: any) => {
       e.preventDefault();
-      const idC = Cookies.get('id');
+      const idC = localStorage.getItem("ID");
+      const token = localStorage.getItem("token");
       axios
         .put(API_URL+'/api/v1/educations/' + String(id), {
           id: id,

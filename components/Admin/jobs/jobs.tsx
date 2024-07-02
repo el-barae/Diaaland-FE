@@ -35,11 +35,10 @@ const Jobs = () =>{
     const router = useRouter();
     const [searchTerm, setSearchTerm] = useState('');
 
-    const token = localStorage.getItem("token");
-
     const handleDelete = async (e:any, idJ:number) =>{
       e.preventDefault()
       const idC = localStorage.getItem("ID");
+      const token = localStorage.getItem("token");
       axios.delete(API_URL+'/api/v1/candidate-jobs/'+String(idC)+'/'+String(idJ), {
         headers: {
           'Authorization': 'Bearer ' + token
@@ -52,6 +51,7 @@ const Jobs = () =>{
     useEffect(() => {
         const fetchData = async () => {
           try {
+            const token = localStorage.getItem("token");
             const response = await axios.get(API_URL+'/api/v1/jobs/list', {
               headers: {
                 'Authorization': 'Bearer ' + token

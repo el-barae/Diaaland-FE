@@ -1,7 +1,6 @@
 'use client'
 import React, { useState,useEffect } from "react";
 import axios from "axios";
-import Cookies from "js-cookie";
 import "./ModalProject.scss";
 import Project from '../Projects'; 
 import API_URL from "@/config";
@@ -26,7 +25,6 @@ interface ModalProps {
   }
 
   export default function Modal({ isOpen, id, name, startDate, endDate, description, onClose, setProjectsData }: ModalProps) {
-    const token = localStorage.getItem("token");
   const [modifiedName, setModifiedName] = useState(name);
   const [modifiedStartDate, setModifiedStartDate] = useState(startDate);
   const [modifiedEndDate, setModifiedEndDate] = useState(endDate);
@@ -39,7 +37,8 @@ interface ModalProps {
     const handleModifyProject = async (e: any) => {
       e.preventDefault();
       try{
-        const idC = Cookies.get('id');
+        const idC = localStorage.getItem("ID");
+        const token = localStorage.getItem("token");
         const response = await axios.put(API_URL + '/api/v1/projects/' + String(id), {
           id: id,
           name: modifiedName,

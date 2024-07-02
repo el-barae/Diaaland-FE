@@ -2,7 +2,6 @@
 import './Links.scss'
 import { useState,useEffect } from 'react';
 import axios from 'axios';
-import Cookies from 'js-cookie';
 import API_URL from '@/config';
 import ModalE from './ModalEducations/ModalEducation'
 import ModalC from './ModalCertificates/ModalCertificate'
@@ -53,7 +52,6 @@ interface Education {
   }
 
 const Links = () => {
-  const token = localStorage.getItem("token");
     const [nameEducation,setNameEducation] = useState('')
     const [nameCertificate,setNameCertificate] = useState('')
     const [nameLink,setNameLink] = useState('')
@@ -73,7 +71,8 @@ const Links = () => {
 
     const handleAddEducation = async (e:any)  =>{
         e.preventDefault()
-        const id = Cookies.get("id");
+        const id = localStorage.getItem("ID");
+        const token = localStorage.getItem("token");
         axios.post(API_URL+'/api/v1/educations', {
           "name": nameEducation,
           "url": urlEducation,
@@ -101,7 +100,8 @@ const Links = () => {
 
       const handleAddCertificate = async (e:any)  =>{
         e.preventDefault()
-        const id = Cookies.get("id");
+        const id = localStorage.getItem("ID");
+        const token = localStorage.getItem("token");
         axios.post(API_URL+'/api/v1/certificates', {
           "name": nameCertificate,
           "url": urlCertificate,
@@ -127,7 +127,8 @@ const Links = () => {
 
       const handleAddOther_Link = async (e:any)  =>{
         e.preventDefault()
-        const id = Cookies.get("id");
+        const id = localStorage.getItem("ID");
+        const token = localStorage.getItem("token");
         axios.post(API_URL+'/api/v1/other_links', {
           "name": nameLink,
           "url": urlLink,
@@ -153,6 +154,7 @@ const Links = () => {
       const handleDeleteEducation = async (e:any, id:number) =>{
         e.preventDefault()
         try{
+          const token = localStorage.getItem("token");
         axios.delete(API_URL+'/api/v1/educations/'+String(id), {
           headers: {
             'Authorization': 'Bearer ' + token
@@ -169,6 +171,7 @@ const Links = () => {
       const handleDeleteCertificate = async (e:any, id:number) =>{
         e.preventDefault()
         try{
+          const token = localStorage.getItem("token");
         axios.delete(API_URL+'/api/v1/certificates/'+String(id), {
           headers: {
             'Authorization': 'Bearer ' + token
@@ -184,6 +187,7 @@ const Links = () => {
       const handleDeleteLink = async (e:any, id:number) =>{
         e.preventDefault()
         try{
+          const token = localStorage.getItem("token");
         axios.delete(API_URL+'/api/v1/other_links/'+String(id), {
           headers: {
             'Authorization': 'Bearer ' + token
@@ -294,8 +298,8 @@ const Links = () => {
         useEffect(() => {
             const fetchData = async () => {
               try {
-                Cookies.set("id","1")
-                const id = Cookies.get("id");
+                const id = localStorage.getItem("ID");
+                const token = localStorage.getItem("token");
                 const response = await axios.get(API_URL+'/api/v1/educations', {
                   headers: {
                     'Authorization': 'Bearer ' + token

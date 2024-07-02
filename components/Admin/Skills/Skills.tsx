@@ -28,7 +28,6 @@ interface skill{
  }
 
 const Skills = () => {
-  const token = localStorage.getItem("token")
     const [name,setName] = useState('')
     const [type,setType] = useState('')
     const [skill,setSkill] = useState('')
@@ -49,6 +48,7 @@ const Skills = () => {
       setSkill('');
       setType('');
       try {
+        const token = localStorage.getItem("token")
         await axios.post(API_URL+'/api/v1/skills', {
           "name": sname,
           "type": stype
@@ -74,6 +74,7 @@ const Skills = () => {
       const handleDelete = async (e:any, idS:number) =>{
         e.preventDefault()
         try{
+          const token = localStorage.getItem("token")
         axios.delete(API_URL+'/api/v1/skills/'+String(idS), {
           headers: {
             'Authorization': 'Bearer ' + token
@@ -90,6 +91,7 @@ const Skills = () => {
       useEffect(() => {
           const fetchData = async () => {
             try {
+              const token = localStorage.getItem("token")
               const response = await axios.get(API_URL+'/api/v1/skills', {
                 headers: {
                   'Authorization': 'Bearer ' + token

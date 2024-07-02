@@ -31,7 +31,6 @@ export default function Modal({ isOpen, id, description, name, onClose }: ModalP
   const [showModal, setShowModal] = useState<boolean>(false);
   const [isApplied, setIsApplied] = useState<boolean>(false);
   const [isFavoris, setIsFavoris] = useState<boolean>(false);
-  const token = localStorage.getItem("token");
   const fileInputRef = useRef<HTMLInputElement>(null);
   const diplomaInputRef = useRef<HTMLInputElement>(null);
 
@@ -51,6 +50,7 @@ export default function Modal({ isOpen, id, description, name, onClose }: ModalP
   const handleAddFavoris = async (e:any, id:number) =>{
 		e.preventDefault()
     const role = localStorage.getItem("role");
+    const token = localStorage.getItem("token");
     if(role === "CANDIDAT"){
 		  axios.post(API_URL+'/api/v1/favoris', {
       "candidate": {
@@ -78,6 +78,7 @@ export default function Modal({ isOpen, id, description, name, onClose }: ModalP
     useEffect(() => {
       async function fetchData() {
         const role = localStorage.getItem("role");
+        const token = localStorage.getItem("token");
         if(role === "CANDIDAT"){
         try {
           const response = await axios.get(API_URL + '/api/v1/candidate-jobs/itsApplied/' + 1 + '/' + id, {
@@ -94,6 +95,7 @@ export default function Modal({ isOpen, id, description, name, onClose }: ModalP
       fetchData();
       async function fetchData1() {
         const role = localStorage.getItem("role");
+        const token = localStorage.getItem("token");
         if(role === "CANDIDAT"){
         try {
           const response1 = await axios.get(API_URL + '/api/v1/favoris/itsFavoris/' + 1 + '/' + id, {

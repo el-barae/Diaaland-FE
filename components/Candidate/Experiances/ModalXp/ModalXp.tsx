@@ -1,6 +1,5 @@
 import React, { useState,useEffect } from "react";
 import axios from "axios";
-import Cookies from "js-cookie";
 import "./ModalXp.scss";
 import API_URL from "@/config";
 
@@ -22,7 +21,6 @@ interface ModalProps {
   }
 
   export default function Modal({ isOpen, id, name, startDate, endDate, onClose, setXpData }: ModalProps) {
-    const token = localStorage.getItem("token");
   const [modifiedName, setModifiedName] = useState(name);
   const [modifiedStartDate, setModifiedStartDate] = useState(startDate);
   const [modifiedEndDate, setModifiedEndDate] = useState(endDate);
@@ -34,7 +32,8 @@ interface ModalProps {
     const handleModifyXp = async (e: any) => {
       e.preventDefault();
       try{
-      const idC = Cookies.get('id');
+      const idC = localStorage.getItem("ID");
+      const token = localStorage.getItem("token");
       axios
         .put(API_URL+'/api/v1/experiences/' + String(id), {
           id: id,

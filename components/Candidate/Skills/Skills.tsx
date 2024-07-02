@@ -27,6 +27,7 @@ const Skills = () => {
     const [skill,setSkill] = useState('')
     const [skillsAll,setSkillsAll] = useState<skill[]>([])
     const [skillsData,setSkillsData] = useState<skill[]>([])
+    
     const handleAddSkill = async (e:any, sname:string)  =>{
       e.preventDefault()
       console.log(skill);

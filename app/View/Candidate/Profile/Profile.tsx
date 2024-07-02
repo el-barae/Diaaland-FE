@@ -54,7 +54,7 @@ const Profile = () => {
 
     useEffect(() => {
         const fetchCandidate = async () => {
-            const id = localStorage.getItem('ID');
+            const id = localStorage.getItem('IDSelected');
             const token = localStorage.getItem('token');
             if (!id || !token) {
                 console.error('ID or token is missing');
