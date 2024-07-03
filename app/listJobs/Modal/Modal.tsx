@@ -16,6 +16,7 @@ interface ModalProps {
     isOpen: boolean;
     id: number;
     name: string;
+    email: string;
     description: string;
     onClose: () => void;
   }
@@ -23,7 +24,7 @@ interface ModalProps {
 
 type FileState = File | null;
 
-export default function Modal({ isOpen, id, description, name, onClose }: ModalProps) {
+export default function Modal({ isOpen, id, description, name,email, onClose }: ModalProps) {
   const [file, setFile] = useState<FileState>(null);
   const [fileName, setFileName] = useState<string | null>(null);
   const [coverLetter, setCoverLetter] = useState<string>('');
@@ -36,6 +37,27 @@ export default function Modal({ isOpen, id, description, name, onClose }: ModalP
 
     const toggleModal = () => {
       onClose();
+    };
+
+    const handleSend = async (e: any) => {
+      e.preventDefault();
+      const token = localStorage.getItem("token")
+      axios
+        .post(API_URL+'/api/v1/messages', {
+          "email": "me.diaaland@gmail.com",
+          "subject": "Application",
+          "message": "You are new application for your job"+name,
+          "date": "2024-04-16T12:00:00",
+          "recipient": email,
+          "view": false
+        }, {
+          headers: {
+            'Authorization': 'Bearer ' + token
+          }
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
     };
   
     const handleApply = async (e:React.MouseEvent<HTMLButtonElement>) =>{
@@ -78,10 +100,11 @@ export default function Modal({ isOpen, id, description, name, onClose }: ModalP
     useEffect(() => {
       async function fetchData() {
         const role = localStorage.getItem("role");
+        const ID = localStorage.getItem("ID");
         const token = localStorage.getItem("token");
         if(role === "CANDIDAT"){
         try {
-          const response = await axios.get(API_URL + '/api/v1/candidate-jobs/itsApplied/' + 1 + '/' + id, {
+          const response = await axios.get(API_URL + '/api/v1/candidate-jobs/itsApplied/' + ID + '/' + id, {
             headers: {
               'Authorization': 'Bearer ' + token
             }
@@ -95,10 +118,11 @@ export default function Modal({ isOpen, id, description, name, onClose }: ModalP
       fetchData();
       async function fetchData1() {
         const role = localStorage.getItem("role");
+        const ID = localStorage.getItem("ID");
         const token = localStorage.getItem("token");
         if(role === "CANDIDAT"){
         try {
-          const response1 = await axios.get(API_URL + '/api/v1/favoris/itsFavoris/' + 1 + '/' + id, {
+          const response1 = await axios.get(API_URL + '/api/v1/favoris/itsFavoris/' + ID + '/' + id, {
             headers: {
               'Authorization': 'Bearer ' + token
             }
@@ -189,6 +213,7 @@ export default function Modal({ isOpen, id, description, name, onClose }: ModalP
     })
       .then(response => response.json())
       .then(data => {
+        handleSend(e);
         console.log('Success:', data);
         swal("Your apply sent successfully", '', "success");
       })
@@ -224,7 +249,7 @@ export default function Modal({ isOpen, id, description, name, onClose }: ModalP
               <button id="close-btn" onClick={toggleModal}>CLOSE</button>
               <div className="modal-content">
                 <h1>{name}</h1>
-                <p>{description}</p>
+                <p id="desc">{description}</p>
                 {!showModal && !isApplied && <button id="apply-btn" onClick={handleApply}>Apply</button>}
             {!showModal && !isFavoris && <button id="favoris-btn" onClick={(e) => handleAddFavoris(e, 1)}>Add to favoris</button>}
             {showModal && (

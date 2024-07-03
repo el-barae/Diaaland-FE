@@ -187,6 +187,8 @@ const Applies = () => {
                             )}
                         </div>
                     </div>
+                    {cj.status !== "accept" && <button onClick={() => handleAccept(cj.id)}>Accept</button>}
+                    {cj.status !== "refuse" && <button onClick={() => handleRefuse(cj.id)}>Refuse</button>}
                 </div>
                 ))}
             </>

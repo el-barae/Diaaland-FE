@@ -96,7 +96,7 @@ const Jobs = () =>{
         <>
         {jobsData.map((job) => (
           <div key={job.id} className={className}>
-          <h1>{job.name} :</h1>
+          <h1>{job.name}</h1>
           <span> Type: </span>{job.type}
           <p><span> Number of positions: </span> {job.numberOfPositions} </p>
           <p><span> Close Date: </span>{job.closeDate}</p>

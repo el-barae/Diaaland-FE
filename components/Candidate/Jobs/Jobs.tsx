@@ -7,6 +7,7 @@ import API_URL from '@/config'
 interface Job {
     id: number;
     name: string;
+    type: string;
     description: string;
     numberOfPositions: number;
     closeDate: string;
@@ -40,8 +41,8 @@ const Jobs = () =>{
           <>
           {jobsData.map((job) => (
             <div key={job.id} className={className}>
-            <h1>{job.name} :</h1>
-            <span> Description: </span>{job.description}
+            <h1>{job.name} </h1>
+            <span> Type: </span>{job.type}
             <p><span> Number of positions: </span> {job.numberOfPositions} </p>
             <p><span> Close Date: </span>{job.closeDate}</p>
             <button onClick={(e) => handleDelete(e, job.id)}>Delete</button>

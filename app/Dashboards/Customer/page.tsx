@@ -164,7 +164,8 @@ const handleAddClick = () =>{
         const fetchCustomerData = async () => {
           try {
             const token = localStorage.getItem("token");
-            const response = await axios.get(API_URL+'/api/v1/customers/name/1', {
+            const ID = localStorage.getItem("ID");
+            const response = await axios.get(API_URL+'/api/v1/customers/name/'+String(ID), {
               headers: {
                 'Authorization': 'Bearer ' + token
               }
