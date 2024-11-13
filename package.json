@@ -36,7 +36,7 @@
     "react-dom": "18.2.0",
     "react-icons": "^4.10.1",
     "react-intl": "^6.4.4",
-    "react-router-dom": "^6.17.0",
+    "react-router-dom": "^6.25.1",
     "react-select": "^5.8.0",
     "react-sf-building-blocks": "^1.0.87",
     "router": "^1.3.8",

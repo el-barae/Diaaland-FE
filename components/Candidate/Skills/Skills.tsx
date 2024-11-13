@@ -72,7 +72,6 @@ const Skills = () => {
           setSkill(skillsAll[0].name);
         }
         console.log(response);
-        alert("Your post had been sent to admin ")
         })
         .catch(function (error) {
         alert(error.message);

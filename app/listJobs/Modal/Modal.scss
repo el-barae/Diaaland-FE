@@ -1,3 +1,5 @@
+@import '@/app/globals.scss';
+
 body.active-modal {
     overflow-y: hidden;
 }
@@ -38,8 +40,11 @@ body.active-modal {
     max-width: 800px;
     min-width: 400px;
     min-height: 200px;
+    max-height: 80vh; 
+    margin-top: 20vh;
+    overflow-y: auto;
     #desc{
-        margin-bottom: 80px;
+        margin-bottom: 100px;
     }
     #apply-btn{
         position: absolute;
@@ -50,9 +55,17 @@ body.active-modal {
     }
     #btn-file{
         position: relative;
+        background-color: $primary;
         font-size: 1rem;
         padding: 2px;
         margin-top: 5px;
+    }
+    #submit{
+        position: relative;
+        font-size: 1.1rem;
+        padding: 5px;
+        margin-top: 50px;
+        max-width: 10vw;
     }
     #favoris-btn{
         position: absolute;

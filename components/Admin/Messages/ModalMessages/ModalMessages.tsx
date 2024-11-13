@@ -1,6 +1,5 @@
 import React, { useState,useEffect } from "react";
 import axios from "axios";
-import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import "../../jobs/ModalJobs/ModalJobs.scss";
 import API_URL from "@/config";
@@ -34,7 +33,6 @@ interface ModalProps {
 
     const handleSend = async (e: any) => {
       e.preventDefault();
-      const idC = Cookies.get('id');
       const token = localStorage.getItem("token")
       axios
         .post(API_URL+'/api/v1/messages', {

@@ -290,7 +290,7 @@ export default function Modal({ isOpen, id, description, name,email, onClose }: 
                     const file = e.target.files ? e.target.files[0] : null;
                     setDiploma(file);
                   }} required />
-                <button type="submit" onClick={(e) => handleSubmit(e, id)}>Submit</button>
+                <button id="submit" type="submit" onClick={(e) => handleSubmit(e, id)}>Submit</button>
               </div>
             )}
               </div>

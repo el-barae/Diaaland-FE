@@ -10,6 +10,10 @@ interface CandidateJobs {
     cv: string;
     diploma: string;
     coverLetter: string;
+    candidate:{
+        firstName: string;
+        lastName: string;
+    }
 }
 
 
@@ -159,7 +163,8 @@ const Applies = () => {
             <>
                 {candidateJobsData.map((cj) => (
                     <div key={cj.id} className={className}>
-                        <p>Status: {cj.status}</p>
+                        <span>candidate: </span>{cj.candidate.firstName} {cj.candidate.lastName}<br></br>
+                        <span>Status: </span>{cj.status}
                         <div>
                           <label htmlFor={`cv-${cj.id}`}>CV:</label>
                           <div className="files">

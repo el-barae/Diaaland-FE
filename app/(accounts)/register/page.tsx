@@ -58,7 +58,7 @@ export default function Register() {
 	const fetchID = async () => {
 		try {
 			const token = localStorage.getItem("token");
-			const resp = await axios.get(API_URL+'/api/v1/users/relatedId/'+String(email), {
+			const resp = await axios.get(API_URL+`/api/v1/users/relatedId/${email}`, {
 				headers: {
 					'Authorization': 'Bearer ' + token
 				}
@@ -99,6 +99,7 @@ export default function Register() {
 			  localStorage.setItem('token', registerResponse.data.token);
 			  localStorage.setItem('role', registerResponse.data.role);
 			  Cookies.set("loggedin", "true");
+			  await wait(1000);
 			  const ID = await fetchID();
 		  
 			  // Wait for 2 seconds
@@ -114,7 +115,7 @@ export default function Register() {
 				}
 			  });
 		  
-			  if (uploadResponse.status === 200) {
+			  if (registerResponse.status === 200) {
 				router.push('Dashboards/Candidate');
 			  } else {
 				console.error('File upload failed with status:', uploadResponse.status);
