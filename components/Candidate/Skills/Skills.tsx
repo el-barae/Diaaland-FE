@@ -113,14 +113,22 @@ const Skills = () => {
               });
               const allSkills: skill[] = res.data;
               setSkillsData(candidateSkills);
-              if(candidateSkills !== null && candidateSkills.length > 0){
-                const skillAll = allSkills.filter(skill => !candidateSkills.some(candidateSkill => candidateSkill.id === skill.id));             
-                setSkillsAll(skillAll);
+              if (candidateSkills !== null && candidateSkills.length > 0) {
+              const skillAll = allSkills.filter(
+                skill => !candidateSkills.some(candidateSkill => candidateSkill.id === skill.id)
+              );             
+              setSkillsAll(skillAll);
+
+              if (skillAll.length > 0) {
+                setSkill(skillAll[0].name);
               }
-              else{
-                setSkillsAll(allSkills);
+            } else {
+              setSkillsAll(allSkills);
+              if (allSkills.length > 0) {
+                setSkill(allSkills[0].name);
               }
-                setSkill(skillsAll[0].name);
+            }
+
               
               console.log("skillAll: "+skillsAll[0].name);
               console.log("skill: "+skill);

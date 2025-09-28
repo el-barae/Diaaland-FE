@@ -2,32 +2,28 @@ import './globals.scss'
 import type { Metadata } from 'next'
 import { Montserrat } from 'next/font/google'
 import Footer from '@/components/HomePage/Footer/Footer'
+
 const montserrat = Montserrat({
-  subsets: ['latin']
+  subsets: ['latin'],
 })
 
 export const metadata: Metadata = {
   title: 'Diaa Land',
   description: 'Service de recrutement des développeurs informatique et des profiles IT',
-  keywords: 'Recrutement, programmation, IT, DevOps , Chef de projet, GIT , javascript , php , java , dotnet',
-}
-
-interface LayoutProps {
-  includeFooter?: boolean;
+  keywords:
+    'Recrutement, programmation, IT, DevOps, Chef de projet, GIT, javascript, php, java, dotnet',
 }
 
 export default function RootLayout({
   children,
-  includeFooter = false,
 }: {
   children: React.ReactNode
-  includeFooter?: boolean
 }) {
   return (
-    <html lang="en" suppressHydrationWarning={true} >
-      <body className={montserrat.className} suppressHydrationWarning={true} >
+    <html lang="en" suppressHydrationWarning={true}>
+      <body className={montserrat.className} suppressHydrationWarning={true}>
         {children}
-        {includeFooter && <Footer />}
+        <Footer />
       </body>
     </html>
   )
