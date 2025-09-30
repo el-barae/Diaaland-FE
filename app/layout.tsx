@@ -8,11 +8,15 @@ const montserrat = Montserrat({
 })
 
 export const metadata: Metadata = {
-  title: 'Diaa Land',
+  title: 'DiaaLand',
   description: 'Service de recrutement des développeurs informatique et des profiles IT',
   keywords:
     'Recrutement, programmation, IT, DevOps, Chef de projet, GIT, javascript, php, java, dotnet',
+  icons: {
+    icon: '/images/favicon.ico',
+  },
 }
+
 
 export default function RootLayout({
   children,
