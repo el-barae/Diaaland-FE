@@ -1,4 +1,3 @@
-const API_URL = 'http://localhost:7777';
-// const API_URL = 'https://dimarun.com/diaaland';
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export default API_URL;
