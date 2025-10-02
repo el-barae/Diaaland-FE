@@ -132,37 +132,36 @@ const Links = () => {
     return(
         <>
             <div className="jobs">
-                    <div className="education">
-                        <h1>Educations</h1>
-                        <div className='add'>
-                            <div className='part2'>
-                                <div className='lists' id='ls1'>
-                                    <Educations className="list" n={educationsData.length} educationsData={educationsData} />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="certificats">
-                        <h1>Certificates</h1>
-                        <div className='add'>
-                            <div className='part2'>
-                                <div className='lists' id='ls2'>
-                                    <Certificates className="list" n={certificatesData.length} certificatesData={certificatesData} />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="others">
-                        <h1>Other links</h1>
-                        <div className='add'>
-                            <div className='part2'>
-                                <div className='lists' id='ls3'>
-                                    <Other_Links className="list" n={other_linksData.length} other_linksData={other_linksData} />
-                                </div>
-                            </div>
-                        </div>
-                </div>
-            </div>
+
+  {/* Ligne 1 : Education + Certificates */}
+  <div className="grid-class">
+    <div className="part1">
+      <h1>Educations</h1>
+      <div className="lists" id="ls1">
+        <Educations className="list" n={educationsData.length} educationsData={educationsData} />
+      </div>
+    </div>
+
+    <div className="part2">
+      <h1>Certificates</h1>
+      <div className="lists" id="ls2">
+        <Certificates className="list" n={certificatesData.length} certificatesData={certificatesData} />
+      </div>
+    </div>
+  </div>
+
+  {/* Ligne 2 : Other links seul */}
+  <div className="grid-class">
+    <div className="part2">
+      <h1>Other links</h1>
+      <div className="lists" id="ls3">
+        <Other_Links className="list" n={other_linksData.length} other_linksData={other_linksData} />
+      </div>
+    </div>
+  </div>
+
+</div>
+
         </>
     )
   }

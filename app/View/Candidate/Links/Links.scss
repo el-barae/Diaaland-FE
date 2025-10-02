@@ -108,3 +108,150 @@ label{
         padding: 0px;
     }
 }
+
+
+.grid-class {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  width: 100%;
+  padding: 1rem;
+  box-shadow: 0 1px 10px #cecaca;
+  border-radius: 20px;
+
+  .lists {
+    flex: 1;
+    overflow-y: auto;
+  }
+
+  button {
+    font-size: 16px;
+    font-weight: 250;
+    text-align: center;
+    padding: 10px;
+    background-color: $main-color;
+    color: $second-color;
+    border-radius: 20px;
+    margin: 10px;
+    width: 10rem;
+    transition: .3s ease-in-out;
+
+    &:hover {
+      font-size: 20px;
+      font-weight: 300;
+      background-color: darken($main-color, 10%);
+    }
+  }
+
+  textarea {
+    height: 140px;
+    border-radius: 10px;
+    box-shadow: 1px $footer-bg;
+    padding: 5px;
+    border: 1px solid $footer-bg;
+  }
+
+  input {
+    border-radius: 10px;
+    border: 1px solid $footer-bg;
+    padding: .5rem;
+  }
+
+  .part1 {
+    display: flex;
+    flex-direction: column;
+    // margin-right: 50px;
+  }
+
+  .part1, .part2 {
+    border-radius: 15px;
+    padding: 1rem;
+    min-height: 300px; 
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; // pour répartir contenu
+  }
+
+  .part2 {
+    display: flex;
+    flex-direction: column;
+    // margin-left: 50px;
+
+    button {
+      margin-left: 22rem;
+    }
+
+    input {
+      width: 34rem;
+      height: 7rem;
+      border: 1px solid $footer-bg;
+      padding: .5rem;
+    }
+  }
+}
+
+// Responsive
+
+@media (max-width: 1250px) {
+  .grid-class {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+@media (max-width: 1000px) {
+  .grid-class {
+    .part1 input {
+      width: 20rem;
+    }
+    .part2 {
+      margin-left: 0px;
+      input {
+        width: 30rem;
+      }
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  .grid-class {
+    padding: 10px;
+
+    .part1 {
+      margin-right: 0px;
+      input {
+        width: 20rem;
+      }
+    }
+
+    .part2 {
+      margin-left: 0px;
+
+      button {
+        margin-left: 70px;
+      }
+
+      input {
+        width: 20rem;
+      }
+
+      .list {
+        margin: 0px;
+        padding: 10px;
+      }
+    }
+
+    textarea {
+      width: 20rem;
+    }
+  }
+}
+
+.jobs{
+  @media (max-width: 1150px) {
+    .lists{
+                  grid-template-columns: repeat(2,1fr);
+          }
+        }
+}

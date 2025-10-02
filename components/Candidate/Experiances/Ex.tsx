@@ -138,8 +138,8 @@ const Xp = () => {
               value={endDate} 
               onChange={(e) => setEndDate(e.target.value)}
               />
-            <button onClick={handleAddXp}>add xp</button>
         </div>
+        <button id='btn-add' onClick={handleAddXp}>add xp</button>
             <h1>Experiences</h1>
             <div className='lists'>
                   <RepeatClassNTimes className="list" n={xpData.length} xpData={xpData} />

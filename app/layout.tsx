@@ -1,7 +1,6 @@
 import './globals.scss'
 import type { Metadata } from 'next'
 import { Montserrat } from 'next/font/google'
-import Footer from '@/components/HomePage/Footer/Footer'
 
 const montserrat = Montserrat({
   subsets: ['latin'],
@@ -27,7 +26,6 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning={true}>
       <body className={montserrat.className} suppressHydrationWarning={true}>
         {children}
-        <Footer />
       </body>
     </html>
   )

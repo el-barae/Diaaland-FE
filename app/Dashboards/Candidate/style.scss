@@ -147,7 +147,7 @@
             width: 12rem;
             position:absolute;
             min-height: 80vh;
-            height: 100%;
+            height: 125%;
             font-size: 1.8rem;
             box-shadow: 0 1px 10px #cecaca;
             align-items: center;
@@ -196,8 +196,30 @@
                     margin-bottom: 0px;
                 }
             }
-            .Menu::-webkit-scrollbar {
-                display: none; }
+            .Menu {
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+
+  &::-webkit-scrollbar {
+    height: 5px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: darken($main-color, 20%);;
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: darken(#f1f1f1, 10%);
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: darken(#f1f1f1, 20%);
+  }
+}
+
             .Candidate-box{
                 margin-top: 20px;
             }
@@ -206,6 +228,7 @@
             .content{
             .Menu {
                 margin-top: -12px;
+                font-size: 1.3rem;
             }}
         }
     }

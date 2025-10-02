@@ -13,6 +13,8 @@ import Goals from "@/components/HomePage/Goals/Goals"
 import ContactUs from "@/components/HomePage/ContactUs/ContactUs"
 import VisitBlog from "@/components/HomePage/VisitBlog/VisitBlog";
 import Founder from "@/components/HomePage/Founder/Founder";
+import Footer from '@/components/HomePage/Footer/Footer'
+
 
 export default function Home() {
   return (
@@ -29,6 +31,8 @@ export default function Home() {
         <VisitBlog />
         <Founder />
       </div>
+              <Footer />
+
     </ThemeProvider>
   )
 }
