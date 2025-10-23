@@ -104,19 +104,19 @@ const Links = () => {
               try {
                 const id = localStorage.getItem("ID");
                 const token = localStorage.getItem("token");
-                const response = await axios.get(API_URL+'/api/v1/educations', {
+                const response = await axios.get(API_URL+'/api/v1/profiles/educations', {
                   headers: {
                     'Authorization': 'Bearer ' + token
                   }
                 });        
                 setEducationsData(response.data);
-                const response1 = await axios.get(API_URL+'/api/v1/certificates', {
+                const response1 = await axios.get(API_URL+'/api/v1/profiles/certificates', {
                   headers: {
                     'Authorization': 'Bearer ' + token
                   }
                 });
                 setCertificatesData(response1.data);
-                const response2 = await axios.get(API_URL+'/api/v1/other_links', {
+                const response2 = await axios.get(API_URL+'/api/v1/profiles/other_links', {
                   headers: {
                     'Authorization': 'Bearer ' + token
                   }

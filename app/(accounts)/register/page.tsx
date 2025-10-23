@@ -10,8 +10,16 @@ import Link from 'next/link'
 import RegisterImg from '@/public/images/register-info.svg'
 import { FaEyeSlash, FaEye } from 'react-icons/fa';
 import axios from 'axios';
+import {jwtDecode} from "jwt-decode";
 import swal from 'sweetalert';
 import API_URL from '@/config';
+
+interface MyToken {
+  sub: string; // email
+  id: number;
+  role: string;
+  exp: number;
+}
 
 const passwordStrength = (password: string) => {
 	let res = 0;
@@ -58,19 +66,18 @@ export default function Register() {
 	const fetchID = async () => {
 		try {
 			const token = localStorage.getItem("token");
-			const resp = await axios.get(API_URL+`/api/v1/users/relatedId/${email}`, {
-				headers: {
-					'Authorization': 'Bearer ' + token
-				}
-			});
-			const ID = JSON.stringify(resp.data);
-			localStorage.setItem('ID',ID)
+			if (token) {
+			const decoded: MyToken = jwtDecode(token);
+			console.log("User ID:", decoded.id);
+			console.log("User Role:", decoded.role);
+			localStorage.setItem("ID", decoded.id.toString());
+			}
+
 			localStorage.setItem('matching', 'true');
-			return ID;
-		  } catch (error) {
+		} catch (error) {
 			console.error('Erreur lors de la récupération des données :', error);
-		  }
 		}
+	}
 
 		const handleFileChange = (e: any) => {
 			if (e.target.files && e.target.files[0]) {
@@ -86,7 +93,7 @@ export default function Register() {
 			e.preventDefault();
 			try {
 			  // Register user
-			  const registerResponse = await axios.post(`${API_URL}/api/v1/auth/register/candidate`, {
+			  const registerResponse = await axios.post(`${API_URL}/api/v1/users/auth/register/candidate`, {
 				firstName: firstName,
 				lastName: lastName,
 				email: email,
@@ -109,7 +116,7 @@ export default function Register() {
 			  formData.append('file', resume);
 		  
 			  // Upload the resume
-			  const uploadResponse = await axios.post(`${API_URL}/api/v1/files/uploadCV/${ID}`, formData, {
+			  const uploadResponse = await axios.post(`${API_URL}/api/v1/users/files/uploadCV/${ID}`, formData, {
 				headers: {
 				  'Content-Type': 'multipart/form-data'
 				}

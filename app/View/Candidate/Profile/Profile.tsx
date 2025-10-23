@@ -62,15 +62,15 @@ const Profile = () => {
             }
 
             try {
-                const response = await axios.get<Candidate>(API_URL + `/api/v1/candidates/${id}`, {
+                const response = await axios.get<Candidate>(API_URL + `/api/v1/profiles/candidates/${id}`, {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
                 });
 
                 setCandidate(response.data);
-                setResumeURL(API_URL + `/api/v1/candidates/resumefile/${id}`);
-                setPhotoURL(API_URL + `/api/v1/candidates/image/${id}`);
+                setResumeURL(API_URL + `/api/v1/profiles/candidates/resumefile/${id}`);
+                setPhotoURL(API_URL + `/api/v1/profiles/candidates/image/${id}`);
             } catch (error) {
                 console.error('Error fetching candidate data:', error);
             }

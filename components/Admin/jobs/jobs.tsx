@@ -39,7 +39,7 @@ const Jobs = () =>{
       e.preventDefault()
       const idC = localStorage.getItem("ID");
       const token = localStorage.getItem("token");
-      axios.delete(API_URL+'/api/v1/candidate-jobs/'+String(idC)+'/'+String(idJ), {
+      axios.delete(API_URL+'/api/v1/jobs/candidate-jobs/'+String(idC)+'/'+String(idJ), {
         headers: {
           'Authorization': 'Bearer ' + token
         }

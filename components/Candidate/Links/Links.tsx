@@ -73,7 +73,7 @@ const Links = () => {
         e.preventDefault()
         const id = localStorage.getItem("ID");
         const token = localStorage.getItem("token");
-        axios.post(API_URL+'/api/v1/educations', {
+        axios.post(API_URL+'/api/v1/profiles/educations', {
           "name": nameEducation,
           "url": urlEducation,
           "description": descEducation,
@@ -102,7 +102,7 @@ const Links = () => {
         e.preventDefault()
         const id = localStorage.getItem("ID");
         const token = localStorage.getItem("token");
-        axios.post(API_URL+'/api/v1/certificates', {
+        axios.post(API_URL+'/api/v1/profiles/certificates', {
           "name": nameCertificate,
           "url": urlCertificate,
           "decription": descCertificate,
@@ -129,7 +129,7 @@ const Links = () => {
         e.preventDefault()
         const id = localStorage.getItem("ID");
         const token = localStorage.getItem("token");
-        axios.post(API_URL+'/api/v1/other_links', {
+        axios.post(API_URL+'/api/v1/profiles/other_links', {
           "name": nameLink,
           "url": urlLink,
           "decription": descLink,
@@ -155,7 +155,7 @@ const Links = () => {
         e.preventDefault()
         try{
           const token = localStorage.getItem("token");
-        axios.delete(API_URL+'/api/v1/educations/'+String(id), {
+        axios.delete(API_URL+'/api/v1/profiles/educations/'+String(id), {
           headers: {
             'Authorization': 'Bearer ' + token
           }
@@ -172,7 +172,7 @@ const Links = () => {
         e.preventDefault()
         try{
           const token = localStorage.getItem("token");
-        axios.delete(API_URL+'/api/v1/certificates/'+String(id), {
+        axios.delete(API_URL+'/api/v1/profiles/certificates/'+String(id), {
           headers: {
             'Authorization': 'Bearer ' + token
           }
@@ -188,7 +188,7 @@ const Links = () => {
         e.preventDefault()
         try{
           const token = localStorage.getItem("token");
-        axios.delete(API_URL+'/api/v1/other_links/'+String(id), {
+        axios.delete(API_URL+'/api/v1/profiles/other_links/'+String(id), {
           headers: {
             'Authorization': 'Bearer ' + token
           }
@@ -300,19 +300,19 @@ const Links = () => {
               try {
                 const id = localStorage.getItem("ID");
                 const token = localStorage.getItem("token");
-                const response = await axios.get(API_URL+'/api/v1/educations', {
+                const response = await axios.get(API_URL+'/api/v1/profiles/educations', {
                   headers: {
                     'Authorization': 'Bearer ' + token
                   }
                 });        
                 setEducationsData(response.data);
-                const response1 = await axios.get(API_URL+'/api/v1/certificates', {
+                const response1 = await axios.get(API_URL+'/api/v1/profiles/certificates', {
                   headers: {
                     'Authorization': 'Bearer ' + token
                   }
                 });
                 setCertificatesData(response1.data);
-                const response2 = await axios.get(API_URL+'/api/v1/other_links', {
+                const response2 = await axios.get(API_URL+'/api/v1/profiles/other_links', {
                   headers: {
                     'Authorization': 'Bearer ' + token
                   }

@@ -29,7 +29,7 @@ const Xp = () => {
       e.preventDefault()
       const id = localStorage.getItem("ID");
       const token = localStorage.getItem("token");
-      axios.post(API_URL+'/api/v1/experiences', {
+      axios.post(API_URL+'/api/v1/profiles/experiences', {
         "name": name,
         "startDate": startDate,
         "endDate": endDate,
@@ -54,7 +54,7 @@ const Xp = () => {
     const handleDelete = async (e:any, id:number) =>{
       e.preventDefault()
       const token = localStorage.getItem("token");
-      axios.delete(API_URL+'/api/v1/experiences/'+String(id), {
+      axios.delete(API_URL+'/api/v1/profiles/experiences/'+String(id), {
         headers: {
           'Authorization': 'Bearer ' + token
         }
@@ -83,7 +83,7 @@ const Xp = () => {
           try {
             const id = localStorage.getItem("ID");
             const token = localStorage.getItem("token");
-            const response = await axios.get(API_URL+'/api/v1/experiences/byCandidate/'+String(id), {
+            const response = await axios.get(API_URL+'/api/v1/profiles/experiences/byCandidate/'+String(id), {
               headers: {
                 'Authorization': 'Bearer ' + token
               }

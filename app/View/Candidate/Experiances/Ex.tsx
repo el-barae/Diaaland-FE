@@ -25,7 +25,7 @@ const Xp = () => {
           try {
             const token = localStorage.getItem("token");
             const id = localStorage.getItem("IDSelected");
-            const response = await axios.get(API_URL+'/api/v1/experiences/byCandidate/'+String(id), {
+            const response = await axios.get(API_URL+'/api/v1/profiles/experiences/byCandidate/'+String(id), {
               headers: {
                 'Authorization': 'Bearer ' + token
               }

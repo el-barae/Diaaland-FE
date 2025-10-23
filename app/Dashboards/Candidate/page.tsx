@@ -44,14 +44,14 @@ const Candidate = () => {
   const handleToggle = async () => {
     setIsOpen(!isOpen);
     const email = localStorage.getItem('email');
-    axios.put(API_URL+'/api/v1/messages/mark-viewed/'+email)
+    axios.put(API_URL+'/api/v1/users/messages/mark-viewed/'+email)
           .catch(error => {
             console.error('Error marking messages as viewed:', error);
         });
     setNotif(false);
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get(API_URL+'/api/v1/messages/recipient/'+email, {
+      const response = await axios.get(API_URL+'/api/v1/users/messages/recipient/'+email, {
         headers: {
           'Authorization': 'Bearer ' + token
         }
@@ -65,7 +65,7 @@ const Candidate = () => {
 const handleDelete = async (e:any) =>{
   try{
     const email = localStorage.getItem('email');
-  axios.delete(API_URL+'/api/v1/messages/recipient/'+email)
+  axios.delete(API_URL+'/api/v1/users/messages/recipient/'+email)
   const updatedMessagesData = messagesData.filter(m => m.email !== email)
       setMessagesData(updatedMessagesData)
   }catch(error) {
@@ -113,21 +113,21 @@ const handleDelete = async (e:any) =>{
         try {
           const token = localStorage.getItem('token');
           var ID = localStorage.getItem('ID');
-          const response = await axios.get(API_URL+'/api/v1/candidates/name/'+String(ID), {
+          const response = await axios.get(API_URL+'/api/v1/profiles/candidates/name/'+String(ID), {
             headers: {
               'Authorization': 'Bearer ' + token
             }
           });
           setCandidateData(response.data);
           const email = localStorage.getItem('email');
-          axios.get(API_URL+'/api/v1/messages/viewed/'+email)
+          axios.get(API_URL+'/api/v1/users/messages/viewed/'+email)
           .then(response => {
             setNotif(response.data);
           });
           const matching = localStorage.getItem('matching');
           if(matching){
             swal('The matching process is currently running.');
-            axios.get(API_URL+'/api/v1/matching/byCandidate/'+String(ID), {
+            axios.get(API_URL+'/api/v1/jobs/matching/byCandidate/'+String(ID), {
               headers: {
                 'Authorization': 'Bearer ' + token
               }

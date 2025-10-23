@@ -27,7 +27,7 @@ const Projects = () => {
           try {
             const id = localStorage.getItem("IDSelected");
             const token = localStorage.getItem("token");
-            const response = await axios.get(API_URL+'/api/v1/projects/byCandidate/'+String(id), {
+            const response = await axios.get(API_URL+'/api/v1/profiles/projects/byCandidate/'+String(id), {
               headers: {
                 'Authorization': 'Bearer ' + token
               }

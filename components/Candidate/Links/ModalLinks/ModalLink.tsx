@@ -26,7 +26,7 @@ interface ModalProps {
       const idC = localStorage.getItem("ID");
       const token = localStorage.getItem("token");
       axios
-        .put(API_URL+'/api/v1/other_links/' + String(id), {
+        .put(API_URL+'/api/v1/profiles/other_links/' + String(id), {
           id: id,
           name: modifiedName,
           url: modifiedUrl,

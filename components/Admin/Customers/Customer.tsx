@@ -32,7 +32,7 @@ const Customers = () =>{
     const handleDelete = async (e:any, idC:number) =>{
       e.preventDefault()
       const token = localStorage.getItem("token")
-      axios.delete(API_URL+'/api/v1/customers'+'/'+String(idC), {
+      axios.delete(API_URL+'/api/v1/users/customers'+'/'+String(idC), {
         headers: {
           'Authorization': 'Bearer ' + token
         }
@@ -71,7 +71,7 @@ const RepeatClassNTimes: React.FC<RepeatClassNTimesProps> = ({ className, n, cus
         const fetchData = async () => {
           try{
             const token = localStorage.getItem("token")
-            const response = await axios.get(API_URL+'/api/v1/customers', {
+            const response = await axios.get(API_URL+'/api/v1/users/customers', {
               headers: {
                 'Authorization': 'Bearer ' + token
               }

@@ -45,7 +45,7 @@ const Applies = () =>{
       const fetchData = async () => {
         try {
           const token = localStorage.getItem("token")
-          const response = await axios.get(API_URL+'/api/v1/candidates', {
+          const response = await axios.get(API_URL+'/api/v1/profiles/candidates', {
             headers: {
               'Authorization': 'Bearer ' + token
             }
@@ -58,7 +58,7 @@ const Applies = () =>{
             });         
             setJobsData(res.data);
           setCandidatesData(response.data);
-          const response1 = await axios.get<Matching[]>(API_URL+'/api/v1/matching/customer/'+id, {
+          const response1 = await axios.get<Matching[]>(API_URL+'/api/v1/jobs/matching/customer/'+id, {
               headers: {
                 'Authorization': 'Bearer ' + token
               }

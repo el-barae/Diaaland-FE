@@ -53,7 +53,7 @@ interface ModalProps {
       const idC = localStorage.getItem("ID");
       const token = localStorage.getItem("token")
       axios
-        .put(API_URL+'/api/v1/customers/' + String(id), {
+        .put(API_URL+'/api/v1/users/customers/' + String(id), {
           id: id,
           name: McustomerName,
           email: McustomerEmail,

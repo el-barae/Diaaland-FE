@@ -26,7 +26,7 @@ const Messages = () =>{
       var ID = localStorage.getItem("ID");
       try{
         const token = localStorage.getItem("token");
-      axios.delete(API_URL+'/api/v1/messages/'+String(idM), {
+      axios.delete(API_URL+'/api/v1/users/messages/'+String(idM), {
         headers: {
           'Authorization': 'Bearer ' + token
         }
@@ -61,7 +61,7 @@ const Messages = () =>{
         const fetchData = async () => {
           try {
             const token = localStorage.getItem("token");
-            const response = await axios.get(API_URL+'/api/v1/messages/recipient/DIAALAND', {
+            const response = await axios.get(API_URL+'/api/v1/users/messages/recipient/DIAALAND', {
               headers: {
                 'Authorization': 'Bearer ' + token
               }

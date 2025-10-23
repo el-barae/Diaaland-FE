@@ -25,7 +25,7 @@ const Jobs = () =>{
       e.preventDefault()
       var ID = localStorage.getItem("ID");
       const token = localStorage.getItem("token");
-      axios.delete(API_URL+'/api/v1/candidate-jobs/'+String(ID)+'/'+String(idJ), {
+      axios.delete(API_URL+'/api/v1/jobs/candidate-jobs/'+String(ID)+'/'+String(idJ), {
         headers: {
           'Authorization': 'Bearer ' + token
         }
@@ -57,7 +57,7 @@ const Jobs = () =>{
           try {
             var ID = localStorage.getItem("ID");
             const token = localStorage.getItem("token");
-            const response = await axios.get(API_URL+'/api/v1/candidate-jobs/byCandidate/'+String(ID), {
+            const response = await axios.get(API_URL+'/api/v1/jobs/candidate-jobs/byCandidate/'+String(ID), {
               headers: {
                 'Authorization': 'Bearer ' + token
               }

@@ -50,7 +50,7 @@ const ListJobs = () => {
         setFilteredJobs(response.data);
         setTimeout(() => {
           setLoading(false);
-        }, 1500);
+        }, 500);
       } catch (error) {
         console.error('Erreur lors de la récupération des données :', error);
       }

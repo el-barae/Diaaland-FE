@@ -24,7 +24,7 @@ const Skills = () => {
             try {
               var ID = localStorage.getItem("IDSelected");
               const token = localStorage.getItem("token");
-              const response = await axios.get(API_URL+'/api/v1/candidate-skills/byCandidate/' + String(ID), {
+              const response = await axios.get(API_URL+'/api/v1/profiles/candidate-skills/byCandidate/' + String(ID), {
                 headers: {
                   'Authorization': 'Bearer ' + token
                 }

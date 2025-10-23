@@ -42,7 +42,7 @@ interface ModalProps {
       e.preventDefault()
       try{
         const token = localStorage.getItem("token")
-      axios.delete(API_URL+'/api/v1/candidate-skills/'+String(id)+'/'+String(idS), {
+      axios.delete(API_URL+'/api/v1/profiles/candidate-skills/'+String(id)+'/'+String(idS), {
         headers: {
           'Authorization': 'Bearer ' + token
         }
@@ -58,7 +58,7 @@ interface ModalProps {
       e.preventDefault()
       try{
         const token = localStorage.getItem("token")
-      axios.put(API_URL+'/api/v1/candidate-skills/'+String(idS), {
+      axios.put(API_URL+'/api/v1/profiles/candidate-skills/'+String(idS), {
         "id": 2,
         "score": score,
         "candidate": {
@@ -89,7 +89,7 @@ interface ModalProps {
       const fetchData = async () => {
       try {
         const token = localStorage.getItem("token")
-        const response = await axios.get(API_URL+'/api/v1/candidate-skills/byCandidate/' + id, {
+        const response = await axios.get(API_URL+'/api/v1/profiles/candidate-skills/byCandidate/' + id, {
           headers: {
             'Authorization': 'Bearer ' + token
           }

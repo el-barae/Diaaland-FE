@@ -49,7 +49,7 @@ const Skills = () => {
       setType('');
       try {
         const token = localStorage.getItem("token")
-        await axios.post(API_URL+'/api/v1/skills', {
+        await axios.post(API_URL+'/api/v1/profiles/skills', {
           "name": sname,
           "type": stype
         }, {
@@ -57,7 +57,7 @@ const Skills = () => {
             'Authorization': 'Bearer ' + token
           }
         });        
-        const response = await axios.get(API_URL+'/api/v1/skills', {
+        const response = await axios.get(API_URL+'/api/v1/profiles/skills', {
           headers: {
             'Authorization': 'Bearer ' + token
           }
@@ -75,7 +75,7 @@ const Skills = () => {
         e.preventDefault()
         try{
           const token = localStorage.getItem("token")
-        axios.delete(API_URL+'/api/v1/skills/'+String(idS), {
+        axios.delete(API_URL+'/api/v1/profiles/skills/'+String(idS), {
           headers: {
             'Authorization': 'Bearer ' + token
           }
@@ -92,7 +92,7 @@ const Skills = () => {
           const fetchData = async () => {
             try {
               const token = localStorage.getItem("token")
-              const response = await axios.get(API_URL+'/api/v1/skills', {
+              const response = await axios.get(API_URL+'/api/v1/profiles/skills', {
                 headers: {
                   'Authorization': 'Bearer ' + token
                 }

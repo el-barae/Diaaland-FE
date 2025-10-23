@@ -43,7 +43,7 @@ export default function Modal({ isOpen, id, description, name,email, onClose }: 
       e.preventDefault();
       const token = localStorage.getItem("token")
       axios
-        .post(API_URL+'/api/v1/messages', {
+        .post(API_URL+'/api/v1/users/messages', {
           "email": "me.diaaland@gmail.com",
           "subject": "Application",
           "message": "You are new application for your job"+name,
@@ -74,7 +74,7 @@ export default function Modal({ isOpen, id, description, name,email, onClose }: 
     const role = localStorage.getItem("role");
     const token = localStorage.getItem("token");
     if(role === "CANDIDAT"){
-		  axios.post(API_URL+'/api/v1/favoris', {
+		  axios.post(API_URL+'/api/v1/jobs/favoris', {
       "candidate": {
         "id": 1
       },
@@ -104,7 +104,7 @@ export default function Modal({ isOpen, id, description, name,email, onClose }: 
         const token = localStorage.getItem("token");
         if(role === "CANDIDAT"){
         try {
-          const response = await axios.get(API_URL + '/api/v1/candidate-jobs/itsApplied/' + ID + '/' + id, {
+          const response = await axios.get(API_URL + '/api/v1/jobs/candidate-jobs/itsApplied/' + ID + '/' + id, {
             headers: {
               'Authorization': 'Bearer ' + token
             }
@@ -122,7 +122,7 @@ export default function Modal({ isOpen, id, description, name,email, onClose }: 
         const token = localStorage.getItem("token");
         if(role === "CANDIDAT"){
         try {
-          const response1 = await axios.get(API_URL + '/api/v1/favoris/itsFavoris/' + ID + '/' + id, {
+          const response1 = await axios.get(API_URL + '/api/v1/jobs/favoris/itsFavoris/' + ID + '/' + id, {
             headers: {
               'Authorization': 'Bearer ' + token
             }
@@ -156,7 +156,7 @@ export default function Modal({ isOpen, id, description, name,email, onClose }: 
             throw new Error('No token found in localStorage');
           }
   
-          const response = await fetch('http://localhost:7777/api/v1/candidates/resumefile/1', {
+          const response = await fetch(API_URL+'/api/v1/profiles/candidates/resumefile/1', {
             method: 'GET',
             headers: {
               'Authorization': `Bearer ${token}`,
@@ -185,7 +185,7 @@ export default function Modal({ isOpen, id, description, name,email, onClose }: 
       e.preventDefault();
       var idC = localStorage.getItem("ID");
       const token = localStorage.getItem("token");
-  axios.get(API_URL+'/api/v1/candidate-skills/haveSkills/'+idC, {
+  axios.get(API_URL+'/api/v1/profiles/candidate-skills/haveSkills/'+idC, {
     headers: {
       'Authorization': 'Bearer ' + token
     }
@@ -204,7 +204,7 @@ export default function Modal({ isOpen, id, description, name,email, onClose }: 
       formData.append('diploma', diploma);
       formData.append('coverLetter', coverLetter);
 
-    fetch(API_URL+'/api/v1/candidate-jobs/send', {
+    fetch(API_URL+'/api/v1/jobs/candidate-jobs/send', {
       method: 'POST',
       body: formData,
       headers: {

@@ -33,7 +33,7 @@ const Admin = () =>{
             setTimeout(() => {
                 setLoading(false);
               }, 1500);
-            axios.get(API_URL+'/api/v1/messages/viewed/DIAALAND')
+            axios.get(API_URL+'/api/v1/users/messages/viewed/DIAALAND')
           .then(response => {
             setNotif(response.data);
           })
@@ -45,7 +45,7 @@ const Admin = () =>{
     }, []);
 
     const markAllMessagesViewed = () => {
-        axios.put(API_URL+'/api/v1/messages/mark-viewed/DIAALAND')
+        axios.put(API_URL+'/api/v1/users/messages/mark-viewed/DIAALAND')
           .catch(error => {
             console.error('Error marking messages as viewed:', error);
         });

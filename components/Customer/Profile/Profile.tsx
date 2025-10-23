@@ -50,7 +50,7 @@ const Profile = () => {
             }
 
             try {
-                const response = await axios.get<Customer>(API_URL+"/api/v1/customers/"+id, {
+                const response = await axios.get<Customer>(API_URL+"/api/v1/users/customers/"+id, {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
@@ -76,7 +76,7 @@ const Profile = () => {
         }
 
         try {
-            const response = await fetch(API_URL+'/api/v1/customers/logo/'+id, {
+            const response = await fetch(API_URL+'/api/v1/users/customers/logo/'+id, {
                 method: 'GET',
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -125,7 +125,7 @@ const Profile = () => {
         formData.append('file', file);
 
         try {
-            const response = await axios.post<string>(`${API_URL}/api/v1/files/uploadLogo/${id}`, formData, {
+            const response = await axios.post<string>(`${API_URL}/api/v1/users/files/uploadLogo/${id}`, formData, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     'Content-Type': 'multipart/form-data'
@@ -149,7 +149,7 @@ const Profile = () => {
         try {
             let logo = customer.logo;
 			const token = localStorage.getItem('token');
-			await axios.put(`${API_URL}/api/v1/customers/${id}`, {
+			await axios.put(`${API_URL}/api/v1/users/customers/${id}`, {
 				"name": customer.name,
 				"email": customer.email,
 				"address": customer.address,

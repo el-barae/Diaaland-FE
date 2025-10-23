@@ -56,7 +56,7 @@ const [skillsAll,setSkillsAll] = useState<skill[]>([])
   const handleDelete = async (e:any, idC:number) =>{
     e.preventDefault()
     const token = localStorage.getItem("token")
-    axios.delete(API_URL+'/api/v1/candidates'+'/'+String(idC), {
+    axios.delete(API_URL+'/api/v1/profiles/candidates'+'/'+String(idC), {
       headers: {
         'Authorization': 'Bearer ' + token
       }
@@ -86,7 +86,7 @@ const handleFiltre = async () =>{
   if (ID !== null) {
     try {
       const token = localStorage.getItem("token")
-      const response = await axios.get(API_URL+'/api/v1/candidate-skills/bySkill/' + String(ID), {
+      const response = await axios.get(API_URL+'/api/v1/profiles/candidate-skills/bySkill/' + String(ID), {
         headers: {
           'Authorization': 'Bearer ' + token
         }
@@ -129,12 +129,12 @@ const RepeatClassNTimes: React.FC<RepeatClassNTimesProps> = ({ className, n, can
         const fetchData = async () => {
           try {
             const token = localStorage.getItem("token")
-            const response = await axios.get(API_URL+'/api/v1/candidates', {
+            const response = await axios.get(API_URL+'/api/v1/profiles/candidates', {
               headers: {
                 'Authorization': 'Bearer ' + token
               }
             });   
-            const res = await axios.get(API_URL+'/api/v1/skills', {
+            const res = await axios.get(API_URL+'/api/v1/profiles/skills', {
               headers: {
                 'Authorization': 'Bearer ' + token
               }

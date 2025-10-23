@@ -35,7 +35,7 @@ interface ModalProps {
       e.preventDefault();
       const token = localStorage.getItem("token")
       axios
-        .post(API_URL+'/api/v1/messages', {
+        .post(API_URL+'/api/v1/users/messages', {
           "email": "elfallous@gmail.com",
           "subject": subject,
           "message": message,

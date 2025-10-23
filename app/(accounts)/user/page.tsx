@@ -12,6 +12,14 @@ import { FaEyeSlash, FaEye } from 'react-icons/fa';
 import axios from 'axios';
 import swal from 'sweetalert';
 import API_URL from '@/config';
+import {jwtDecode} from "jwt-decode";
+
+interface MyToken {
+  sub: string; // email
+  id: number;
+  role: string;
+  exp: number;
+}
 
 const passwordStrength = (password: string) => {
 	let res = 0;
@@ -58,24 +66,24 @@ export default function Register() {
 
 	const [passState, setPassState] = useState('hide');
 
-	const fetchID = async () => {
-		try {
-			const token = localStorage.getItem("token");
-			const resp = await axios.get(API_URL+'/api/v1/users/relatedId/'+String(email), {
-				headers: {
-					'Authorization': 'Bearer ' + token
+		const fetchID = async () => {
+				try {
+					const token = localStorage.getItem("token");
+					if (token) {
+					const decoded: MyToken = jwtDecode(token);
+					console.log("User ID:", decoded.id);
+					console.log("User Role:", decoded.role);
+					localStorage.setItem("ID", decoded.id.toString());
+					}
+				} catch (error) {
+					console.error('Erreur lors de la récupération des données :', error);
 				}
-			});
-			const ID = JSON.stringify(resp.data);
-			localStorage.setItem('ID',ID)
-		  } catch (error) {
-			console.error('Erreur lors de la récupération des données :', error);
-		  }
-		}
+			}
+		
 	
 	const handleSubmit = async (e:any)  =>{
 		e.preventDefault()
-			const response = axios.post(API_URL+'/api/v1/auth/register/customer', {
+			const response = axios.post(API_URL+'/api/v1/users/auth/register/customer', {
 				"name": name,
 				"email":email,
 				"phoneNumber": phoneNumber,
@@ -84,7 +92,6 @@ export default function Register() {
 			}).then(function (response) {
 		  localStorage.setItem('token',response.data.token)
 		  localStorage.setItem('role',response.data.role)
-		  Cookies.set("loggedin", "true");
 		  fetchID();
 		  swal('Registration successfuly', '', 'success');
 		  router.push('Dashboards/Customer')

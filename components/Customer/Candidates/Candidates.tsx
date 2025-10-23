@@ -48,7 +48,7 @@ const Candidates = () =>{
           try {
             const id = localStorage.getItem("ID");
             const token = localStorage.getItem("token");
-            const response = await axios.get(API_URL+'/api/v1/candidate-jobs/byCustomer/'+String(id), {
+            const response = await axios.get(API_URL+'/api/v1/jobs/candidate-jobs/byCustomer/'+String(id), {
               headers: {
                 'Authorization': 'Bearer ' + token
               }

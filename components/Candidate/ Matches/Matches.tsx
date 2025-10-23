@@ -52,7 +52,7 @@ const Applies = () =>{
               }
             });         
             setJobsData(res.data);
-          const response1 = await axios.get<Matching[]>(API_URL+'/api/v1/matching/candidate/'+String(ID), {
+          const response1 = await axios.get<Matching[]>(API_URL+'/api/v1/jobs/matching/candidate/'+String(ID), {
               headers: {
                 'Authorization': 'Bearer ' + token
               }

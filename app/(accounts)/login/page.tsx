@@ -13,6 +13,14 @@ import { FaEye, FaEyeSlash } from 'react-icons/fa'
 //import { signIn, useSession } from 'next-auth/react';
 import Cookies from 'js-cookie';
 import API_URL from '@/config';
+import {jwtDecode} from "jwt-decode";
+
+interface MyToken {
+  sub: string; // email
+  id: number;
+  role: string;
+  exp: number;
+}
 
 const Login = () =>  {
 
@@ -28,13 +36,10 @@ const Login = () =>  {
 	const fetchID = async () => {
 		try {
 			const token = localStorage.getItem("token");
-			const resp = await axios.get(API_URL+'/api/v1/users/relatedId/'+String(email), {
-				headers: {
-					'Authorization': 'Bearer ' + token
-				}
-			});
-			var ID = JSON.stringify(resp.data);
-			localStorage.setItem('ID',ID);
+			if (token) {
+			const decoded: MyToken = jwtDecode(token);
+			localStorage.setItem("ID", decoded.id.toString());
+			}
 		  } catch (error) {
 			console.error('Erreur lors de la récupération des données :', error);
 		  }
@@ -42,7 +47,7 @@ const Login = () =>  {
 
 	const handleSubmit = async (e:any)  =>{
 		e.preventDefault()
-		axios.post(API_URL+'/api/v1/auth', {
+		axios.post(API_URL+'/api/v1/users/auth', {
 			"email": email,
 			"password": password
 		  })

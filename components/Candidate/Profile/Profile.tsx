@@ -71,15 +71,15 @@ const Profile = () => {
             }
 
             try {
-                const response = await axios.get<Candidate>(API_URL + `/api/v1/candidates/${id}`, {
+                const response = await axios.get<Candidate>(API_URL + `/api/v1/profiles/candidates/${id}`, {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
                 });
 
                 setCandidate(response.data);
-                setResumeURL(API_URL + `/api/v1/candidates/resumefile/${id}`);
-                setPhotoURL(API_URL + `/api/v1/candidates/image/${id}`);
+                setResumeURL(API_URL + `/api/v1/profiles/candidates/resumefile/${id}`);
+                setPhotoURL(API_URL + `/api/v1/profiles/candidates/image/${id}`);
             } catch (error) {
                 console.error('Error fetching candidate data:', error);
             }
@@ -201,7 +201,7 @@ const Profile = () => {
         formData.append('file', file);
 
         try {
-            const response = await axios.post<string>(API_URL + `/api/v1/files/${endpoint}/${id}`, formData, {
+            const response = await axios.post<string>(API_URL + `/api/v1/users/files/${endpoint}/${id}`, formData, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     'Content-Type': 'multipart/form-data'
@@ -219,7 +219,7 @@ const Profile = () => {
         const id = localStorage.getItem('ID');
         const token = localStorage.getItem('token');
         try {
-          await axios.put(API_URL + `/api/v1/candidates/${id}`, {
+          await axios.put(API_URL + `/api/v1/profiles/candidates/${id}`, {
               "firstName": candidate.firstName,
               "lastName": candidate.lastName,
               "email": candidate.email,
@@ -266,7 +266,7 @@ const Profile = () => {
             const uploadedPhoto = await uploadFile(photoFile, id, 'uploadImg');
             if (uploadedPhoto) {
                 photoLink = uploadedPhoto;
-                setPhotoURL(API_URL + `/api/v1/candidates/image/${id}`); 
+                setPhotoURL(API_URL + `/api/v1/profiles/candidates/image/${id}`); 
             }
         }
     };

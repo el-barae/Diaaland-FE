@@ -34,14 +34,14 @@ const Skills = () => {
        const token = localStorage.getItem("token");
       setSkill('');
       var ID = localStorage.getItem("ID");
-      const response = await axios.get(API_URL+'/api/v1/skills/id/'+sname, {
+      const response = await axios.get(API_URL+'/api/v1/profiles/skills/id/'+sname, {
         headers: {
           'Authorization': 'Bearer ' + token
         }
       });
       const skillId = response.data;
       try{
-        const res = await axios.get(API_URL+'/api/v1/skills/'+String(response.data), {
+        const res = await axios.get(API_URL+'/api/v1/profiles/skills/'+String(response.data), {
           headers: {
             'Authorization': 'Bearer ' + token
           }
@@ -52,7 +52,7 @@ const Skills = () => {
       }catch (error) {
         console.log(error);
        };
-      axios.post(API_URL+'/api/v1/candidate-skills', {
+      axios.post(API_URL+'/api/v1/profiles/candidate-skills', {
         "score": score,
         "candidate": {
           "id": ID
@@ -83,7 +83,7 @@ const Skills = () => {
         try{
           var ID = localStorage.getItem("ID");
           const token = localStorage.getItem("token");
-        axios.delete(API_URL+'/api/v1/candidate-skills/'+String(ID)+'/'+String(idS), {
+        axios.delete(API_URL+'/api/v1/profiles/candidate-skills/'+String(ID)+'/'+String(idS), {
           headers: {
             'Authorization': 'Bearer ' + token
           }
@@ -100,13 +100,13 @@ const Skills = () => {
             try {
               var ID = localStorage.getItem("ID");
               const token = localStorage.getItem("token");
-              const response = await axios.get(API_URL+'/api/v1/candidate-skills/byCandidate/' + String(ID), {
+              const response = await axios.get(API_URL+'/api/v1/profiles/candidate-skills/byCandidate/' + String(ID), {
                 headers: {
                   'Authorization': 'Bearer ' + token
                 }
               });
               const candidateSkills: skill[] = response.data;
-              const res = await axios.get(API_URL+'/api/v1/skills', {
+              const res = await axios.get(API_URL+'/api/v1/profiles/skills', {
                 headers: {
                   'Authorization': 'Bearer ' + token
                 }

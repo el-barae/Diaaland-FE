@@ -75,7 +75,7 @@ export default function AddCandidate({ isOpen, onClose}: Props) {
 	
 	const handleSubmit = async (e:any)  =>{
 		e.preventDefault()
-		axios.post(API_URL+'/api/v1/auth/register/candidate', {
+		axios.post(API_URL+'/api/v1/users/auth/register/candidate', {
 			"firstName": firstName,
 			"lastName": lastName,
 			"email":email,

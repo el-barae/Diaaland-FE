@@ -32,7 +32,7 @@ const Projects = () => {
       e.preventDefault()
       const id = localStorage.getItem("ID");
       const token = localStorage.getItem("token");
-      axios.post(API_URL+'/api/v1/projects', {
+      axios.post(API_URL+'/api/v1/profiles/projects', {
         "name": name,
         "startDate": startDate,
         "endDate": endDate,
@@ -59,7 +59,7 @@ const Projects = () => {
       e.preventDefault()
       try{
         const token = localStorage.getItem("token");
-      axios.delete(API_URL+'/api/v1/projects/'+String(id), {
+      axios.delete(API_URL+'/api/v1/profiles/projects/'+String(id), {
         headers: {
           'Authorization': 'Bearer ' + token
         }
@@ -91,7 +91,7 @@ const Projects = () => {
           try {
             const id = localStorage.getItem("ID");
             const token = localStorage.getItem("token");
-            const response = await axios.get(API_URL+'/api/v1/projects/byCandidate/'+String(id), {
+            const response = await axios.get(API_URL+'/api/v1/profiles/projects/byCandidate/'+String(id), {
               headers: {
                 'Authorization': 'Bearer ' + token
               }

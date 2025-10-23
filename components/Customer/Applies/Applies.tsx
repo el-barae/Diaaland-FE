@@ -49,7 +49,7 @@ const Applies = () => {
             setCandidateJobsData(updatedJobs);
 
             try {
-            const respense= axios.put(`${API_URL}/api/v1/candidate-jobs/status/accept/`+String(id),{}, {
+            const respense= axios.put(`${API_URL}/api/v1/jobs/candidate-jobs/status/accept/`+String(id),{}, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -71,7 +71,7 @@ const Applies = () => {
             setCandidateJobsData(updatedJobs);
 
             try {
-                const respense = axios.put(`${API_URL}/api/v1/candidate-jobs/status/refuse/`+String(id),{}, {
+                const respense = axios.put(`${API_URL}/api/v1/jobs/candidate-jobs/status/refuse/`+String(id),{}, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -87,7 +87,7 @@ const Applies = () => {
             try {
                 const id = localStorage.getItem("ID");
                 const token = localStorage.getItem("token");
-                const response = await axios.get(`${API_URL}/api/v1/candidate-jobs/candidatejobsByCustomer/${id}`, {
+                const response = await axios.get(`${API_URL}/api/v1/jobs/candidate-jobs/candidatejobsByCustomer/${id}`, {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
@@ -117,8 +117,8 @@ const Applies = () => {
         }
             const cvName = String(candidateJob.cv);
             const diplomaName = String(candidateJob.diploma);
-            const resumeFile = await fetchFile(`${API_URL}/api/v1/candidate-jobs/cv/${candidateId}`,cvName , token);
-            const diplomaFile = await fetchFile(`${API_URL}/api/v1/candidate-jobs/diploma/${candidateId}`,diplomaName , token);
+            const resumeFile = await fetchFile(`${API_URL}/api/v1/jobs/candidate-jobs/cv/${candidateId}`,cvName , token);
+            const diplomaFile = await fetchFile(`${API_URL}/api/v1/jobs/candidate-jobs/diploma/${candidateId}`,diplomaName , token);
 
             setCandidateFiles(prevFiles => ({
                 ...prevFiles,

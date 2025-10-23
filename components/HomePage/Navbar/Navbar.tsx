@@ -70,7 +70,7 @@ const Navbar = () => {
 
   const logout = async ()=>{
     const token = localStorage.getItem('token')
-		axios.post(API_URL+'/api/v1/auth/logout', {
+		axios.post(API_URL+'/api/v1/users/auth/logout', {
 			"token" : token
 		  }, {
         headers: {

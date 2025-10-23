@@ -39,7 +39,7 @@ interface ModalProps {
       try{
         const idC = localStorage.getItem("ID");
         const token = localStorage.getItem("token");
-        const response = await axios.put(API_URL + '/api/v1/projects/' + String(id), {
+        const response = await axios.put(API_URL + '/api/v1/profiles/projects/' + String(id), {
           id: id,
           name: modifiedName,
           startDate: modifiedStartDate,

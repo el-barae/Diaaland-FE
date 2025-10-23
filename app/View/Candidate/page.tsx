@@ -44,7 +44,7 @@ const ViewCandidate = () => {
         try {
           const token = localStorage.getItem('token');
           var ID = localStorage.getItem('IDSelected');
-          const response = await axios.get(API_URL+'/api/v1/candidates/name/'+String(ID), {
+          const response = await axios.get(API_URL+'/api/v1/profiles/candidates/name/'+String(ID), {
             headers: {
               'Authorization': 'Bearer ' + token
             }

@@ -25,7 +25,7 @@ const Favoris = () =>{
   const handleApply = async (e:any, id:number) =>{
 		e.preventDefault()
     const token = localStorage.getItem("token");
-		axios.post(API_URL+'/api/v1/candidate-jobs', {
+		axios.post(API_URL+'/api/v1/jobs/candidate-jobs', {
 			"status": "pending",
       "candidate": {
         "id": 1
@@ -70,7 +70,7 @@ const Favoris = () =>{
       try {
       const idC = localStorage.getItem("ID");
       const token = localStorage.getItem("token");
-      axios.delete(API_URL+'/api/v1/favoris/'+String(idC)+'/'+String(idJ), {
+      axios.delete(API_URL+'/api/v1/jobs/favoris/'+String(idC)+'/'+String(idJ), {
         headers: {
           'Authorization': 'Bearer ' + token
         }
@@ -87,7 +87,7 @@ const Favoris = () =>{
     try {
       const id = localStorage.getItem("ID");
       const token = localStorage.getItem("token");
-      const response = await axios.get(API_URL+'/api/v1/favoris/'+String(id), {
+      const response = await axios.get(API_URL+'/api/v1/jobs/favoris/'+String(id), {
         headers: {
           'Authorization': 'Bearer ' + token
         }
