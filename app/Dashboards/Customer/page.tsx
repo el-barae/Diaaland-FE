@@ -15,6 +15,7 @@ import {ThemeProvider} from 'next-themes'
 import Navbar from '@/components/HomePage/Navbar/Navbar'
 import Notif from '@/public/images/notif.png'
 import API_URL from '@/config';
+import {jwtDecode} from "jwt-decode";
 
 interface Candidate {
     id: number;
@@ -88,39 +89,65 @@ const Customer = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [notif,setNotif] = useState(false);
     const [messagesData, setMessagesData] = useState<Message[]>([]);
+  
   const handleToggle = async () => {
     setIsOpen(!isOpen);
-    const email = localStorage.getItem('email');
-    axios.put(API_URL+'/api/v1/users/messages/mark-viewed/'+email)
-          .catch(error => {
-            console.error('Error marking messages as viewed:', error);
-        });
-    setNotif(false);
+
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
     try {
-      const token = localStorage.getItem("token");
-      const response = await axios.get(API_URL+'/api/v1/users/messages/recipient/'+email, {
+      const decoded = jwtDecode(token);
+      const email = decoded.sub;
+
+      // Marquer les messages comme vus
+      await axios.put(`${API_URL}/api/v1/users/messages/mark-viewed/${email}`, {
+                  headers: { Authorization: `Bearer ${token}` },
+                })
+        .catch(error => {
+          console.error('Erreur lors du marquage des messages :', error);
+        });
+
+      setNotif(false);
+
+      // Récupérer les messages de l'utilisateur
+      const response = await axios.get(`${API_URL}/api/v1/users/messages/recipient/${email}`, {
         headers: {
-          'Authorization': 'Bearer ' + token
-        }
-      });         
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
       setMessagesData(response.data);
     } catch (error) {
       console.error('Erreur lors de la récupération des données :', error);
     }
-}
+  };
 
-const handleDelete = async (e:any) =>{
-  try{
-    const email = localStorage.getItem('email');
-  axios.delete(API_URL+'/api/v1/users/messages/recipient/'+email)
-  const updatedMessagesData = messagesData.filter(m => m.email !== email)
-      setMessagesData(updatedMessagesData)
-  }catch(error) {
-    console.log(error);
-   };
+  const handleDelete = async (e: any) => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) return;
 
-   setIsOpen(!isOpen);
-}
+      const decoded: any = jwtDecode(token);
+      const email = decoded.sub;
+
+      await axios.delete(`${API_URL}/api/v1/users/messages/recipient/${email}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const updatedMessagesData = messagesData.filter(
+        (m: any) => m.email !== email
+      );
+      setMessagesData(updatedMessagesData);
+    } catch (error) {
+      console.error("Erreur lors de la suppression des messages :", error);
+    } finally {
+      // Fermer le menu après suppression
+      setIsOpen(!isOpen);
+    }
+  };
 
 const handleAddClick = () =>{
   router.push("../addPost");
@@ -156,53 +183,71 @@ const handleAddClick = () =>{
     }
 
     useEffect(() => {
-      const role = localStorage.getItem('role');
-      if (role !== "CUSTOMER" && role !== "ADMIN") {
-        swal('Authenticate yourself when you are a CUSTOMER', '', 'error');
-        router.push('/');
-    } else {
-        const fetchCustomerData = async () => {
-          try {
-            const token = localStorage.getItem("token");
-            const ID = localStorage.getItem("ID");
-            const response = await axios.get(API_URL+'/api/v1/users/customers/name/'+String(ID), {
-              headers: {
-                'Authorization': 'Bearer ' + token
-              }
-            });
-            setCustomer(response.data);
-            const email = localStorage.getItem('email');
-            axios.get(API_URL+'/api/v1/users/messages/viewed/'+email)
-          .then(response => {
-            setNotif(response.data);
-          });
-          const matching = localStorage.getItem('matching');
-          if(matching){
-            const resp = await axios.get(API_URL+'/api/v1/jobs/lastJobId', {
-              headers: {
-                'Authorization': 'Bearer ' + token
-              }
-            });
-            const jobId = JSON.stringify(resp.data);
-            swal('The matching process is currently running.');
-            axios.get(API_URL+'/api/v1/jobs/matching/byJob/'+ String(jobId), {
-              headers: {
-                'Authorization': 'Bearer ' + token
-              }
-            }).then(response => {
-              localStorage.removeItem("matching");
-            });
+        const token = localStorage.getItem("token");
+        if (!token) {
+          swal("Authentication required", "", "error");
+          router.push("/");
+          return;
+        }
+
+        try {
+          // ✅ Décodage du token JWT
+          const decoded: any = jwtDecode(token);
+          const role = decoded.role;
+          const email = decoded.sub; 
+          const id = decoded.id;
+          const name = decoded.name;
+          setCustomer(name);
+
+          // ✅ Vérification du rôle
+          if (role !== "CUSTOMER" && role !== "ADMIN") {
+            swal("Authenticate yourself when you are a CUSTOMER", "", "error");
+            router.push("/");
+            return;
           }
-            setTimeout(() => {
-              setLoading(false);
-            }, 1500);
-          } catch (error) {
-            console.error('Erreur lors de la récupération des données :', error);
-          }
-        };
-        fetchCustomerData();
-    }
-  }, []);
+
+          // ✅ Chargement des données
+          const fetchCustomerData = async () => {
+            try {
+              // Récupération des notifications (messages)
+              const resNotif = await axios.get(
+                `${API_URL}/api/v1/users/messages/viewed/${email}`
+              , {
+                  headers: { Authorization: `Bearer ${token}` },
+                });
+              setNotif(resNotif.data);
+
+              // Vérification du matching en cours
+              const matching = localStorage.getItem("matching");
+              if (matching) {
+                const resp = await axios.get(`${API_URL}/api/v1/jobs/lastJobId`, {
+                  headers: { Authorization: `Bearer ${token}` },
+                });
+
+                const jobId = resp.data; // inutile de stringify ici
+                swal("The matching process is currently running.");
+
+                await axios.get(`${API_URL}/api/v1/jobs/matching/byJob/${jobId}`, {
+                  headers: { Authorization: `Bearer ${token}` },
+                });
+
+                localStorage.removeItem("matching");
+              }
+
+              setTimeout(() => setLoading(false), 1500);
+            } catch (error) {
+              console.error("Erreur lors de la récupération des données :", error);
+            }
+          };
+
+          fetchCustomerData();
+        } catch (error) {
+          console.error("Erreur de décodage du token :", error);
+          swal("Invalid token", "", "error");
+          router.push("/");
+        }
+      }, []);
+
     return (
       <ThemeProvider enableSystem={true} attribute="class">
       <Navbar/>

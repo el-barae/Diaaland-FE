@@ -16,6 +16,7 @@ import Matches from '@/components/Admin/ Matches/Matches'
 import axios from "axios";
 import API_URL from "@/config";
 import swal from "sweetalert";
+import {jwtDecode} from "jwt-decode";
 
 const Admin = () =>{
     var [x,setX] = useState("Dashboard");
@@ -24,25 +25,40 @@ const Admin = () =>{
     const router = useRouter();
 
     useEffect(() => {
-        const role = localStorage.getItem('role');
-        if (role !== "ADMIN") {
-            swal('Authenticate yourself when you are a ADMIN', '', 'error');
+        const token = localStorage.getItem('token');
+
+        if (!token) {
+            swal('No token found. Please log in.', '', 'error');
+            router.push('/');
+            return;
+        }
+
+        try {
+            const decoded: any = jwtDecode(token);
+            const role = decoded.role;
+
+            if (role !== "ADMIN") {
+            swal('Authenticate yourself when you are an ADMIN', '', 'error');
+            router.push('/');
+            return;
+            }
+
+            // ADMIN logic
+            setTimeout(() => {
+            setLoading(false);
+            }, 500);
+
+            axios.get(`${API_URL}/api/v1/users/messages/viewed/DIAALAND`)
+            .then(response => setNotif(response.data))
+            .catch(error => console.error('Error fetching message status:', error));
+
+        } catch (error) {
+            console.error('Invalid token:', error);
+            swal('Invalid or expired token', '', 'error');
             router.push('/');
         }
-        else{
-            setTimeout(() => {
-                setLoading(false);
-              }, 1500);
-            axios.get(API_URL+'/api/v1/users/messages/viewed/DIAALAND')
-          .then(response => {
-            setNotif(response.data);
-          })
-          .catch(error => {
-            console.error('Error fetching message status:', error);
-          });
-        }
-        
-    }, []);
+        }, []);
+
 
     const markAllMessagesViewed = () => {
         axios.put(API_URL+'/api/v1/users/messages/mark-viewed/DIAALAND')

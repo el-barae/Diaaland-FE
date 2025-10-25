@@ -17,6 +17,7 @@ import API_URL from '@/config';
 interface MyToken {
   sub: string; // email
   id: number;
+  name: string;
   role: string;
   exp: number;
 }
@@ -63,22 +64,6 @@ export default function Register() {
 
 	const [passState, setPassState] = useState('hide');
 
-	const fetchID = async () => {
-		try {
-			const token = localStorage.getItem("token");
-			if (token) {
-			const decoded: MyToken = jwtDecode(token);
-			console.log("User ID:", decoded.id);
-			console.log("User Role:", decoded.role);
-			localStorage.setItem("ID", decoded.id.toString());
-			}
-
-			localStorage.setItem('matching', 'true');
-		} catch (error) {
-			console.error('Erreur lors de la récupération des données :', error);
-		}
-	}
-
 		const handleFileChange = (e: any) => {
 			if (e.target.files && e.target.files[0]) {
 			  setResume(e.target.files[0]);
@@ -101,24 +86,21 @@ export default function Register() {
 				password: password,
 				role: "CANDIDAT"
 			  });
-		  
-			  console.log(registerResponse);
-			  localStorage.setItem('token', registerResponse.data.token);
-			  localStorage.setItem('role', registerResponse.data.role);
-			  Cookies.set("loggedin", "true");
-			  await wait(1000);
-			  const ID = await fetchID();
-		  
-			  // Wait for 2 seconds
-			  await wait(2000);
-		  
+			  const ID = registerResponse.data.id;
+			  const token = registerResponse.data.token
+			  localStorage.setItem('token', token);
+			  localStorage.setItem('matching', 'true');
+			  await wait(1500);
+
+
 			  const formData = new FormData();
 			  formData.append('file', resume);
 		  
 			  // Upload the resume
-			  const uploadResponse = await axios.post(`${API_URL}/api/v1/users/files/uploadCV/${ID}`, formData, {
+			  const uploadResponse = await axios.post(`${API_URL}/api/v1/profiles/files/uploadCV/${ID}`, formData, {
 				headers: {
 				  'Content-Type': 'multipart/form-data'
+				//   'Authorization': 'Bearer ' + token
 				}
 			  });
 		  

@@ -2,6 +2,15 @@ import React, { useState,useEffect } from "react";
 import axios from "axios";
 import "./ModalXp.scss";
 import API_URL from "@/config";
+import { jwtDecode } from "jwt-decode";
+
+interface MyToken {
+  sub: string; // email
+  id: number;
+  name: string;
+  role: string;
+  exp: number;
+}
 
 interface xp{
   id: number;
@@ -32,8 +41,11 @@ interface ModalProps {
     const handleModifyXp = async (e: any) => {
       e.preventDefault();
       try{
-      const idC = localStorage.getItem("ID");
       const token = localStorage.getItem("token");
+            if (!token) return alert("Token not found, please log in again.");
+      
+            const decoded = jwtDecode<MyToken>(token);
+            const candidateId = decoded.id;
       axios
         .put(API_URL+'/api/v1/profiles/experiences/' + String(id), {
           id: id,
@@ -41,7 +53,7 @@ interface ModalProps {
           startDate: modifiedStartDate,
           endDate: modifiedEndDate,
           candidate: {
-            id: idC,
+            id: candidateId,
           },
         }, {
           headers: {

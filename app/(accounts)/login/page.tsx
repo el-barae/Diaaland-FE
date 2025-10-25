@@ -18,6 +18,7 @@ import {jwtDecode} from "jwt-decode";
 interface MyToken {
   sub: string; // email
   id: number;
+  name: string;
   role: string;
   exp: number;
 }
@@ -33,17 +34,17 @@ const Login = () =>  {
 	const [passState, setPassState] = useState('hide');
 	const router = useRouter();
 
-	const fetchID = async () => {
-		try {
-			const token = localStorage.getItem("token");
-			if (token) {
-			const decoded: MyToken = jwtDecode(token);
-			localStorage.setItem("ID", decoded.id.toString());
-			}
-		  } catch (error) {
-			console.error('Erreur lors de la récupération des données :', error);
-		  }
-		}
+	// const fetchID = async () => {
+	// 	try {
+	// 		const token = localStorage.getItem("token");
+	// 		if (token) {
+	// 		const decoded: MyToken = jwtDecode(token);
+	// 		localStorage.setItem("ID", decoded.id.toString());
+	// 		}
+	// 	  } catch (error) {
+	// 		console.error('Erreur lors de la récupération des données :', error);
+	// 	  }
+	// 	}
 
 	const handleSubmit = async (e:any)  =>{
 		e.preventDefault()
@@ -53,11 +54,7 @@ const Login = () =>  {
 		  })
 		  .then(function (response) {
 			localStorage.setItem('token',response.data.token)
-			localStorage.setItem('role',response.data.role)
-			localStorage.setItem('email',email)
-			Cookies.set("loggedin", "true");
-			if(response.data.role==="CANDIDAT"||response.data.role==="CUSTOMER")
-				fetchID();
+
 			if(response.data.role === 'CANDIDAT')
 				router.push('Dashboards/Candidate')
 			else if(response.data.role === 'CUSTOMER')

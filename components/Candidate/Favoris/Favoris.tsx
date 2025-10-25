@@ -3,6 +3,15 @@ import { useState ,useEffect} from "react"
 import axios from 'axios'
 import React from 'react';
 import API_URL from '@/config'
+import { jwtDecode } from "jwt-decode";
+
+interface MyToken {
+  sub: string; // email
+  id: number;
+  name: string;
+  role: string;
+  exp: number;
+}
 
 interface Job {
     id: number;
@@ -22,29 +31,80 @@ const Favoris = () =>{
 
   const [jobsData, setJobsData] = useState<Job[]>([]);
 
-  const handleApply = async (e:any, id:number) =>{
-		e.preventDefault()
-    const token = localStorage.getItem("token");
-		axios.post(API_URL+'/api/v1/jobs/candidate-jobs', {
-			"status": "pending",
-      "candidate": {
-        "id": 1
-      },
-      "job": {
-        "id": id
+  // ✅ Candidature à un job
+  const handleApply = async (e: any, jobId: number) => {
+    e.preventDefault();
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        alert("Token not found. Please log in again.");
+        return;
       }
-		 }, {
-      headers: {
-        'Authorization': 'Bearer ' + token
-      }
-    })
-		 .then(function (response) {
-		 })
-		 .catch(function (error) {
-			console.log(error);
-		 });
-	}
 
+      const decoded = jwtDecode<MyToken>(token);
+      const candidateId = decoded.id;
+
+      await axios.post(
+        `${API_URL}/api/v1/jobs/candidate-jobs`,
+        {
+          status: "pending",
+          candidate: { id: candidateId },
+          job: { id: jobId },
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      alert("Application sent successfully!");
+    } catch (error) {
+      console.error("Error during job application:", error);
+    }
+  };
+
+  // ✅ Supprimer un job des favoris
+  const handleDelFavoris = async (e: any, jobId: number) => {
+    e.preventDefault();
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) return;
+
+      const decoded = jwtDecode<MyToken>(token);
+      const candidateId = decoded.id;
+
+      await axios.delete(`${API_URL}/api/v1/jobs/favoris/${candidateId}/${jobId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      // Mise à jour locale de la liste
+      setJobsData((prev) => prev.filter((job) => job.id !== jobId));
+    } catch (error) {
+      console.error("Erreur lors de la suppression du favori :", error);
+    }
+  };
+
+  // ✅ Récupérer les jobs favoris du candidat
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) return;
+
+        const decoded = jwtDecode<MyToken>(token);
+        const candidateId = decoded.id;
+
+        const response = await axios.get(`${API_URL}/api/v1/jobs/favoris/${candidateId}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        setJobsData(response.data);
+      } catch (error) {
+        console.error("Erreur lors de la récupération des favoris :", error);
+      }
+    };
+    fetchData();
+  }, []);
+  
   const RepeatClassNTimes: React.FC<RepeatClassNTimesProps> = ({ className, n, jobsData }) => {
     if(jobsData.length != 0)
       return(
@@ -65,40 +125,7 @@ const Favoris = () =>{
       )
     }
 
-    const handleDelFavoris = async (e:any, idJ:number) =>{
-      e.preventDefault()
-      try {
-      const idC = localStorage.getItem("ID");
-      const token = localStorage.getItem("token");
-      axios.delete(API_URL+'/api/v1/jobs/favoris/'+String(idC)+'/'+String(idJ), {
-        headers: {
-          'Authorization': 'Bearer ' + token
-        }
-      })
-      const updatedJobsData = jobsData.filter(job => job.id !== idJ)
-      setJobsData(updatedJobsData)
-    } catch (error) {
-      console.error('Erreur lors de la modification des données :', error);
-    }
-    }
 
-    useEffect(() => {
-         const fetchData = async () => {
-    try {
-      const id = localStorage.getItem("ID");
-      const token = localStorage.getItem("token");
-      const response = await axios.get(API_URL+'/api/v1/jobs/favoris/'+String(id), {
-        headers: {
-          'Authorization': 'Bearer ' + token
-        }
-      });    
-      setJobsData(response.data);
-    } catch (error) {
-      console.error('Erreur lors de la récupération des données :', error);
-    }
-  };
-        fetchData();
-  }, []);
   return(
     <>
     <div className='jobs'>

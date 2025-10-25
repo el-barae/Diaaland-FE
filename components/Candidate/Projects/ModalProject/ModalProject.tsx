@@ -4,6 +4,15 @@ import axios from "axios";
 import "./ModalProject.scss";
 import Project from '../Projects'; 
 import API_URL from "@/config";
+import { jwtDecode } from "jwt-decode";
+
+interface MyToken {
+  sub: string; // email
+  id: number;
+  name: string;
+  role: string;
+  exp: number;
+}
 
 interface Project {
   id: number;
@@ -37,8 +46,14 @@ interface ModalProps {
     const handleModifyProject = async (e: any) => {
       e.preventDefault();
       try{
-        const idC = localStorage.getItem("ID");
         const token = localStorage.getItem("token");
+                            if (!token) {
+                              alert("Token not found. Please log in again.");
+                              return;
+                            }
+                      
+                            const decoded = jwtDecode<MyToken>(token);
+                            const idC = decoded.id;
         const response = await axios.put(API_URL + '/api/v1/profiles/projects/' + String(id), {
           id: id,
           name: modifiedName,

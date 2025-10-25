@@ -86,7 +86,6 @@ export default function AddCandidate({ isOpen, onClose}: Props) {
 		  .then(function (response) {
 			console.log(response);
 			localStorage.setItem('token',response.data.token)
-			localStorage.setItem('role',response.data.role)
 			fetchID();
 			router.push('Dashboards/Candidate')
 		  })

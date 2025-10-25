@@ -3,6 +3,15 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import "./ModalJobs.scss";
 import API_URL from "@/config";
+import { jwtDecode } from "jwt-decode";
+
+interface MyToken {
+  sub: string; // email
+  id: number;
+  name: string;
+  role: string;
+  exp: number;
+}
 
 interface Job {
   id: number;
@@ -101,7 +110,13 @@ interface ModalProps {
     const handleModifyJob = async (e: any) => {
       e.preventDefault();
       const token = localStorage.getItem("token");
-      const ID = localStorage.getItem("ID");
+              if (!token) {
+                alert("Token not found. Please log in again.");
+                return;
+              }
+        
+              const decoded = jwtDecode<MyToken>(token);
+              const ID = decoded.id;
       axios
         .put(API_URL+'/api/v1/jobs/' + String(id), {
           id: id,

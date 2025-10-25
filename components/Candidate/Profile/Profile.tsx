@@ -7,6 +7,15 @@ import Image from 'next/image';
 import RegisterImg from '@/public/images/registeration.png';
 import API_URL from '@/config';
 import swal from 'sweetalert';
+import { jwtDecode } from "jwt-decode";
+
+interface MyToken {
+  sub: string; // email
+  id: number;
+  name: string;
+  role: string;
+  exp: number;
+}
 
 type Candidate = {
     id: number;
@@ -63,8 +72,14 @@ const Profile = () => {
 
     useEffect(() => {
         const fetchCandidate = async () => {
-            const id = localStorage.getItem('ID');
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem("token");
+                  if (!token) {
+                    alert("Token not found. Please log in again.");
+                    return;
+                  }
+            
+                  const decoded = jwtDecode<MyToken>(token);
+                  const id = decoded.id;
             if (!id || !token) {
                 console.error('ID or token is missing');
                 return;
@@ -201,7 +216,7 @@ const Profile = () => {
         formData.append('file', file);
 
         try {
-            const response = await axios.post<string>(API_URL + `/api/v1/users/files/${endpoint}/${id}`, formData, {
+            const response = await axios.post<string>(API_URL + `/api/v1/profiles/files/${endpoint}/${id}`, formData, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     'Content-Type': 'multipart/form-data'
@@ -216,8 +231,14 @@ const Profile = () => {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const id = localStorage.getItem('ID');
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem("token");
+              if (!token) {
+                alert("Token not found. Please log in again.");
+                return;
+              }
+        
+              const decoded = jwtDecode<MyToken>(token);
+              const id = decoded.id;
         try {
           await axios.put(API_URL + `/api/v1/profiles/candidates/${id}`, {
               "firstName": candidate.firstName,
@@ -257,13 +278,13 @@ const Profile = () => {
         let photoLink = candidate.photoLink;
 
         if (resumeFile) {
-            const uploadedResume = await uploadFile(resumeFile, id, 'upload');
+            const uploadedResume = await uploadFile(resumeFile, String(id), 'upload');
             if (uploadedResume) resumeLink = uploadedResume;
         }
 
         if (photoFile) {
             //const photo= new File([photoBlob], photoName, { type: 'image/jpeg' });
-            const uploadedPhoto = await uploadFile(photoFile, id, 'uploadImg');
+            const uploadedPhoto = await uploadFile(photoFile, String(id), 'uploadImg');
             if (uploadedPhoto) {
                 photoLink = uploadedPhoto;
                 setPhotoURL(API_URL + `/api/v1/profiles/candidates/image/${id}`); 

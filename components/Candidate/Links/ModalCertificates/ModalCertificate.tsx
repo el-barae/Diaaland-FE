@@ -2,6 +2,15 @@ import React, { useState,useEffect } from "react";
 import axios from "axios";
 import "./ModalCertificate.scss";
 import API_URL from "@/config";
+import { jwtDecode } from "jwt-decode";
+
+interface MyToken {
+  sub: string; // email
+  id: number;
+  name: string;
+  role: string;
+  exp: number;
+}
 
 interface ModalProps {
     isOpen: boolean;
@@ -25,8 +34,11 @@ interface ModalProps {
 
     const handleModifyCertificate = async (e: any) => {
       e.preventDefault();
-      const idC = localStorage.getItem("ID");
       const token = localStorage.getItem("token");
+            if (!token) return;
+      
+            const decoded = jwtDecode<MyToken>(token);
+            const idC = decoded.id;
       axios
         .put(API_URL+'/api/v1/profiles/certificates/' + String(id), {
           id: id,

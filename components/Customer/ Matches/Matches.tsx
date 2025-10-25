@@ -4,6 +4,15 @@ import axios from "axios"
 import { useState, useEffect } from "react"
 import Select,{ SingleValue } from "react-select"
 import './Matches.scss'
+import { jwtDecode } from "jwt-decode";
+
+interface MyToken {
+  sub: string; // email
+  id: number;
+  name: string;
+  role: string;
+  exp: number;
+}
 
 interface Matching{
   id: number;
@@ -44,13 +53,19 @@ const Applies = () =>{
   useEffect(() => {
       const fetchData = async () => {
         try {
-          const token = localStorage.getItem("token")
+          const token = localStorage.getItem("token");
+                  if (!token) {
+                    alert("Token not found. Please log in again.");
+                    return;
+                  }
+            
+                  const decoded = jwtDecode<MyToken>(token);
+                  const id = decoded.id;
           const response = await axios.get(API_URL+'/api/v1/profiles/candidates', {
             headers: {
               'Authorization': 'Bearer ' + token
             }
           });   
-          const id = localStorage.getItem("ID");
             const res = await axios.get(API_URL+'/api/v1/jobs/byCustomer/'+String(id), {
               headers: {
                 'Authorization': 'Bearer ' + token

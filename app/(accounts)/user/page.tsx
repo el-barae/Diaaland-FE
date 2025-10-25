@@ -65,21 +65,6 @@ export default function Register() {
 	const [logo, setLogo] = useState('')
 
 	const [passState, setPassState] = useState('hide');
-
-		const fetchID = async () => {
-				try {
-					const token = localStorage.getItem("token");
-					if (token) {
-					const decoded: MyToken = jwtDecode(token);
-					console.log("User ID:", decoded.id);
-					console.log("User Role:", decoded.role);
-					localStorage.setItem("ID", decoded.id.toString());
-					}
-				} catch (error) {
-					console.error('Erreur lors de la récupération des données :', error);
-				}
-			}
-		
 	
 	const handleSubmit = async (e:any)  =>{
 		e.preventDefault()
@@ -91,8 +76,6 @@ export default function Register() {
 				"role": "CUSTOMER"
 			}).then(function (response) {
 		  localStorage.setItem('token',response.data.token)
-		  localStorage.setItem('role',response.data.role)
-		  fetchID();
 		  swal('Registration successfuly', '', 'success');
 		  router.push('Dashboards/Customer')
 		}). catch(function (error) {

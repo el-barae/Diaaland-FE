@@ -2,6 +2,15 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import API_URL from "@/config";
+import { jwtDecode } from "jwt-decode";
+
+interface MyToken {
+  sub: string; // email
+  id: number;
+  name: string;
+  role: string;
+  exp: number;
+}
 
 // Interface for the candidate jobs data
 interface CandidateJobs {
@@ -85,8 +94,14 @@ const Applies = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const id = localStorage.getItem("ID");
                 const token = localStorage.getItem("token");
+                        if (!token) {
+                          alert("Token not found. Please log in again.");
+                          return;
+                        }
+                  
+                        const decoded = jwtDecode<MyToken>(token);
+                        const id = decoded.id;
                 const response = await axios.get(`${API_URL}/api/v1/jobs/candidate-jobs/candidatejobsByCustomer/${id}`, {
                     headers: {
                         'Authorization': `Bearer ${token}`
@@ -104,9 +119,14 @@ const Applies = () => {
         const token = localStorage.getItem('token');
         if (!token) return;
 
-        candidateJobsData.forEach(cj => {
-            fetchFiles(cj.id, token);
-        });
+        if (Array.isArray(candidateJobsData)) {
+            candidateJobsData.forEach(cj => {
+                fetchFiles(cj.id, token);
+            });
+            } else {
+            console.warn("candidateJobsData is not an array:", candidateJobsData);
+            }
+
     }, [candidateJobsData]);
 
     const fetchFiles = async (candidateId: number, token: string) => {

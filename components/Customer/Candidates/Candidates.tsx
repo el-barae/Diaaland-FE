@@ -4,6 +4,15 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import './Candidates.scss'
 import API_URL from "@/config";
+import { jwtDecode } from "jwt-decode";
+
+interface MyToken {
+  sub: string; // email
+  id: number;
+  name: string;
+  role: string;
+  exp: number;
+}
 
 interface Candidate {
     id: number;
@@ -46,8 +55,14 @@ const Candidates = () =>{
     useEffect(() => {
         const fetchData = async () => {
           try {
-            const id = localStorage.getItem("ID");
             const token = localStorage.getItem("token");
+                    if (!token) {
+                      alert("Token not found. Please log in again.");
+                      return;
+                    }
+              
+                    const decoded = jwtDecode<MyToken>(token);
+                    const id = decoded.id;
             const response = await axios.get(API_URL+'/api/v1/jobs/candidate-jobs/byCustomer/'+String(id), {
               headers: {
                 'Authorization': 'Bearer ' + token

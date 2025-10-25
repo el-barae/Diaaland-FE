@@ -7,6 +7,15 @@ import RegisterImg from '@/public/images/registeration.png'
 import axios from 'axios';
 import swal from 'sweetalert';
 import API_URL from '@/config';
+import { jwtDecode } from "jwt-decode";
+
+interface MyToken {
+  sub: string; // email
+  id: number;
+  name: string;
+  role: string;
+  exp: number;
+}
 
 type Customer={
 		id: number,
@@ -42,8 +51,14 @@ const Profile = () => {
 
     useEffect(() => {
         const fetchCustomer = async () => {
-            const id = localStorage.getItem('ID');
-			const token = localStorage.getItem('token');
+            const token = localStorage.getItem("token");
+                if (!token) {
+                    alert("Token not found. Please log in again.");
+                    return;
+                }
+            
+                const decoded = jwtDecode<MyToken>(token);
+                const id = decoded.id;
             if (!id || !token) {
                 console.error('ID or token is missing');
                 return;
@@ -69,8 +84,14 @@ const Profile = () => {
     }, []);
 
     const fetchLogoFile = async () => {
-		const id = localStorage.getItem('ID')
-        const token = localStorage.getItem('token');
+		const token = localStorage.getItem("token");
+                if (!token) {
+                    alert("Token not found. Please log in again.");
+                    return;
+                }
+            
+                const decoded = jwtDecode<MyToken>(token);
+                const id = decoded.id;
         if (!token) {
             return;
         }
@@ -144,40 +165,55 @@ const Profile = () => {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const id = localStorage.getItem('ID'); 
+        const token = localStorage.getItem("token");
+        if (!token) {
+            alert("Token not found. Please log in again.");
+            return;
+        }
+
+        // 🔍 Décodage du token
+        const decoded = jwtDecode<MyToken>(token);
+        const id = String(decoded.id); // ✅ convertit le nombre en string
 
         try {
             let logo = customer.logo;
-			const token = localStorage.getItem('token');
-			await axios.put(`${API_URL}/api/v1/users/customers/${id}`, {
-				"name": customer.name,
-				"email": customer.email,
-				"address": customer.address,
-				"city": customer.city,
-				"country": customer.country,
-				"phoneNumber": customer.phoneNumber,
-				"url": customer.url,
-				"description": customer.description,
-				"logo": customer.logo
-		}, {
-				headers: {
-					Authorization: `Bearer ${token}`
-				}
-			});
 
+            // 🧩 Mise à jour du profil client
+            await axios.put(
+            `${API_URL}/api/v1/users/customers/${id}`,
+            {
+                name: customer.name,
+                email: customer.email,
+                address: customer.address,
+                city: customer.city,
+                country: customer.country,
+                phoneNumber: customer.phoneNumber,
+                url: customer.url,
+                description: customer.description,
+                logo: customer.logo,
+            },
+            {
+                headers: {
+                Authorization: `Bearer ${token}`,
+                },
+            }
+            );
+
+            // 🖼️ Upload du logo si sélectionné
             if (logoFile) {
-                const uploadedLogo = await uploadLogo(logoFile, id!);
-                if (uploadedLogo) {
-                    logo = uploadedLogo;
-                }
+            const uploadedLogo = await uploadLogo(logoFile, id); // id est maintenant une string
+            if (uploadedLogo) {
+                logo = uploadedLogo;
+            }
             }
 
-            swal('Profile updated successfully!','','success');
+            swal("Profile updated successfully!", "", "success");
         } catch (error) {
-            console.error('Error updating profile:', error);
-            swal('Failed to update profile.','','error');
+            console.error("Error updating profile:", error);
+            swal("Failed to update profile.", "", "error");
         }
-    };
+        };
+
 
 	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setCustomer({ ...customer, [e.target.name]: e.target.value });

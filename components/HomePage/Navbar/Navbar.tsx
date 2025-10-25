@@ -14,7 +14,15 @@ import './Navbar.scss'
 //import SigninButton from './SigninButton';
 //import { useSession, signIn, signOut } from 'next-auth/react';
 import API_URL from '@/config';
+import { jwtDecode } from "jwt-decode";
 
+interface MyToken {
+  sub: string; // email
+  id: number;
+  name: string;
+  role: string;
+  exp: number;
+}
 
 
 const Navbar = () => {
@@ -31,7 +39,14 @@ const Navbar = () => {
   };
 
   const handleToggle = () => {
-    const option = localStorage.getItem("role");
+    const token = localStorage.getItem("token");
+      if (!token) {
+        alert("Token not found. Please log in again.");
+        return;
+      }
+
+      const decoded = jwtDecode<MyToken>(token);
+      const option = decoded.role;
     if (option==='CANDIDAT'){
       router.push('/Dashboards/Candidate');
   }
@@ -130,8 +145,11 @@ const Navbar = () => {
   };
 
   useEffect(() => {
-    const loggedIn = Cookies.get("loggedin") === "true";
-    setIsLoggedIn(loggedIn);
+    const loggedIn = localStorage.getItem('token');
+    if(loggedIn)
+      setIsLoggedIn(true);
+    else
+      setIsLoading(false);
   }, []);
 
   return (

@@ -2,7 +2,16 @@ import React, { useState,useEffect,useRef, ChangeEvent  } from "react";
 import axios from "axios";
 import "./Modal.scss";
 import API_URL from "@/config";
+import { jwtDecode } from "jwt-decode";
 import swal from "sweetalert";
+
+interface MyToken {
+  sub: string; // email
+  id: number;
+  name: string;
+  role: string;
+  exp: number;
+}
 
 interface Job {
   id: number;
@@ -60,180 +69,161 @@ export default function Modal({ isOpen, id, description, name,email, onClose }: 
         });
     };
   
-    const handleApply = async (e:React.MouseEvent<HTMLButtonElement>) =>{
-		e.preventDefault()
-    const role = localStorage.getItem("role");
-    if(role === "CANDIDAT")
-     setShowModal(true);
-    else
-      swal("Authenticate yourself when you are a CANDIDATE", '', "error")
-	}
-
-  const handleAddFavoris = async (e:any, id:number) =>{
-		e.preventDefault()
-    const role = localStorage.getItem("role");
+    // ✅ Handle Apply
+  const handleApply = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
     const token = localStorage.getItem("token");
-    if(role === "CANDIDAT"){
-		  axios.post(API_URL+'/api/v1/jobs/favoris', {
-      "candidate": {
-        "id": 1
-      },
-      "job": {
-        "id": id
+    if (!token) return swal("Authentication required", "", "error");
+
+    const decoded = jwtDecode<MyToken>(token);
+    if (decoded.role === "CANDIDAT") setShowModal(true);
+    else swal("Authenticate yourself when you are a CANDIDATE", "", "error");
+  };
+
+  // ✅ Handle Add to Favoris
+  const handleAddFavoris = async (e: any, jobId: number) => {
+    e.preventDefault();
+    const token = localStorage.getItem("token");
+    if (!token) return swal("Authentication required", "", "error");
+
+    const decoded = jwtDecode<MyToken>(token);
+    if (decoded.role === "CANDIDAT") {
+      try {
+        await axios.post(
+          `${API_URL}/api/v1/jobs/favoris`,
+          {
+            candidate: { id: decoded.id },
+            job: { id: jobId },
+          },
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        onClose();
+      } catch (error) {
+        console.error("Error adding favoris:", error);
       }
-		 }, {
-      headers: {
-        'Authorization': 'Bearer ' + token
-      }
-      })
-		 .then(function (response) {
-      onClose();
-		 })
-		 .catch(function (error) {
-			console.log(error);
-		 });
+    } else {
+      swal("Authenticate yourself when you are a CANDIDATE", "", "error");
     }
-    else
-      swal("Authenticate yourself when you are a CANDIDATE", '', "error")
-	}
+  };
 
-    useEffect(() => {
-      async function fetchData() {
-        const role = localStorage.getItem("role");
-        const ID = localStorage.getItem("ID");
-        const token = localStorage.getItem("token");
-        if(role === "CANDIDAT"){
-        try {
-          const response = await axios.get(API_URL + '/api/v1/jobs/candidate-jobs/itsApplied/' + ID + '/' + id, {
-            headers: {
-              'Authorization': 'Bearer ' + token
-            }
-          });
-          setIsApplied(response.data);  
-        } catch (error) {
-          console.error('Error fetching data:', error);
-        }
-        }
-      }
-      fetchData();
-      async function fetchData1() {
-        const role = localStorage.getItem("role");
-        const ID = localStorage.getItem("ID");
-        const token = localStorage.getItem("token");
-        if(role === "CANDIDAT"){
-        try {
-          const response1 = await axios.get(API_URL + '/api/v1/jobs/favoris/itsFavoris/' + ID + '/' + id, {
-            headers: {
-              'Authorization': 'Bearer ' + token
-            }
-          });
-          setIsFavoris(response1.data); 
-        } catch (error) {
-          console.error('Error fetching data:', error);
-        }
-        }
-      }
-      fetchData1();
-      if (isOpen) {
-        document.body.classList.add('active-modal');
-      } else {
-        document.body.classList.remove('active-modal');
-      }
-  
-      return () => {
-        document.body.classList.remove('active-modal');
-      };
-    }, [isOpen]);
+  // ✅ Vérifier si le candidat a déjà postulé ou ajouté en favoris
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
 
-  
-    useEffect(() => {
-      const fetchCV = async () => {
-        const role = localStorage.getItem("role");
-        if(role === "CANDIDAT"){
-        try {
-          const token = localStorage.getItem('token');
-          if (!token) {
-            throw new Error('No token found in localStorage');
-          }
-  
-          const response = await fetch(API_URL+'/api/v1/profiles/candidates/resumefile/1', {
-            method: 'GET',
-            headers: {
-              'Authorization': `Bearer ${token}`,
-              'Content-Type': 'application/json',
-            },
-          });
-  
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
-  
-          const blob = await response.blob();
-          const file = new File([blob], 'cv.pdf', { type: 'application/pdf' });
-          setFile(file);
-          setFileName(file.name);
-        } catch (error) {
-          console.error('Error fetching the CV:', error);
-        }
-        }
-      };
-  
-      fetchCV();
-    }, []);
+    const decoded = jwtDecode<MyToken>(token);
+    if (decoded.role !== "CANDIDAT") return;
 
-    const handleSubmit = (e:any, id:number) => {
-      e.preventDefault();
-      var idC = localStorage.getItem("ID");
+    const fetchApplyAndFavoris = async () => {
+      try {
+        const headers = { Authorization: `Bearer ${token}` };
+
+        const [applyRes, favorisRes] = await Promise.all([
+          axios.get(`${API_URL}/api/v1/jobs/candidate-jobs/itsApplied/${decoded.id}/${id}`, { headers }),
+          axios.get(`${API_URL}/api/v1/jobs/favoris/itsFavoris/${decoded.id}/${id}`, { headers }),
+        ]);
+
+        setIsApplied(applyRes.data);
+        setIsFavoris(favorisRes.data);
+      } catch (error) {
+        console.error("Error fetching apply/favoris status:", error);
+      }
+    };
+
+    fetchApplyAndFavoris();
+
+    // gestion du modal body scroll
+    document.body.classList.toggle("active-modal", isOpen);
+    return () => document.body.classList.remove("active-modal");
+  }, [id, isOpen]);
+
+  // ✅ Charger le CV depuis le token.id
+  useEffect(() => {
+    const fetchCV = async () => {
       const token = localStorage.getItem("token");
-  axios.get(API_URL+'/api/v1/profiles/candidate-skills/haveSkills/'+idC, {
-    headers: {
-      'Authorization': 'Bearer ' + token
-    }
-  })
-  .then(function (response) {
-    if (response.data === true) {
-      if (!file || !diploma) {
-        console.error('CV or diploma file is missing');
+      if (!token) return;
+
+      const decoded = jwtDecode<MyToken>(token);
+      if (decoded.role !== "CANDIDAT") return;
+
+      try {
+        const response = await fetch(`${API_URL}/api/v1/profiles/candidates/resumefile/${decoded.id}`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (!response.ok) throw new Error("Network response was not ok");
+
+        const blob = await response.blob();
+        const file = new File([blob], "cv.pdf", { type: "application/pdf" });
+        setFile(file);
+        setFileName(file.name);
+      } catch (error) {
+        console.error("Error fetching CV:", error);
+      }
+    };
+
+    fetchCV();
+  }, []);
+
+  // ✅ Handle Submit candidature
+  const handleSubmit = async (e: any, jobId: number) => {
+    e.preventDefault();
+
+    const token = localStorage.getItem("token");
+    if (!token) return swal("Authentication required", "", "error");
+
+    const decoded = jwtDecode<MyToken>(token);
+
+    try {
+      const headers = { Authorization: `Bearer ${token}` };
+      const skillRes = await axios.get(
+        `${API_URL}/api/v1/profiles/candidate-skills/haveSkills/${decoded.id}`,
+        { headers }
+      );
+
+      if (!skillRes.data) {
+        swal("You should add skills", "", "error");
         return;
       }
-  
-      const formData = new FormData();
-      formData.append('candidateId', String(idC));
-      formData.append('jobId', id.toString());
-      formData.append('cv', file);
-      formData.append('diploma', diploma);
-      formData.append('coverLetter', coverLetter);
 
-    fetch(API_URL+'/api/v1/jobs/candidate-jobs/send', {
-      method: 'POST',
-      body: formData,
-      headers: {
-        'Authorization': `Bearer ${token}`
+      if (!file || !diploma) {
+        console.error("CV or diploma file is missing");
+        return;
       }
-    })
-      .then(response => response.json())
-      .then(data => {
-        handleSend(e);
-        console.log('Success:', data);
-        swal("Your apply sent successfully", '', "success");
-      })
-      .catch((error) => {
-        console.error('Error:', error);
+
+      const formData = new FormData();
+      formData.append("candidateId", String(decoded.id));
+      formData.append("jobId", jobId.toString());
+      formData.append("cv", file);
+      formData.append("diploma", diploma);
+      formData.append("coverLetter", coverLetter);
+
+      const response = await fetch(`${API_URL}/api/v1/jobs/candidate-jobs/send`, {
+        method: "POST",
+        body: formData,
+        headers,
       });
+
+      const data = await response.json();
+      console.log("Success:", data);
+      swal("Your apply sent successfully", "", "success");
+
+      // Nettoyage
+      setFile(null);
+      setFileName(null);
+      setCoverLetter("");
+      setDiploma(null);
+      setShowModal(false);
+    } catch (error) {
+      console.error("Error submitting application:", error);
     }
-    else{
-      swal("Your should add skills", '', 'error');
-    }
-  })
-  .catch(function (error) {
-    console.log(error);
-  });
-  setFile(null);
-  setFileName(null);
-  setCoverLetter('');
-  setDiploma(null);
-  setShowModal(false);
- };
+  };
   
     const handleFileSelect = () => {
       if (fileInputRef.current) {

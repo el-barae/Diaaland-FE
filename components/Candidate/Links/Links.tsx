@@ -7,6 +7,15 @@ import ModalE from './ModalEducations/ModalEducation'
 import ModalC from './ModalCertificates/ModalCertificate'
 import ModalL from './ModalLinks/ModalLink'
 import { dom } from '@fortawesome/fontawesome-svg-core';
+import { jwtDecode } from "jwt-decode";
+
+interface MyToken {
+  sub: string; // email
+  id: number;
+  name: string;
+  role: string;
+  exp: number;
+}
 
 interface education{
     id: number;
@@ -68,140 +77,7 @@ const Links = () => {
     const [educationsData,setEducationsData] = useState<education[]>([])
     const [certificatesData,setCertificatesData] = useState<certificate[]>([])
     const [other_linksData,setOther_LinksData] = useState<other_link[]>([])
-
-    const handleAddEducation = async (e:any)  =>{
-        e.preventDefault()
-        const id = localStorage.getItem("ID");
-        const token = localStorage.getItem("token");
-        axios.post(API_URL+'/api/v1/profiles/educations', {
-          "name": nameEducation,
-          "url": urlEducation,
-          "description": descEducation,
-          "candidate": {
-            "id": id
-          },
-          "school": school,
-          "startDate": startDate,
-          "endDate": endDate,
-          }, {
-            headers: {
-              'Authorization': 'Bearer ' + token
-            }
-          })
-          .then(function (response) {
-            setEducationsData(prevEducationData => [...prevEducationData, response.data]);
-          console.log(response);
-          alert("Your post had been sent to admin ")
-          })
-          .catch(function (error) {
-          alert(error.message);
-          });
-      }
-
-      const handleAddCertificate = async (e:any)  =>{
-        e.preventDefault()
-        const id = localStorage.getItem("ID");
-        const token = localStorage.getItem("token");
-        axios.post(API_URL+'/api/v1/profiles/certificates', {
-          "name": nameCertificate,
-          "url": urlCertificate,
-          "decription": descCertificate,
-          "candidate": {
-            "id": id
-          },
-          "domain": domain
-          }, {
-            headers: {
-              'Authorization': 'Bearer ' + token
-            }
-          })
-          .then(function (response) {
-          setCertificatesData(prevCertificatesData => [...prevCertificatesData, response.data]);
-          console.log(response);
-          alert("Your post had been sent to admin ")
-          })
-          .catch(function (error) {
-          alert(error.message);
-          });
-      }
-
-      const handleAddOther_Link = async (e:any)  =>{
-        e.preventDefault()
-        const id = localStorage.getItem("ID");
-        const token = localStorage.getItem("token");
-        axios.post(API_URL+'/api/v1/profiles/other_links', {
-          "name": nameLink,
-          "url": urlLink,
-          "decription": descLink,
-          "candidate": {
-            "id": id
-          }
-          }, {
-            headers: {
-              'Authorization': 'Bearer ' + token
-            }
-          })
-          .then(function (response) {
-            setOther_LinksData(prevOthersData => [...prevOthersData, response.data]);
-          console.log(response);
-          alert("Your post had been sent to admin ")
-          })
-          .catch(function (error) {
-          alert(error.message);
-          });
-      }
-  
-      const handleDeleteEducation = async (e:any, id:number) =>{
-        e.preventDefault()
-        try{
-          const token = localStorage.getItem("token");
-        axios.delete(API_URL+'/api/v1/profiles/educations/'+String(id), {
-          headers: {
-            'Authorization': 'Bearer ' + token
-          }
-        });
-        const updatedEducationsData = educationsData.filter(ed => ed.id !== id)
-        setEducationsData(updatedEducationsData)
-        }
-        catch(error) {
-          console.log(error);
-        };
-      }
-
-      const handleDeleteCertificate = async (e:any, id:number) =>{
-        e.preventDefault()
-        try{
-          const token = localStorage.getItem("token");
-        axios.delete(API_URL+'/api/v1/profiles/certificates/'+String(id), {
-          headers: {
-            'Authorization': 'Bearer ' + token
-          }
-        });
-        const updatedCertificatesData = certificatesData.filter(cer => cer.id !== id)
-        setCertificatesData(updatedCertificatesData)
-        }
-        catch(error) {
-          console.log(error);
-        };
-      }
-      const handleDeleteLink = async (e:any, id:number) =>{
-        e.preventDefault()
-        try{
-          const token = localStorage.getItem("token");
-        axios.delete(API_URL+'/api/v1/profiles/other_links/'+String(id), {
-          headers: {
-            'Authorization': 'Bearer ' + token
-          }
-        });
-        const updatedOtherData = other_linksData.filter(o => o.id !== id)
-        setOther_LinksData(updatedOtherData)
-        }
-        catch(error) {
-          console.log(error);
-        };
-      }
-
-      const [modalEOpen, setModalEOpen] = useState(false);
+    const [modalEOpen, setModalEOpen] = useState(false);
       const [currentId, setCurrentId] = useState(0);
       const [currentName, setCurrentName] = useState("");
       const [currentUrl, setCurrentUrl] = useState("");
@@ -295,35 +171,165 @@ const Links = () => {
                 )
               }
     
-        useEffect(() => {
-            const fetchData = async () => {
-              try {
-                const id = localStorage.getItem("ID");
-                const token = localStorage.getItem("token");
-                const response = await axios.get(API_URL+'/api/v1/profiles/educations', {
-                  headers: {
-                    'Authorization': 'Bearer ' + token
-                  }
-                });        
-                setEducationsData(response.data);
-                const response1 = await axios.get(API_URL+'/api/v1/profiles/certificates', {
-                  headers: {
-                    'Authorization': 'Bearer ' + token
-                  }
-                });
-                setCertificatesData(response1.data);
-                const response2 = await axios.get(API_URL+'/api/v1/profiles/other_links', {
-                  headers: {
-                    'Authorization': 'Bearer ' + token
-                  }
-                });
-                setOther_LinksData(response2.data);
-              } catch (error) {
-                console.error('Erreur lors de la récupération des données :', error);
-              }
-            };
-            fetchData();
-      }, []);
+
+    const handleAddEducation = async (e: any) => {
+    e.preventDefault();
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) throw new Error("No token found");
+      const decoded = jwtDecode<MyToken>(token);
+
+      const response = await axios.post(
+        `${API_URL}/api/v1/profiles/educations`,
+        {
+          name: nameEducation,
+          url: urlEducation,
+          description: descEducation,
+          candidate: { id: decoded.id },
+          school,
+          startDate,
+          endDate,
+        },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      setEducationsData((prev) => [...prev, response.data]);
+      alert("Education added successfully!");
+    } catch (error: any) {
+      alert(error.message || "Error adding education");
+    }
+  };
+
+  // ============================
+  //  🔹 Ajout d’un certificat
+  // ============================
+  const handleAddCertificate = async (e: any) => {
+    e.preventDefault();
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) throw new Error("No token found");
+      const decoded = jwtDecode<MyToken>(token);
+
+      const response = await axios.post(
+        `${API_URL}/api/v1/profiles/certificates`,
+        {
+          name: nameCertificate,
+          url: urlCertificate,
+          description: descCertificate,
+          candidate: { id: decoded.id },
+          domain,
+        },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      setCertificatesData((prev) => [...prev, response.data]);
+      alert("Certificate added successfully!");
+    } catch (error: any) {
+      alert(error.message || "Error adding certificate");
+    }
+  };
+
+  // ============================
+  //  🔹 Ajout d’un lien externe
+  // ============================
+  const handleAddOther_Link = async (e: any) => {
+    e.preventDefault();
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) throw new Error("No token found");
+      const decoded = jwtDecode<MyToken>(token);
+
+      const response = await axios.post(
+        `${API_URL}/api/v1/profiles/other_links`,
+        {
+          name: nameLink,
+          url: urlLink,
+          description: descLink,
+          candidate: { id: decoded.id },
+        },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      setOther_LinksData((prev) => [...prev, response.data]);
+      alert("Link added successfully!");
+    } catch (error: any) {
+      alert(error.message || "Error adding link");
+    }
+  };
+
+  // ============================
+  //  🔹 Suppressions
+  // ============================
+  const handleDeleteEducation = async (e: any, id: number) => {
+    e.preventDefault();
+    try {
+      const token = localStorage.getItem("token");
+      await axios.delete(`${API_URL}/api/v1/profiles/educations/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setEducationsData((prev) => prev.filter((ed) => ed.id !== id));
+    } catch (error) {
+      console.error("Error deleting education:", error);
+    }
+  };
+
+  const handleDeleteCertificate = async (e: any, id: number) => {
+    e.preventDefault();
+    try {
+      const token = localStorage.getItem("token");
+      await axios.delete(`${API_URL}/api/v1/profiles/certificates/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setCertificatesData((prev) => prev.filter((c) => c.id !== id));
+    } catch (error) {
+      console.error("Error deleting certificate:", error);
+    }
+  };
+
+  const handleDeleteLink = async (e: any, id: number) => {
+    e.preventDefault();
+    try {
+      const token = localStorage.getItem("token");
+      await axios.delete(`${API_URL}/api/v1/profiles/other_links/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setOther_LinksData((prev) => prev.filter((o) => o.id !== id));
+    } catch (error) {
+      console.error("Error deleting link:", error);
+    }
+  };
+
+  // ============================
+  //  🔹 Récupération des données
+  // ============================
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) return;
+
+        const [resEdu, resCert, resLink] = await Promise.all([
+          axios.get(`${API_URL}/api/v1/profiles/educations`, {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
+          axios.get(`${API_URL}/api/v1/profiles/certificates`, {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
+          axios.get(`${API_URL}/api/v1/profiles/other_links`, {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
+        ]);
+
+        setEducationsData(resEdu.data);
+        setCertificatesData(resCert.data);
+        setOther_LinksData(resLink.data);
+      } catch (error) {
+        console.error("Erreur lors de la récupération des données :", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
     return(
         <>

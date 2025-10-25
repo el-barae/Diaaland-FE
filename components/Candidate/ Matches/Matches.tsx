@@ -3,6 +3,7 @@ import API_URL from "@/config"
 import axios from "axios"
 import { useState, useEffect } from "react"
 import Select,{ SingleValue } from "react-select"
+import { jwtDecode } from "jwt-decode";
 import './Matches.scss'
 
 interface Matching{
@@ -34,6 +35,20 @@ interface Job {
   name: string;
 }
 
+interface MyToken {
+  sub: string; // email
+  id: number;
+  name: string;
+  role: string;
+  exp: number;
+}
+
+interface Matching {
+  id: number;
+  jobTitle: string;
+  score: number;
+}
+
 const Applies = () =>{
   const [candidatesData,setCandidatesData] = useState<Candidate[]>([]);
   const [jobsData, setJobsData] = useState<Job[]>([]);
@@ -41,30 +56,43 @@ const Applies = () =>{
     const [selectedJob, setSelectedJob] = useState<SingleValue<{ value: number | null; label: string }> | null>(null);
   const [matchingData, setMatchingData] = useState<Matching[]>([]);
   const [filteredData, setFilteredData] = useState<Matching[]>([]);
-  useEffect(() => {
-      const fetchData = async () => {
-        try {
-          const token = localStorage.getItem("token")
-          const ID = localStorage.getItem("ID"); 
-          const res = await axios.get(API_URL+'/api/v1/jobs/list', {
-              headers: {
-                'Authorization': 'Bearer ' + token
-              }
-            });         
-            setJobsData(res.data);
-          const response1 = await axios.get<Matching[]>(API_URL+'/api/v1/jobs/matching/candidate/'+String(ID), {
-              headers: {
-                'Authorization': 'Bearer ' + token
-              }
-            });
-          setMatchingData(response1.data);
-          setFilteredData(response1.data);
-        } catch (error) {
-          console.error('Erreur lors de la récupération des données :', error);
+  
+   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          console.error("No token found");
+          return;
         }
-      };
-      fetchData();
-   }, []);
+
+        // ✅ Décoder le token pour obtenir l’ID candidat
+        const decoded = jwtDecode<MyToken>(token);
+        const candidateId = decoded.id;
+
+        // 🔹 Charger la liste de tous les jobs
+        const jobsResponse = await axios.get(`${API_URL}/api/v1/jobs/list`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setJobsData(jobsResponse.data);
+
+        // 🔹 Charger les correspondances (matching)
+        const matchingResponse = await axios.get<Matching[]>(
+          `${API_URL}/api/v1/jobs/matching/candidate/${candidateId}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+
+        setMatchingData(matchingResponse.data);
+        setFilteredData(matchingResponse.data);
+      } catch (error) {
+        console.error("Erreur lors de la récupération des données :", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
    interface LastCandidates {
       n: number;

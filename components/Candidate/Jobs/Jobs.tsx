@@ -3,6 +3,15 @@ import { useState ,useEffect} from "react"
 import axios from 'axios'
 import React from 'react';
 import API_URL from '@/config'
+import { jwtDecode } from "jwt-decode";
+
+interface MyToken {
+  sub: string; // email
+  id: number;
+  name: string;
+  role: string;
+  exp: number;
+}
 
 interface Job {
     id: number;
@@ -21,21 +30,59 @@ interface Job {
 
 const Jobs = () =>{
     const [jobsData, setJobsData] = useState<Job[]>([]);
-    const handleDelete = async (e:any, idJ:number) =>{
-      e.preventDefault()
-      var ID = localStorage.getItem("ID");
+    
+    // ✅ Supprimer une candidature
+  const handleDelete = async (e: any, jobId: number) => {
+    e.preventDefault();
+    try {
       const token = localStorage.getItem("token");
-      axios.delete(API_URL+'/api/v1/jobs/candidate-jobs/'+String(ID)+'/'+String(idJ), {
-        headers: {
-          'Authorization': 'Bearer ' + token
-        }
-      })
-       .catch(function (error) {
-        console.log(error);
-       });
-    }
+      if (!token) {
+        alert("Token not found, please log in again.");
+        return;
+      }
 
-    const RepeatClassNTimes: React.FC<RepeatClassNTimesProps> = ({ className, n, jobsData }) => {
+      const decoded = jwtDecode<MyToken>(token);
+      const candidateId = decoded.id;
+
+      await axios.delete(`${API_URL}/api/v1/jobs/candidate-jobs/${candidateId}/${jobId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      // 🔄 Mise à jour locale
+      setJobsData((prev) => prev.filter((job) => job.id !== jobId));
+      console.log(`Job ${jobId} deleted successfully`);
+    } catch (error) {
+      console.error("Erreur lors de la suppression du job :", error);
+    }
+  };
+
+  // ✅ Récupérer les jobs du candidat connecté
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) return;
+
+        const decoded = jwtDecode<MyToken>(token);
+        const candidateId = decoded.id;
+
+        const response = await axios.get(
+          `${API_URL}/api/v1/jobs/candidate-jobs/byCandidate/${candidateId}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+
+        setJobsData(response.data);
+      } catch (error) {
+        console.error("Erreur lors de la récupération des données :", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const RepeatClassNTimes: React.FC<RepeatClassNTimesProps> = ({ className, n, jobsData }) => {
       if(jobsData.length != 0)
         return(
           <>
@@ -51,24 +98,6 @@ const Jobs = () =>{
           </>
         )
       }
-      
-    useEffect(() => {
-        const fetchData = async () => {
-          try {
-            var ID = localStorage.getItem("ID");
-            const token = localStorage.getItem("token");
-            const response = await axios.get(API_URL+'/api/v1/jobs/candidate-jobs/byCandidate/'+String(ID), {
-              headers: {
-                'Authorization': 'Bearer ' + token
-              }
-            });     
-            setJobsData(response.data);
-          } catch (error) {
-            console.error('Erreur lors de la récupération des données :', error);
-          }
-        };
-        fetchData();
-  }, []);
 
   return(
     <>

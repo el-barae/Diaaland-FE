@@ -4,6 +4,15 @@ import axios from 'axios'
 import React from 'react';
 import API_URL from '@/config';
 import Modal from './ModalJobs/ModalJobs';
+import { jwtDecode } from "jwt-decode";
+
+interface MyToken {
+  sub: string; // email
+  id: number;
+  name: string;
+  role: string;
+  exp: number;
+}
 
 interface Job {
   id: number;
@@ -46,7 +55,13 @@ const Jobs = () =>{
         const fetchData = async () => {
           try {
             const token = localStorage.getItem("token");
-            const id = localStorage.getItem("ID");
+                    if (!token) {
+                      alert("Token not found. Please log in again.");
+                      return;
+                    }
+              
+                    const decoded = jwtDecode<MyToken>(token);
+                    const id = decoded.id;
             const response = await axios.get(API_URL+'/api/v1/jobs/byCustomer/'+String(id), {
               headers: {
                 'Authorization': 'Bearer ' + token

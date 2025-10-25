@@ -3,6 +3,15 @@ import './Skills.scss'
 import { useState, useEffect } from "react"
 import axios from "axios";
 import API_URL from '@/config';
+import { jwtDecode } from "jwt-decode";
+
+interface MyToken {
+  sub: string; // email
+  id: number;
+  name: string;
+  role: string;
+  exp: number;
+}
 
 interface skill{
     id: number;
@@ -31,9 +40,15 @@ const Skills = () => {
     const handleAddSkill = async (e:any, sname:string)  =>{
       e.preventDefault()
       console.log(skill);
-       const token = localStorage.getItem("token");
       setSkill('');
-      var ID = localStorage.getItem("ID");
+      const token = localStorage.getItem("token");
+        if (!token) {
+          alert("Token not found. Please log in again.");
+          return;
+        }
+  
+        const decoded = jwtDecode<MyToken>(token);
+        const ID = decoded.id;
       const response = await axios.get(API_URL+'/api/v1/profiles/skills/id/'+sname, {
         headers: {
           'Authorization': 'Bearer ' + token
@@ -81,8 +96,14 @@ const Skills = () => {
       const handleDelete = async (e:any, idS:number) =>{
         e.preventDefault()
         try{
-          var ID = localStorage.getItem("ID");
           const token = localStorage.getItem("token");
+                              if (!token) {
+                                alert("Token not found. Please log in again.");
+                                return;
+                              }
+                        
+                              const decoded = jwtDecode<MyToken>(token);
+                              const ID = decoded.id;
         axios.delete(API_URL+'/api/v1/profiles/candidate-skills/'+String(ID)+'/'+String(idS), {
           headers: {
             'Authorization': 'Bearer ' + token
@@ -98,8 +119,14 @@ const Skills = () => {
       useEffect(() => {
           const fetchData = async () => {
             try {
-              var ID = localStorage.getItem("ID");
               const token = localStorage.getItem("token");
+                                  if (!token) {
+                                    alert("Token not found. Please log in again.");
+                                    return;
+                                  }
+                            
+                                  const decoded = jwtDecode<MyToken>(token);
+                                  const ID = decoded.id;
               const response = await axios.get(API_URL+'/api/v1/profiles/candidate-skills/byCandidate/' + String(ID), {
                 headers: {
                   'Authorization': 'Bearer ' + token
@@ -128,10 +155,6 @@ const Skills = () => {
                 setSkill(allSkills[0].name);
               }
             }
-
-              
-              console.log("skillAll: "+skillsAll[0].name);
-              console.log("skill: "+skill);
             } catch (error) {
               console.error('Erreur lors de la récupération des données :', error);
             }
