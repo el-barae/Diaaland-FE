@@ -57,7 +57,7 @@ export default function AddPost() {
       swal('Authenticate yourself when you are a EMPLOYER', '', 'error');
       router.push('/');
     } else {
-      setTimeout(() => setLoading(false), 1500);
+      setTimeout(() => setLoading(false), 500);
     }
   }, [router]);
  

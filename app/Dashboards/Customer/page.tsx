@@ -234,7 +234,7 @@ const handleAddClick = () =>{
                 localStorage.removeItem("matching");
               }
 
-              setTimeout(() => setLoading(false), 1500);
+              setTimeout(() => setLoading(false), 500);
             } catch (error) {
               console.error("Erreur lors de la récupération des données :", error);
             }
