@@ -1,5 +1,5 @@
 'use client'
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useContext, useCallback } from 'react';
 import '../../../app/(accounts)/register/style.scss';
 import './Profile.scss'
 import Image from 'next/image'
@@ -7,30 +7,23 @@ import RegisterImg from '@/public/images/registeration.png'
 import axios from 'axios';
 import swal from 'sweetalert';
 import API_URL from '@/config';
-import { jwtDecode } from "jwt-decode";
+import { CustomerContext } from '../../../app/Dashboards/Customer/page';
 
-interface MyToken {
-  sub: string; // email
-  id: number;
-  name: string;
-  role: string;
-  exp: number;
-}
-
-type Customer={
-		id: number,
-        name: string,
-        email: string,
-        address: string,
-        city: string,
-        country: string,
-        phoneNumber: string,
-        url: string,
-        description: string,
-        logo?: string
+type Customer = {
+    id: number,
+    name: string,
+    email: string,
+    address: string,
+    city: string,
+    country: string,
+    phoneNumber: string,
+    url: string,
+    description: string,
+    logo?: string
 }
 
 const Profile = () => {
+    const { token, customerId } = useContext(CustomerContext);
     const [customer, setCustomer] = useState<Customer>({
         id: 0,
         name: '',
@@ -46,58 +39,16 @@ const Profile = () => {
 
     const [logoFile, setLogoFile] = useState<File | null>(null);
     const [logoBlob, setLogoBlob] = useState<Blob | null>(null);
-    const [logoName, setLogoName] = useState<string>('');
+    const [isLoading, setIsLoading] = useState(true);
+    const [isSaving, setIsSaving] = useState(false);
     const logoInputRef = useRef<HTMLInputElement | null>(null);
 
-    useEffect(() => {
-        const fetchCustomer = async () => {
-            const token = localStorage.getItem("token");
-                if (!token) {
-                    alert("Token not found. Please log in again.");
-                    return;
-                }
-            
-                const decoded = jwtDecode<MyToken>(token);
-                const id = decoded.id;
-            if (!id || !token) {
-                console.error('ID or token is missing');
-                return;
-            }
-
-            try {
-                const response = await axios.get<Customer>(API_URL+"/api/v1/users/customers/"+id, {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                });
-                setCustomer(response.data);
-
-                if (response.data.logo) {
-                    fetchLogoFile();
-                }
-            } catch (error) {
-                console.error('Error fetching customer data:', error);
-            }
-        };
-
-        fetchCustomer();
-    }, []);
-
-    const fetchLogoFile = async () => {
-		const token = localStorage.getItem("token");
-                if (!token) {
-                    alert("Token not found. Please log in again.");
-                    return;
-                }
-            
-                const decoded = jwtDecode<MyToken>(token);
-                const id = decoded.id;
-        if (!token) {
-            return;
-        }
+    // Optimized file fetch
+    const fetchLogoFile = useCallback(async () => {
+        if (!token || !customerId) return;
 
         try {
-            const response = await fetch(API_URL+'/api/v1/users/customers/logo/'+id, {
+            const response = await fetch(`${API_URL}/api/v1/users/customers/logo/${customerId}`, {
                 method: 'GET',
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -105,124 +56,160 @@ const Profile = () => {
                 }
             });
 
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
+            if (!response.ok) throw new Error('Failed to fetch logo');
 
             const blob = await response.blob();
             setLogoBlob(blob);
-            const fileName = String(customer.logo);
-            const file = new File([blob], String(fileName.split('/').pop()), { type: 'image/jpeg' });
+            
+            const fileName = customer.logo ? String(customer.logo.split('/').pop()) : 'logo.jpg';
+            const file = new File([blob], fileName, { type: blob.type });
             setLogoFile(file);
-            setLogoName(file.name);
         } catch (error) {
-            console.error('Error fetching logo file:', error);
+            console.error('Error fetching logo:', error);
         }
-    };
+    }, [token, customerId, customer.logo]);
 
-    const handleFileSelect = (inputRef: React.RefObject<HTMLInputElement>) => {
-        if (inputRef.current) {
-            inputRef.current.click();
-        }
-    };
+    // Fetch customer data only once
+    useEffect(() => {
+        if (!customerId || !token) return;
 
-    const handleImgChange = (e: React.ChangeEvent<HTMLInputElement>, setFile: React.Dispatch<React.SetStateAction<File | null>>, setBlob: React.Dispatch<React.SetStateAction<Blob | null>>, setName: React.Dispatch<React.SetStateAction<string>>) => {
-        const file = e.target.files ? e.target.files[0] : null;
+        const fetchCustomer = async () => {
+            setIsLoading(true);
+
+            try {
+                const response = await axios.get<Customer>(
+                    `${API_URL}/api/v1/users/customers/${customerId}`,
+                    { headers: { Authorization: `Bearer ${token}` } }
+                );
+                
+                setCustomer(response.data);
+
+                // Fetch logo if available
+                if (response.data.logo) {
+                    await fetchLogoFile();
+                }
+            } catch (error) {
+                console.error('Error fetching customer data:', error);
+                swal("Failed to load profile", "", "error");
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchCustomer();
+    }, [customerId, token]); // Removed fetchLogoFile from dependencies
+
+    // Optimized handlers
+    const handleFileSelect = useCallback((inputRef: React.RefObject<HTMLInputElement>) => {
+        inputRef.current?.click();
+    }, []);
+
+    const handleLogoChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
         if (file) {
-            setFile(file);
-            setName(file.name);
-            setBlob(file);
+            setLogoFile(file);
+            setLogoBlob(file);
         }
-    };
+    }, []);
 
-    const handleLogoSelect = () => handleFileSelect(logoInputRef);
-    const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => handleImgChange(e, setLogoFile, setLogoBlob, setLogoName);
+    const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        setCustomer(prev => ({ ...prev, [e.target.name]: e.target.value }));
+    }, []);
 
-    const uploadFile = async (file: File | null, id: string) => {
-        if (!file) return null;
+    // Optimized upload
+    const uploadLogo = useCallback(async (file: File | null): Promise<string | null> => {
+        if (!file || !token || !customerId) return null;
 
-        const token = localStorage.getItem('token');
         const formData = new FormData();
         formData.append('file', file);
 
         try {
-            const response = await axios.post<string>(`${API_URL}/api/v1/users/files/uploadLogo/${id}`, formData, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    'Content-Type': 'multipart/form-data'
+            const response = await axios.post<string>(
+                `${API_URL}/api/v1/users/files/uploadLogo/${customerId}`,
+                formData,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        'Content-Type': 'multipart/form-data'
+                    }
                 }
-            });
+            );
             return response.data;
         } catch (error) {
-            console.error(`Error uploading logo:`, error);
+            console.error('Error uploading logo:', error);
             return null;
         }
-    };
+    }, [token, customerId]);
 
-    const uploadLogo = async (file: File | null, id: string) => {
-        return uploadFile(file, id);
-    };
+    // Optimized submit handler
+    const handleSubmit = useCallback(async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    
+    if (!token || !customerId) {
+        swal("Authentication required", "", "error");
+        return;
+    }
 
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        const token = localStorage.getItem("token");
-        if (!token) {
-            alert("Token not found. Please log in again.");
-            return;
-        }
+    setIsSaving(true);
 
-        // 🔍 Décodage du token
-        const decoded = jwtDecode<MyToken>(token);
-        const id = String(decoded.id); // ✅ convertit le nombre en string
+    try {
+        let logoUrl = customer.logo;
 
-        try {
-            let logo = customer.logo;
+        // 1️⃣ Upload du logo si changé
+        if (logoFile && logoBlob !== null) {
+            const formData = new FormData();
+            formData.append("file", logoFile);
 
-            // 🧩 Mise à jour du profil client
-            await axios.put(
-            `${API_URL}/api/v1/users/customers/${id}`,
-            {
-                name: customer.name,
-                email: customer.email,
-                address: customer.address,
-                city: customer.city,
-                country: customer.country,
-                phoneNumber: customer.phoneNumber,
-                url: customer.url,
-                description: customer.description,
-                logo: customer.logo,
-            },
-            {
-                headers: {
-                Authorization: `Bearer ${token}`,
-                },
-            }
+            const uploadResponse = await axios.post(
+                `${API_URL}/api/v1/users/uploadLogo/${customerId}`,
+                formData,
+                {
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "multipart/form-data"
+                    }
+                }
             );
 
-            // 🖼️ Upload du logo si sélectionné
-            if (logoFile) {
-            const uploadedLogo = await uploadLogo(logoFile, id); // id est maintenant une string
-            if (uploadedLogo) {
-                logo = uploadedLogo;
-            }
-            }
-
-            swal("Profile updated successfully!", "", "success");
-        } catch (error) {
-            console.error("Error updating profile:", error);
-            swal("Failed to update profile.", "", "error");
+            logoUrl = uploadResponse.data; // le nom du fichier retourné
         }
-        };
+
+        // 2️⃣ Mettre à jour le reste du profil
+        const updateResponse = await axios.put(
+            `${API_URL}/api/v1/users/customers/${customerId}`,
+            {
+                ...customer,
+                logo: logoUrl
+            },
+            {
+                headers: { Authorization: `Bearer ${token}` }
+            }
+        );
+
+        setCustomer(prev => ({ ...prev, logo: logoUrl }));
+
+        swal("Profile updated successfully!", "", "success");
+    } catch (error) {
+        console.error("Error updating profile:", error);
+        swal("Failed to update profile.", "", "error");
+    } finally {
+        setIsSaving(false);
+    }
+}, [token, customerId, customer, logoFile, logoBlob]);
 
 
-	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        setCustomer({ ...customer, [e.target.name]: e.target.value });
-    };
+    // Loading state
+    if (isLoading) {
+        return (
+            <div className="form-candidate">
+                <div className="loading-state">Loading profile...</div>
+            </div>
+        );
+    }
 
     return (
         <form onSubmit={handleSubmit} className="form-candidate">
-
-<div className="div1">
+            <div className="div1">
                 <h1>Profile</h1>
                 <br />
                 <label htmlFor="name">Name</label>
@@ -261,7 +248,6 @@ const Profile = () => {
                     placeholder="Enter your city"
                     value={customer.city}
                     onChange={handleInputChange}
-
                 />
                 <label htmlFor="country">Country</label>
                 <input
@@ -291,6 +277,7 @@ const Profile = () => {
                     onChange={handleInputChange}
                 />
             </div>
+            
             <div className="div2">
                 <label htmlFor="description">Description</label>
                 <textarea
@@ -300,6 +287,7 @@ const Profile = () => {
                     value={customer.description}
                     onChange={handleInputChange}
                 ></textarea>
+                
                 <label htmlFor="logo">Logo</label>
                 <input
                     type="file"
@@ -308,17 +296,26 @@ const Profile = () => {
                     style={{ display: 'none' }}
                     onChange={handleLogoChange}
                 />
-                <div onClick={handleLogoSelect} style={{ cursor: 'pointer', textAlign: 'center' }}>
+                <div 
+                    onClick={() => handleFileSelect(logoInputRef)} 
+                    style={{ cursor: 'pointer', textAlign: 'center' }}
+                >
                     {logoBlob ? (
                         <img
                             src={URL.createObjectURL(logoBlob)}
                             alt="Customer Logo"
-                            style={{ marginLeft: '40px', borderRadius: '20px', width: '200px', height: '220px' }}
+                            style={{ 
+                                marginLeft: '40px', 
+                                borderRadius: '20px', 
+                                width: '200px', 
+                                height: '220px',
+                                objectFit: 'cover'
+                            }}
                         />
                     ) : (
                         <button
                             type="button"
-                            onClick={handleLogoSelect}
+                            onClick={() => handleFileSelect(logoInputRef)}
                             style={{ backgroundColor: 'rgb(108, 162, 209)' }}
                         >
                             Choose Logo
@@ -326,9 +323,12 @@ const Profile = () => {
                     )}
                 </div>
 
-				<button type="submit">Modify</button>
+                <button type="submit" disabled={isSaving}>
+                    {isSaving ? 'Saving...' : 'Modify'}
+                </button>
             </div>
-			<div className="div-image">
+            
+            <div className="div-image">
                 <Image
                     src={RegisterImg}
                     width={400}
@@ -336,7 +336,6 @@ const Profile = () => {
                     alt="register image"
                 />
             </div>
-
         </form>
     );
 };

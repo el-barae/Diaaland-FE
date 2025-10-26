@@ -1,18 +1,10 @@
 'use client'
-import { useState,useEffect } from "react";
+import { useState, useEffect, useContext, useCallback } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import './Candidates.scss'
 import API_URL from "@/config";
-import { jwtDecode } from "jwt-decode";
-
-interface MyToken {
-  sub: string; // email
-  id: number;
-  name: string;
-  role: string;
-  exp: number;
-}
+import { CustomerContext } from '../../../app/Dashboards/Customer/page';
 
 interface Candidate {
     id: number;
@@ -20,69 +12,91 @@ interface Candidate {
     lastName: string;
     email: string;
     jobStatus: string;
-  }
+}
 
-  interface RepeatClassNTimesProps {
-    className: string;
-    n: number;
-    candidatesData: Candidate[];
-  }
-
-const Candidates = () =>{
-    const [candidatesData,setCandidatesData] = useState([])
+const Candidates = () => {
+    const { token, customerId } = useContext(CustomerContext);
+    const [candidatesData, setCandidatesData] = useState<Candidate[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
     const router = useRouter();
 
-  const ViewMore = (id:number) => {
-    localStorage.setItem('IDSelected',String(id));
-    router.push("../View/Candidate")
-  }
+    // Optimized view more handler
+    const handleViewMore = useCallback((id: number) => {
+        localStorage.setItem('IDSelected', String(id));
+        router.push("../View/Candidate");
+    }, [router]);
 
-  const RepeatClassNTimes: React.FC<RepeatClassNTimesProps> = ({ className, n, candidatesData }) => {
-    if(candidatesData.length != 0)
-      return(
-        <>
-        {candidatesData.map((candidate) => (
-          <div key={candidate.id} className={className}>
-          <h1>{candidate.firstName} {candidate.lastName}:</h1>
-          <span> Email: </span>{candidate.email}
-          <p><span> Job statut: </span> {candidate.jobStatus}  </p>
-          <button onClick={() => ViewMore(candidate.id)}>More</button>
-        </div>
-        ))}
-        </>
-      )
-    }
+    // Fetch candidates only once
     useEffect(() => {
-        const fetchData = async () => {
-          try {
-            const token = localStorage.getItem("token");
-                    if (!token) {
-                      alert("Token not found. Please log in again.");
-                      return;
-                    }
-              
-                    const decoded = jwtDecode<MyToken>(token);
-                    const id = decoded.id;
-            const response = await axios.get(API_URL+'/api/v1/jobs/candidate-jobs/byCustomer/'+String(id), {
-              headers: {
-                'Authorization': 'Bearer ' + token
-              }
-              });        
-                  
-            setCandidatesData(response.data);
-          } catch (error) {
-            console.error('Erreur lors de la récupération des données :', error);
-          }
+        if (!token || !customerId || candidatesData.length > 0) return;
+
+        const fetchCandidates = async () => {
+            setIsLoading(true);
+            setError(null);
+
+            try {
+                const response = await axios.get(
+                    `${API_URL}/api/v1/jobs/candidate-jobs/byCustomer/${customerId}`,
+                    { headers: { 'Authorization': `Bearer ${token}` } }
+                );
+                
+                setCandidatesData(response.data || []);
+            } catch (error) {
+                console.error('Error fetching candidates:', error);
+                setError('Failed to load candidates');
+            } finally {
+                setIsLoading(false);
+            }
         };
-        fetchData();
-  }, []);
-    return(
-    <div className="jobs">
-        <h1>Latest candidates</h1>
-        <div className='lists'>
-                  <RepeatClassNTimes className="list" n={candidatesData.length} candidatesData={candidatesData} />
-                </div>
-    </div>
+
+        fetchCandidates();
+    }, [token, customerId]); // Removed candidatesData from dependencies
+
+    // Loading state
+    if (isLoading) {
+        return (
+            <div className="jobs">
+                <h1>Latest candidates</h1>
+                <div className='loading-state'>Loading candidates...</div>
+            </div>
+        );
+    }
+
+    // Error state
+    if (error) {
+        return (
+            <div className="jobs">
+                <h1>Latest candidates</h1>
+                <div className='error-state'>{error}</div>
+            </div>
+        );
+    }
+
+    // Empty state
+    if (candidatesData.length === 0) {
+        return (
+            <div className="jobs">
+                <h1>Latest candidates</h1>
+                <div className='empty-state'>No candidates found</div>
+            </div>
+        );
+    }
+
+    return (
+        <div className="jobs">
+            <h1>Latest candidates</h1>
+            <div className='lists'>
+                {candidatesData.map((candidate) => (
+                    <div key={candidate.id} className="list">
+                        <h1>{candidate.firstName} {candidate.lastName}</h1>
+                        <span>Email: </span>{candidate.email}
+                        <p><span>Job status: </span>{candidate.jobStatus}</p>
+                        <button onClick={() => handleViewMore(candidate.id)}>More</button>
+                    </div>
+                ))}
+            </div>
+        </div>
     );
 }
 

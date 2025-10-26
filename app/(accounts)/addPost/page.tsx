@@ -10,6 +10,15 @@ import axios from 'axios'
 import { ThemeProvider } from 'next-themes'
 import API_URL from '@/config'
 import swal from 'sweetalert'
+import { jwtDecode } from "jwt-decode";
+
+interface MyToken {
+  sub: string; // email
+  id: number;
+  name: string;
+  role: string;
+  exp: number;
+}
 
 export default function AddPost() {
   const [jobTitle, setJobTitle] = useState('');
@@ -52,7 +61,11 @@ export default function AddPost() {
   };
 
   useEffect(() => {
-    const role = localStorage.getItem('role');
+    const token = localStorage.getItem("token");
+                if (!token) return alert("Please log in again.");
+          
+                const decoded = jwtDecode<MyToken>(token);
+                const role = decoded.role;
     if (role !== "ADMIN" && role !== "CUSTOMER") {
       swal('Authenticate yourself when you are a EMPLOYER', '', 'error');
       router.push('/');
@@ -63,8 +76,11 @@ export default function AddPost() {
  
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    const id = localStorage.getItem('ID');
     const token = localStorage.getItem("token");
+                if (!token) return alert("Please log in again.");
+          
+                const decoded = jwtDecode<MyToken>(token);
+                const id = decoded.id;
     
     axios.post(API_URL + '/api/v1/jobs', {
       "name": jobTitle,
@@ -78,7 +94,7 @@ export default function AddPost() {
       "address": adress,
       "remoteStatus": true,
       "degrees": selectedDegrees,
-      "customer": { "id": id }
+      "customerId": id
     }, {
       headers: { 'Authorization': 'Bearer ' + token }
     })

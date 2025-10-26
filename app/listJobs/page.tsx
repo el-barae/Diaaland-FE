@@ -18,9 +18,7 @@ interface Job {
  description: string;
  numberOfPositions: number;
  closeDate: string;
- customer: {
-  email: string;
- }
+ customerId: number;
 }
 
 var c=0;
@@ -71,12 +69,12 @@ const ListJobs = () => {
   const [currentName, setCurrentName] = useState("");
   const [currentEmail, setCurrentEmail] = useState("");
 
-  const handleApplyClick = (id:number, name:string, description: string, email:string) => {
+  const handleApplyClick = (id:number, name:string, description: string, customerId: number) => {
     setCurrentDescription(description);
     setCurrentId(id);
     setCurrentName(name);
     setModalOpen(true);
-    setCurrentEmail(email);
+    setCurrentEmail("email");
   };
 
       if(filteredJobs.length != 0)
@@ -89,7 +87,7 @@ const ListJobs = () => {
             <br/> Number of positions: {job.numberOfPositions} 
           </p>
           <p>Close Date: {job.closeDate}</p>
-          <button onClick={() => handleApplyClick(job.id, job.name, job.description, job.customer.email)}>View</button>
+          <button onClick={() => handleApplyClick(job.id, job.name, job.description, job.customerId)}>View</button>
           <Modal isOpen={modalOpen} id={currentId} name={currentName} email={currentEmail} description={currentDescription} onClose={() => setModalOpen(false)}/>
         </div>
         ))}

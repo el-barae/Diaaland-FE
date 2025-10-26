@@ -131,9 +131,7 @@ interface ModalProps {
           "address": Madress,
           "remoteStatus": Mstatus,
           "degrees": selectedDegrees,
-          "customer":{
-            "id": ID
-          }
+          "customerId": ID
         }, {
           headers: {
             'Authorization': 'Bearer ' + token
@@ -205,18 +203,22 @@ interface ModalProps {
               <div className="modal-content">
               <label htmlFor="jobTitle">Job Title:</label>
     <input type="text" id="jobTitle" placeholder="Enter job title" value={MjobTitle} onChange={(e) => setJobTitle(e.target.value)} />
+    <div className="md:flex gap-2">
     <label htmlFor="minSalary">Minimum Salary:</label>
     <input type="number" id="minSalary" placeholder="Enter minimum salary" value={MminSalary} onChange={handleMaxSalaryChange} />
     <label htmlFor="maxSalary">Maximum Salary:</label>
     <input type="number" id="maxSalary" placeholder="Enter maximum salary" value={MmaxSalary} onChange={handleMinSalaryChange} />
-    <label htmlFor="positionNumber">Position Number:</label>
-    <input type="number" id="positionNumber" placeholder="Enter position number" value={MpositionNumber} onChange={handleNbPositionsChange} />
+    </div>
+    
+    <div className="md:flex gap-2">
     <label htmlFor="jobOpenDate">Job Open Date:</label>
     <input type="date" id="jobOpenDate" value={MjobOpenDate} onChange={(e) => setJobOpenDate(e.target.value)} />
     <label htmlFor="jobCloseDate">Job Close Date:</label>
     <input type="date" id="jobCloseDate" value={MjobCloseDate} onChange={(e) => setJobCloseDate(e.target.value)} />
+    </div>
+
     <label htmlFor="jobDescription">Job Description:</label>
-    <textarea className="desc" id="jobDescription" placeholder="Enter job description" value={MjobDescription} onChange={(e) => setJobDescription(e.target.value)} />
+    <textarea className="desc min-h-12" id="jobDescription" placeholder="Enter job description" value={MjobDescription} onChange={(e) => setJobDescription(e.target.value)} />
     <div className='degrees'></div>
               <label htmlFor="degrees">Degrees</label>
               <div className="dropdown">
@@ -242,8 +244,13 @@ interface ModalProps {
               </div> 
     <label htmlFor="adress">Address:</label>
     <input type="text" id="adress" placeholder="Enter address" value={Madress} onChange={(e) => setAdress(e.target.value)} />
+    <div className="md:flex gap-2">
+    <label htmlFor="positionNumber">Position Number:</label>
+    <input type="number" id="positionNumber" placeholder="Enter position number" value={MpositionNumber} onChange={handleNbPositionsChange} />
     <label htmlFor="jobType">Job Type:</label>
     <input type="text" id="jobType" placeholder="Enter job type" value={MjobType} onChange={(e) => setJobType(e.target.value)} />   
+    </div>
+    
     <button onClick={handleModifyJob}>Modify Job</button>
               </div>
           </div>

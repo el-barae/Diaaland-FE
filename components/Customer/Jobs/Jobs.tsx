@@ -1,18 +1,10 @@
 import './jobs.scss'
-import { useState ,useEffect} from "react"
+import { useState, useEffect, useContext, useCallback } from "react"
 import axios from 'axios'
 import React from 'react';
 import API_URL from '@/config';
 import Modal from './ModalJobs/ModalJobs';
-import { jwtDecode } from "jwt-decode";
-
-interface MyToken {
-  sub: string; // email
-  id: number;
-  name: string;
-  role: string;
-  exp: number;
-}
+import { CustomerContext } from '../../../app/Dashboards/Customer/page';
 
 interface Job {
   id: number;
@@ -29,110 +21,142 @@ interface Job {
   degrees: string[];
 }
 
-  interface RepeatClassNTimesProps {
-    className: string;
-    n: number;
-    jobsData: Job[];
-  }
+const Jobs = () => {
+  const { token, customerId } = useContext(CustomerContext);
+  const [jobsData, setJobsData] = useState<Job[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  
+  // Modal state
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedJob, setSelectedJob] = useState<Job | null>(null);
 
-const Jobs = () =>{
-    const [jobsData, setJobsData] = useState<Job[]>([]);
+  // Optimized delete handler with callback
+  const handleDelete = useCallback(async (e: React.MouseEvent, idJ: number) => {
+    e.preventDefault();
+    
+    if (!token) return;
 
-    const handleDelete = async (e:any, idJ:number) =>{
-      e.preventDefault()
-      const token = localStorage.getItem("token");
-      axios.delete(API_URL+'/api/v1/jobs/'+String(idJ), {
-				headers: {
-				  'Authorization': 'Bearer ' + token
-				}
-			  })
-       .catch(function (error) {
-        console.log(error);
-       });
+    try {
+      await axios.delete(`${API_URL}/api/v1/jobs/${idJ}`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      
+      // Update local state instead of refetching
+      setJobsData(prevJobs => prevJobs.filter(job => job.id !== idJ));
+    } catch (error) {
+      console.error('Error deleting job:', error);
+      setError('Failed to delete job');
     }
+  }, [token]);
 
-    useEffect(() => {
-        const fetchData = async () => {
-          try {
-            const token = localStorage.getItem("token");
-                    if (!token) {
-                      alert("Token not found. Please log in again.");
-                      return;
-                    }
-              
-                    const decoded = jwtDecode<MyToken>(token);
-                    const id = decoded.id;
-            const response = await axios.get(API_URL+'/api/v1/jobs/byCustomer/'+String(id), {
-              headers: {
-                'Authorization': 'Bearer ' + token
-              }
-              });              
-            setJobsData(response.data);
-          } catch (error) {
-            console.error('Erreur lors de la récupération des données :', error);
-          }
-        };
-        fetchData();
+  // Optimized modify handler
+  const handleModifyClick = useCallback((e: React.MouseEvent, job: Job) => {
+    e.preventDefault();
+    setSelectedJob(job);
+    setModalOpen(true);
   }, []);
 
-  const [modalOpen, setModalOpen] = useState(false);
-    const [jobId, setJobId] = useState(0);
-    const [jobTitle, setJobTitle] = useState('');
-    const [minSalary, setMinSalary] = useState(0);
-    const [maxSalary, setMaxSalary] = useState(0);
-    const [positionNumber, setPositionNumber] = useState(0);
-    const [openDate, setOpenDate] = useState('');
-    const [endDate, setEndDate] = useState(''); 
-    const [address, setAddress] = useState('');
-    const [status, setStatus] = useState('');
-    const [type, setType] = useState('');
-    const [description, setDescription] = useState('');
-    const [degrees, setDegrees] = useState<string[]>([]);
+  // Close modal handler
+  const handleCloseModal = useCallback(() => {
+    setModalOpen(false);
+    setSelectedJob(null);
+  }, []);
 
-    const handleModifyClick = (e: any, job: Job) => {
-      setJobId(job.id);
-      setJobTitle(job.name);
-      setMinSalary(job.minSalary);
-      setMaxSalary(job.maxSalary);
-      setPositionNumber(job.numberOfPositions);
-      setOpenDate(job.openDate);
-      setEndDate(job.closeDate);
-      setAddress(job.address);
-      setStatus(job.remoteStatus);
-      setType(job.type);
-      setDescription(job.description);
-      setDegrees(job.degrees);
-      setModalOpen(true);
+  // Fetch jobs only once
+  useEffect(() => {
+    // Skip if already loaded or no valid context
+    if (!token || !customerId || jobsData.length > 0) return;
+
+    const fetchJobs = async () => {
+      setIsLoading(true);
+      setError(null);
+
+      try {
+        const response = await axios.get(
+          `${API_URL}/api/v1/jobs/byCustomer/${customerId}`,
+          { headers: { 'Authorization': `Bearer ${token}` } }
+        );
+        
+        setJobsData(response.data || []);
+      } catch (error) {
+        console.error('Error fetching jobs:', error);
+        setError('Failed to load jobs');
+      } finally {
+        setIsLoading(false);
+      }
     };
 
-  const RepeatClassNTimes: React.FC<RepeatClassNTimesProps> = ({ className, n, jobsData }) => {
-    if(jobsData.length != 0)
-      return(
-        <>
-        {jobsData.map((job) => (
-          <div key={job.id} className={className}>
-          <h1>{job.name}</h1>
-          <span> Type: </span>{job.type}
-          <p><span> Number of positions: </span> {job.numberOfPositions} </p>
-          <p><span> Close Date: </span>{job.closeDate}</p>
-          <button onClick={(e) => handleDelete(e, job.id)}>Delete</button>
-          <button onClick={(e) => handleModifyClick(e, job)}>Modify</button>
-          <Modal isOpen={modalOpen} id={jobId} jobTitle={jobTitle} minSalary={minSalary} maxSalary={maxSalary} positionNumber={positionNumber} openDate={openDate} endDate={endDate} address={address} status={status} type={type} description={description} degrees={degrees} onClose={() => setModalOpen(false)} setJobData={setJobsData}/>
-        </div>
-        ))}
-        </>
-      )
-    }
+    fetchJobs();
+  }, [token, customerId]); // Removed jobsData from dependencies
 
-  return(
-    <>
-    <div className='jobs'>
+  // Loading state
+  if (isLoading) {
+    return (
+      <div className='jobs'>
         <h1>My jobs</h1>
-                <div className='lists'>
-                  <RepeatClassNTimes className="list" n={jobsData.length} jobsData={jobsData} />
-                </div>
+        <div className='loading-state'>Loading jobs...</div>
+      </div>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <div className='jobs'>
+        <h1>My jobs</h1>
+        <div className='error-state'>{error}</div>
+      </div>
+    );
+  }
+
+  // Empty state
+  if (jobsData.length === 0) {
+    return (
+      <div className='jobs'>
+        <h1>My jobs</h1>
+        <div className='empty-state'>No jobs found. Create your first job!</div>
+      </div>
+    );
+  }
+
+  return (
+    <div className='jobs'>
+      <h1>My jobs</h1>
+      <div className='lists'>
+        {jobsData.map((job) => (
+          <div key={job.id} className="list">
+            <h1>{job.name}</h1>
+            <span>Type: </span>{job.type}
+            <p><span>Number of positions: </span>{job.numberOfPositions}</p>
+            <p><span>Close Date: </span>{job.closeDate}</p>
+            <button onClick={(e) => handleDelete(e, job.id)}>Delete</button>
+            <button onClick={(e) => handleModifyClick(e, job)}>Modify</button>
+          </div>
+        ))}
+      </div>
+
+      {modalOpen && selectedJob && (
+        <Modal 
+          isOpen={modalOpen}
+          id={selectedJob.id}
+          jobTitle={selectedJob.name}
+          minSalary={selectedJob.minSalary}
+          maxSalary={selectedJob.maxSalary}
+          positionNumber={selectedJob.numberOfPositions}
+          openDate={selectedJob.openDate}
+          endDate={selectedJob.closeDate}
+          address={selectedJob.address}
+          status={selectedJob.remoteStatus}
+          type={selectedJob.type}
+          description={selectedJob.description}
+          degrees={selectedJob.degrees}
+          onClose={handleCloseModal}
+          setJobData={setJobsData}
+        />
+      )}
     </div>
-    </>
   );
 }
+
 export default Jobs;

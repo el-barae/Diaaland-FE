@@ -172,11 +172,11 @@ const CandidateContent = () => {
       // Vérifier le matching en cours
       const matching = localStorage.getItem("matching");
       if (matching) {
-        swal("The matching process is currently running.");
+                localStorage.removeItem("matching");
         await axios.get(`${API_URL}/api/v1/jobs/matching/byCandidate/${candidateId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        localStorage.removeItem("matching");
+        swal("The matching process is currently running.");
       }
 
       setTimeout(() => setLoading(false), 500);

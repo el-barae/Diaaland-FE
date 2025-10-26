@@ -1,155 +1,184 @@
 @import '@/app/globals.scss';
 
-.modal-jobs{
-    width: 100vw;
-    height: 100vh;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    position: fixed;
-    
-body.active-modal {
+.modal-jobs {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  body.active-modal {
     overflow-y: hidden;
-}
+  }
 
-.btn-modal {
-    padding: 10px 20px;
-    display: block;
-    margin: 100px auto 0;
-    font-size: 18px;
-
-}
-
-.overlay {
+  .overlay {
     width: 100vw;
     height: 100vh;
+    position: fixed;
     top: 0;
     left: 0;
-    right: 0;
-    bottom: 0;
-    position: fixed;
-}
+    background: rgba(49, 49, 49, 0.8);
+  }
 
-.overlay {
-    background: rgba(49,49,49,0.8);
-}
-.modal-content {
-    display: flex;
-    flex-direction: column;
-    position: absolute;
-    top: 55.7%;
+  .modal-content {
+    position: fixed;
+    top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    line-height: 1.4;
     background: #fff;
     color: black;
-    padding: 14px 28px;
-    border-radius: 3px;
+    border-radius: 10px;
+    padding: 20px;
+    width: 80%;
     max-width: 800px;
-    min-width: 400px;
-    min-height: 300px;
-    textarea{
-        height: 6rem;
-        border-radius: 10px;
-        box-shadow: 1px $footer-bg;
-        padding: 5px;
-        border: 1px solid $footer-bg;
+    max-height: 80vh; // limit height
+    overflow-y: auto; // enable scrolling for long content
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    textarea {
+      height: 6rem;
+      border-radius: 10px;
+      box-shadow: 1px $footer-bg;
+      padding: 5px;
+      border: 1px solid $footer-bg;
     }
-    
-    input{
-        border-radius: 10px;
-        border: 1px solid $footer-bg;
-        padding: .5rem;
-        height: 30px;
+
+    input {
+      border-radius: 10px;
+      border: 1px solid $footer-bg;
+      padding: 0.5rem;
+      height: 30px;
+      width: 30%;
     }
 
     .degree-selector {
-        position: relative;
-        width: 300px;
-        margin-bottom: 20px;
+      position: relative;
+      width: 300px;
+      margin-bottom: 20px;
     }
 
-    .degrees{
-     margin-left: 120px;
+    .degrees {
+      margin-left: 120px;
     }
-    
+
     .dropdown {
-        position: relative;
-        display: inline-block;
-        width: 30%;
+      position: relative;
+      display: inline-block;
+      width: 30%;
     }
-    
-    .dropdown button {
-        width: 10rem;
-        padding: 5px;
-        background-color: $primary;
-        color: white;
-        border: none;
-        cursor: pointer;
-        text-align: left;
-        border-radius: 6px;
-    }
-    
-    .dropdown-menu {
-        position: absolute;
-        background-color: #f9f9f9;
-        border: 1px solid #ccc;
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-        width: 150%;
-        z-index: 1;
-        border-radius: 4px;
-        margin-top: 5px;
-        max-height: 150px; /* Set a maximum height for the dropdown */
-        overflow-y: auto; /* Enable vertical scrolling */
-        padding-right: 10px;
-    }
-    
-    .dropdown-item {
-        padding: 10px;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-    }
-    
-    .dropdown-item label {
-        width: 100%;
-    }
-    
-    .degree-tags {
-        margin-top: 10px;
-        display: flex;
-        flex-wrap: wrap;
-        gap: 5px;
-     }
-    
-    .degree-tag {
-        display: inline-flex;
-        align-items: center;
-        background-color: #e0e0e0;
-        padding: 5px 10px;
-        border-radius: 3px;
-    }
-    
-    .degree-tag button {
-        background: none;
-        border: none;
-        margin-left: 5px;
-        cursor: pointer;
-        color: red;
-    }
-}
-#close-btn{
-    background-color: crimson;
-    &:hover {
-        background-color: darken(crimson, 5%);
-    }
-}
 
-.close-modal {
+    .dropdown button {
+      width: 10rem;
+      padding: 5px;
+      background-color: $primary;
+      color: white;
+      border: none;
+      cursor: pointer;
+      text-align: left;
+      border-radius: 6px;
+    }
+
+    .dropdown-menu {
+      position: absolute;
+      background-color: #f9f9f9;
+      border: 1px solid #ccc;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+      width: 150%;
+      z-index: 1;
+      border-radius: 4px;
+      margin-top: 5px;
+      max-height: 150px;
+      overflow-y: auto;
+      padding-right: 10px;
+    }
+
+    .dropdown-item {
+      padding: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+    }
+
+    .dropdown-item label {
+      width: 100%;
+    }
+
+    .degree-tags {
+      margin-top: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+
+    .degree-tag {
+      display: inline-flex;
+      align-items: center;
+      background-color: #e0e0e0;
+      padding: 5px 10px;
+      border-radius: 3px;
+    }
+
+    .degree-tag button {
+      background: none;
+      border: none;
+      margin-left: 5px;
+      cursor: pointer;
+      color: red;
+    }
+
+    .desc{
+        min-height: 80px;
+    }
+
+    #close-btn {
+      background-color: crimson;
+      &:hover {
+        background-color: darken(crimson, 5%);
+      }
+      margin-bottom: 10px;
+    }
+
+    #modify-btn {
+      background-color: #6ca2d1;
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      position: sticky;
+      bottom: 0;
+      width: 100%;
+      margin-top: 10px;
+    }
+  }
+
+  .close-modal {
     position: absolute;
     top: 10px;
     right: 10px;
     padding: 5px 7px;
-}
+  }
+
+  button{
+                        font-size: 17px;
+                        font-weight: 300;
+                        text-align: center;
+                        padding: 5px;
+                        background-color: $main-color;
+                        color: $second-color;
+                        border-radius: 20px;
+                        margin: 10px;
+                        transition: .3s ease-in-out;
+                        margin-left: 25%;
+                        width: 50%;
+                        &:hover {
+                            font-size: 20px;
+                            font-weight: 300;
+                            background-color: darken($main-color, 10%);
+                        }
+                    }
 }

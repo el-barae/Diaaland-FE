@@ -1,6 +1,6 @@
 'use client'
 import Image from 'next/image'
-import { useState ,useEffect} from "react"
+import { useState, useEffect, useMemo, createContext } from "react"
 import { useRouter } from 'next/navigation'
 import axios from 'axios'
 import React from 'react';
@@ -17,291 +17,302 @@ import Notif from '@/public/images/notif.png'
 import API_URL from '@/config';
 import {jwtDecode} from "jwt-decode";
 
-interface Candidate {
-    id: number;
-    firstName: string;
-    lastName: string;
-    description: string;
-    email: string;
-  }
-  interface Job {
-    id: number;
-    name: string;
-    description: string;
-    numberOfPositions: number;
-    closeDate: string;
-  }
+interface MyToken {
+  sub: string;
+  id: number;
+  name: string;
+  role: string;
+  exp: number;
+}
 
-  interface Message {
-    id: number;
-    email: string;
-    subject: string;
-    message: string;
-  }
+interface Message {
+  id: number;
+  email: string;
+  subject: string;
+  message: string;
+}
 
-  interface RepeatClassNTimesProps {
-    className: string;
-    n: number;
-    candidatesData: Candidate[];
-  }
-
-  const RepeatClassNTimes: React.FC<RepeatClassNTimesProps> = ({ className, n, candidatesData }) => {
-      return(
-        <>
-        {Array.isArray(candidatesData) && candidatesData.map((candidate) => (
-          <div key={candidate.id} className={className}>
-          <h1>{candidate.firstName} {candidate.lastName} :</h1>
-          <p>
-            Description: {candidate.description} <br/> email: {candidate.email} 
-          </p>
-        </div>
-        ))}
-        </>
-      )
-    }
-  
-    interface RepeatClassJobNTimesProps {
-      className: string;
-      n: number;
-      jobsData: Job[];
-    }
-  
-    const RepeatClassJobNTimes: React.FC<RepeatClassJobNTimesProps> = ({ className, n, jobsData }) => {
-        return(
-          <>
-          {jobsData.map((job) => (
-            <div key={job.id} className={className}>
-            <h1>{job.name} :</h1>
-            <p>
-              Description: {job.description} <br/> Number of positions: {job.numberOfPositions} 
-            </p>
-            <p>Close Date: {job.closeDate}</p>
-
-          </div>
-          ))}
-          </>
-        )
-      }
+// Context pour partager les données entre composants enfants
+export const CustomerContext = createContext<{
+  token: string | null;
+  customerId: number | null;
+  customerEmail: string | null;
+}>({
+  token: null,
+  customerId: null,
+  customerEmail: null
+});
 
 const Customer = () => {
   const [loading, setLoading] = useState(true);
-    const [customerData, setCustomer] = useState('');
+  const [customerData, setCustomer] = useState('');
   const [isOpen, setIsOpen] = useState(false);
-  const [notif,setNotif] = useState(false);
-    const [messagesData, setMessagesData] = useState<Message[]>([]);
-  
-  const handleToggle = async () => {
-    setIsOpen(!isOpen);
+  const [notif, setNotif] = useState<number | false>(false);
+  const [messagesData, setMessagesData] = useState<Message[]>([]);
+  const [activeTab, setActiveTab] = useState("Profile");
+  const router = useRouter();
 
+  // Mémorisation du token et des infos utilisateur
+  const userContext = useMemo(() => {
     const token = localStorage.getItem("token");
-    if (!token) return;
-
+    if (!token) return { token: null, customerId: null, customerEmail: null };
+    
     try {
-      const decoded = jwtDecode(token);
-      const email = decoded.sub;
-
-      // Marquer les messages comme vus
-      await axios.put(`${API_URL}/api/v1/users/messages/mark-viewed/${email}`, {
-                  headers: { Authorization: `Bearer ${token}` },
-                })
-        .catch(error => {
-          console.error('Erreur lors du marquage des messages :', error);
-        });
-
-      setNotif(false);
-
-      // Récupérer les messages de l'utilisateur
-      const response = await axios.get(`${API_URL}/api/v1/users/messages/recipient/${email}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      setMessagesData(response.data);
+      const decoded = jwtDecode<MyToken>(token);
+      return {
+        token,
+        customerId: decoded.id,
+        customerEmail: decoded.sub
+      };
     } catch (error) {
-      console.error('Erreur lors de la récupération des données :', error);
+      console.error("Erreur de décodage du token:", error);
+      return { token: null, customerId: null, customerEmail: null };
+    }
+  }, []);
+
+  // Charger les messages seulement quand le dropdown s'ouvre
+  const handleToggle = async () => {
+    const newIsOpen = !isOpen;
+    setIsOpen(newIsOpen);
+
+    if (!userContext.token || !userContext.customerEmail) return;
+
+    // Charger les messages seulement si on ouvre le dropdown ET qu'on n'a pas déjà les messages
+    if (newIsOpen && messagesData.length === 0) {
+      try {
+        // Marquer les messages comme vus
+        await axios.put(
+          `${API_URL}/api/v1/users/messages/mark-viewed/${userContext.customerEmail}`,
+          {},
+          { headers: { Authorization: `Bearer ${userContext.token}` } }
+        );
+
+        setNotif(false);
+
+        // Récupérer les messages
+        const response = await axios.get(
+          `${API_URL}/api/v1/users/messages/recipient/${userContext.customerEmail}`,
+          { headers: { Authorization: `Bearer ${userContext.token}` } }
+        );
+
+        setMessagesData(response.data);
+      } catch (error) {
+        console.error('Erreur lors de la récupération des messages:', error);
+      }
     }
   };
 
-  const handleDelete = async (e: any) => {
+  const handleDelete = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    
+    if (!userContext.token || !userContext.customerEmail) return;
+
     try {
-      const token = localStorage.getItem("token");
-      if (!token) return;
-
-      const decoded: any = jwtDecode(token);
-      const email = decoded.sub;
-
-      await axios.delete(`${API_URL}/api/v1/users/messages/recipient/${email}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      const updatedMessagesData = messagesData.filter(
-        (m: any) => m.email !== email
+      await axios.delete(
+        `${API_URL}/api/v1/users/messages/recipient/${userContext.customerEmail}`,
+        { headers: { Authorization: `Bearer ${userContext.token}` } }
       );
-      setMessagesData(updatedMessagesData);
+
+      setMessagesData([]);
+      setIsOpen(false);
+      setNotif(false);
     } catch (error) {
-      console.error("Erreur lors de la suppression des messages :", error);
-    } finally {
-      // Fermer le menu après suppression
-      setIsOpen(!isOpen);
+      console.error("Erreur lors de la suppression des messages:", error);
     }
   };
 
-const handleAddClick = () =>{
-  router.push("../addPost");
-}
-
-    const router = useRouter();
-
-    var [x,setX] = useState("Profile"); 
-
-  const handleClick = (value : string) => {
-    setX(value);
-    y();
+  const handleAddClick = () => {
+    router.push("../addPost");
   };
- 
-  const options = ['Message 1', 'Message 2', 'Message 3'];
 
-    const y = () => {
-      if (x === "Profile"){ 
+  const handleTabClick = (value: string) => {
+    setActiveTab(value);
+  };
+
+  // Rendu conditionnel des composants
+  const renderActiveComponent = () => {
+    switch (activeTab) {
+      case "Profile":
         return <Profile />;
-      }
-      if (x === "Jobs") {
+      case "Jobs":
         return <Jobs />;
-      }
-      if (x === "Applies") {
+      case "Applies":
         return <Applies />;
-      }
-      if (x === "Candidates") {
+      case "Candidates":
         return <Candidates />;
-      }
-      if (x === "Matches") {
-        return <Matches/>;
-      }
+      case "Matches":
+        return <Matches />;
+      default:
+        return <Profile />;
     }
+  };
 
-    useEffect(() => {
-        const token = localStorage.getItem("token");
-        if (!token) {
-          swal("Authentication required", "", "error");
+  // Initialisation unique au chargement
+  useEffect(() => {
+    const initializeCustomer = async () => {
+      const token = localStorage.getItem("token");
+      
+      if (!token) {
+        swal("Authentication required", "", "error");
+        router.push("/");
+        return;
+      }
+
+      try {
+        const decoded = jwtDecode<MyToken>(token);
+        const { role, name, sub: email } = decoded;
+
+        // Vérification du rôle
+        if (role !== "CUSTOMER" && role !== "ADMIN") {
+          swal("Authenticate yourself when you are a CUSTOMER", "", "error");
           router.push("/");
           return;
         }
 
+        setCustomer(name);
+
+        // Chargement initial (uniquement les notifications)
         try {
-          // ✅ Décodage du token JWT
-          const decoded: any = jwtDecode(token);
-          const role = decoded.role;
-          const email = decoded.sub; 
-          const id = decoded.id;
-          const name = decoded.name;
-          setCustomer(name);
+          // Récupération du nombre de notifications non vues
+          const resNotif = await axios.get(
+            `${API_URL}/api/v1/users/messages/viewed/${email}`,
+            { headers: { Authorization: `Bearer ${token}` } }
+          );
+          setNotif(resNotif.data);
 
-          // ✅ Vérification du rôle
-          if (role !== "CUSTOMER" && role !== "ADMIN") {
-            swal("Authenticate yourself when you are a CUSTOMER", "", "error");
-            router.push("/");
-            return;
+          // Vérification du matching en cours
+          const matching = localStorage.getItem("matching");
+          if (matching) {
+            const resp = await axios.get(
+              `${API_URL}/api/v1/jobs/lastJobId`,
+              { headers: { Authorization: `Bearer ${token}` } }
+            );
+
+            const jobId = resp.data;
+
+            localStorage.removeItem("matching");
+            await axios.get(
+              `${API_URL}/api/v1/jobs/matching/byJob/${jobId}`,
+              { headers: { Authorization: `Bearer ${token}` } }
+            );
+
+            swal("The matching process is currently running.");
           }
-
-          // ✅ Chargement des données
-          const fetchCustomerData = async () => {
-            try {
-              // Récupération des notifications (messages)
-              const resNotif = await axios.get(
-                `${API_URL}/api/v1/users/messages/viewed/${email}`
-              , {
-                  headers: { Authorization: `Bearer ${token}` },
-                });
-              setNotif(resNotif.data);
-
-              // Vérification du matching en cours
-              const matching = localStorage.getItem("matching");
-              if (matching) {
-                const resp = await axios.get(`${API_URL}/api/v1/jobs/lastJobId`, {
-                  headers: { Authorization: `Bearer ${token}` },
-                });
-
-                const jobId = resp.data; // inutile de stringify ici
-                swal("The matching process is currently running.");
-
-                await axios.get(`${API_URL}/api/v1/jobs/matching/byJob/${jobId}`, {
-                  headers: { Authorization: `Bearer ${token}` },
-                });
-
-                localStorage.removeItem("matching");
-              }
-
-              setTimeout(() => setLoading(false), 500);
-            } catch (error) {
-              console.error("Erreur lors de la récupération des données :", error);
-            }
-          };
-
-          fetchCustomerData();
         } catch (error) {
-          console.error("Erreur de décodage du token :", error);
-          swal("Invalid token", "", "error");
-          router.push("/");
+          console.error("Erreur lors de la récupération des notifications:", error);
         }
-      }, []);
 
-    return (
+        // Délai minimal pour une meilleure UX
+        setTimeout(() => setLoading(false), 300);
+
+      } catch (error) {
+        console.error("Erreur de décodage du token:", error);
+        swal("Invalid token", "", "error");
+        router.push("/");
+      }
+    };
+
+    initializeCustomer();
+  }, [router]); // Dépendance minimale
+
+  return (
+    <CustomerContext.Provider value={userContext}>
       <ThemeProvider enableSystem={true} attribute="class">
-      <Navbar/>
-      {!loading && (
-      <div className='Customer'>
-              <div className='header'>
-                <h1>{customerData}</h1>
-                <button type="button" className="button" onClick={handleAddClick}>Add job</button>
-                {isOpen && (
-                <button className="btn" onClick={(e) => handleDelete(e)}>
-                <svg viewBox="0 0 15 17.5" height="17.5" width="15" xmlns="http://www.w3.org/2000/svg" className="icon">
-                <path transform="translate(-2.5 -1.25)" d="M15,18.75H5A1.251,1.251,0,0,1,3.75,17.5V5H2.5V3.75h15V5H16.25V17.5A1.251,1.251,0,0,1,15,18.75ZM5,5V17.5H15V5Zm7.5,10H11.25V7.5H12.5V15ZM8.75,15H7.5V7.5H8.75V15ZM12.5,2.5h-5V1.25h5V2.5Z" id="Fill"></path>
-              </svg>
-              </button>)}
-                <button onClick={handleToggle}>
-                <Image 
-									src={Notif}
-									width={50}
-									height={50}
-									alt="login image"
-								/>
-                {notif === false ? null : <span className="badge">{notif}</span>}
+        <Navbar />
+        {!loading && (
+          <div className='Customer'>
+            <div className='header'>
+              <h1>{customerData}</h1>
+              <button type="button" className="button" onClick={handleAddClick}>
+                Add job
+              </button>
+              
+              {isOpen && (
+                <button className="btn" onClick={handleDelete}>
+                  <svg viewBox="0 0 15 17.5" height="17.5" width="15" xmlns="http://www.w3.org/2000/svg" className="icon">
+                    <path transform="translate(-2.5 -1.25)" d="M15,18.75H5A1.251,1.251,0,0,1,3.75,17.5V5H2.5V3.75h15V5H16.25V17.5A1.251,1.251,0,0,1,15,18.75ZM5,5V17.5H15V5Zm7.5,10H11.25V7.5H12.5V15ZM8.75,15H7.5V7.5H8.75V15ZM12.5,2.5h-5V1.25h5V2.5Z" id="Fill"></path>
+                  </svg>
                 </button>
-                {isOpen && (
-        <ul className="dropdown-list">
-          {messagesData.map(message => (
-          <li key={message.id}>
-            <p><strong>Sujet :</strong> {message.subject}</p>
-            <p><strong>Message :</strong> {message.message}</p>
-          </li>
-        ))}
-        </ul>
-      )}
+              )}
+              
+              <button onClick={handleToggle} aria-label="Notifications">
+                <Image 
+                  src={Notif}
+                  width={50}
+                  height={50}
+                  alt="notifications"
+                />
+                {notif !== false && notif > 0 && (
+                  <span className="badge">{notif}</span>
+                )}
+              </button>
+              
+              {isOpen && (
+                <ul className="dropdown-list">
+                  {messagesData.length > 0 ? (
+                    messagesData.map(message => (
+                      <li key={message.id}>
+                        <p><strong>Sujet:</strong> {message.subject}</p>
+                        <p><strong>Message:</strong> {message.message}</p>
+                      </li>
+                    ))
+                  ) : (
+                    <li>No messages</li>
+                  )}
+                </ul>
+              )}
+            </div>
+            
+            <div className='content'>
+              <div className='Menu'>
+                <button 
+                  onClick={() => handleTabClick("Profile")}
+                  className={activeTab === "Profile" ? "active" : ""}
+                >
+                  Profile
+                </button>
+                <button 
+                  onClick={() => handleTabClick("Jobs")}
+                  className={activeTab === "Jobs" ? "active" : ""}
+                >
+                  My jobs
+                </button>
+                <button 
+                  onClick={() => handleTabClick("Applies")}
+                  className={activeTab === "Applies" ? "active" : ""}
+                >
+                  Applies
+                </button>
+                <button 
+                  onClick={() => handleTabClick("Candidates")}
+                  className={activeTab === "Candidates" ? "active" : ""}
+                >
+                  Candidates
+                </button>
+                <button 
+                  onClick={() => handleTabClick("Matches")}
+                  className={activeTab === "Matches" ? "active" : ""}
+                >
+                  Matches
+                </button>
               </div>
-              <div className='content'>
-                <div className='Menu'>
-                  <button onClick={() => handleClick("Profile")}>Profile</button>
-                  <button onClick={() => handleClick("Jobs")}>My jobs</button>
-                  <button onClick={() => handleClick("Applies")}>Applies</button>
-                  <button onClick={() => handleClick("Candidates")}>Candidates</button>
-                  <button onClick={() => handleClick("Matches")}>Matches</button>
-                </div>
-                <div className='Customer-box'>
-                   {y()} 
-                </div>
+              
+              <div className='Customer-box'>
+                {renderActiveComponent()}
               </div>
-        </div>
+            </div>
+          </div>
         )}
+        
         {loading && (
-            <div className="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+          <div className="lds-roller">
+            <div></div><div></div><div></div><div></div>
+            <div></div><div></div><div></div><div></div>
+          </div>
         )}
-  </ThemeProvider>
-  )
-  }
-  
-  export default Customer;
+      </ThemeProvider>
+    </CustomerContext.Provider>
+  );
+};
 
+export default Customer;
