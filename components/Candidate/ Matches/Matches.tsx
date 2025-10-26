@@ -1,33 +1,28 @@
 'use client'
 import API_URL from "@/config"
-import axios from "axios"
-import { useState, useEffect } from "react"
-import Select,{ SingleValue } from "react-select"
-import { jwtDecode } from "jwt-decode";
+import { useState } from "react"
+import Select, { SingleValue } from "react-select"
+import React from 'react';
+import { useCandidateContext } from '@/contexts/CandidateContext'
+import { useAPIQuery } from '@/hooks/useOptimizedAPI'
 import './Matches.scss'
 
-interface Matching{
+interface Matching {
   id: number;
   score: number;
   candidate: {
-      id: number;
-      firstName: string;
-      lastName: string;
+    id: number;
+    firstName: string;
+    lastName: string;
   };
   job: {
+    id: number;
+    name: string;
+    customer: {
       id: number;
       name: string;
-      customer:{
-        id: number;
-        name: string;
-      }
+    }
   };
-}
-
-interface Candidate{
-  id:number;
-   firstName:string;
-  lastName:string;
 }
 
 interface Job {
@@ -35,71 +30,26 @@ interface Job {
   name: string;
 }
 
-interface MyToken {
-  sub: string; // email
-  id: number;
-  name: string;
-  role: string;
-  exp: number;
-}
+const Matches = () => {
+  const { matches, candidateId } = useCandidateContext();
+  const [selectedJob, setSelectedJob] = useState<SingleValue<{ value: number | null; label: string }> | null>(null);
+  const [filteredData, setFilteredData] = useState<Matching[]>(matches);
 
-interface Matching {
-  id: number;
-  jobTitle: string;
-  score: number;
-}
+  // Charger la liste des jobs
+  const { data: jobsData = [], loading: loadingJobs } = useAPIQuery<Job[]>(
+    `${API_URL}/api/v1/jobs/list`,
+    {
+      cacheKey: 'jobs-list',
+      enabled: !!candidateId
+    }
+  );
 
-const Applies = () =>{
-  const [candidatesData,setCandidatesData] = useState<Candidate[]>([]);
-  const [jobsData, setJobsData] = useState<Job[]>([]);
-  const [selectedCandidate, setSelectedCandidate] = useState<SingleValue<{ value: number | null; label: string }> | null>(null);
-    const [selectedJob, setSelectedJob] = useState<SingleValue<{ value: number | null; label: string }> | null>(null);
-  const [matchingData, setMatchingData] = useState<Matching[]>([]);
-  const [filteredData, setFilteredData] = useState<Matching[]>([]);
-  
-   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        if (!token) {
-          console.error("No token found");
-          return;
-        }
+  interface LastCandidates {
+    n: number;
+    matchingData: Matching[];
+  }
 
-        // ✅ Décoder le token pour obtenir l’ID candidat
-        const decoded = jwtDecode<MyToken>(token);
-        const candidateId = decoded.id;
-
-        // 🔹 Charger la liste de tous les jobs
-        const jobsResponse = await axios.get(`${API_URL}/api/v1/jobs/list`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setJobsData(jobsResponse.data);
-
-        // 🔹 Charger les correspondances (matching)
-        const matchingResponse = await axios.get<Matching[]>(
-          `${API_URL}/api/v1/jobs/matching/candidate/${candidateId}`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
-
-        setMatchingData(matchingResponse.data);
-        setFilteredData(matchingResponse.data);
-      } catch (error) {
-        console.error("Erreur lors de la récupération des données :", error);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-   interface LastCandidates {
-      n: number;
-      matchingData: Matching[];
-   }
-
-   const ListMatching: React.FC<LastCandidates> = ({ n, matchingData }) => {
+  const ListMatching: React.FC<LastCandidates> = ({ n, matchingData }) => {
     if (matchingData.length !== 0)
       return (
         <>
@@ -116,12 +66,8 @@ const Applies = () =>{
     return null;
   };
 
-  const filterMatchingData = (candidateId: number | null, jobId: number | null) => {
-    let filtered = matchingData;
-
-    if (candidateId !== null) {
-      filtered = filtered.filter((m) => m.candidate.id === candidateId);
-    }
+  const filterMatchingData = (jobId: number | null) => {
+    let filtered = matches;
 
     if (jobId !== null) {
       filtered = filtered.filter((m) => m.job.id === jobId);
@@ -132,52 +78,54 @@ const Applies = () =>{
 
   const handleJobChange = (newValue: SingleValue<{ value: number | null; label: string }>) => {
     setSelectedJob(newValue);
-    filterMatchingData(selectedCandidate?.value ?? null, newValue?.value ?? null);
+    filterMatchingData(newValue?.value ?? null);
   };
 
   const jobOptions = [
     { value: null, label: 'All Jobs' },
-    ...jobsData.map(job => ({
+    ...(jobsData || []).map((job: Job) => ({
       value: job.id,
       label: job.name
     }))
   ];
 
-    return (
-      <div className="cadr-matches">
+  return (
+    <div className="cadr-matches">
       <div className="matches">
-          <h2 id="Matches-h">Matches</h2>
+        <h2 id="Matches-h">Matches</h2>
       </div>
       <div className="sort">
-          <h4>By job </h4>
-          <Select id="jobs"
-      name="jobs"
-      value={selectedJob}
-      onChange={handleJobChange}
-      options={jobOptions}></Select>
+        <h4>By job</h4>
+        <Select
+          id="jobs"
+          name="jobs"
+          value={selectedJob}
+          onChange={handleJobChange}
+          options={jobOptions}
+        />
       </div>
 
       <table id="Applies">
-          <thead>
-              <tr>
-                  <td>Candidate</td>
-                  <td>Job</td>
-                  <td>Employer</td>
-                  <td>Score matching</td>
-              </tr>
-          </thead>
-
-          <tbody>
-          {filteredData.length > 0 ? (
-          <ListMatching n={filteredData.length} matchingData={filteredData} />
-        ) : (
+        <thead>
           <tr>
-            <td colSpan={4}>No matching data available</td>
+            <td>Candidate</td>
+            <td>Job</td>
+            <td>Employer</td>
+            <td>Score matching</td>
           </tr>
-        )}
-          </tbody>
+        </thead>
+        <tbody>
+          {filteredData.length > 0 ? (
+            <ListMatching n={filteredData.length} matchingData={filteredData} />
+          ) : (
+            <tr>
+              <td colSpan={4}>No matching data available</td>
+            </tr>
+          )}
+        </tbody>
       </table>
-  </div>
-    );
+    </div>
+  );
 }
-export default Applies;
+
+export default Matches;
