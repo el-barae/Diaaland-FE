@@ -35,6 +35,11 @@ const Matches = () => {
   const [selectedJob, setSelectedJob] = useState<SingleValue<{ value: number | null; label: string }> | null>(null);
   const [filteredData, setFilteredData] = useState<Matching[]>(matches);
 
+  // Update filtered data when matches change
+  React.useEffect(() => {
+    filterMatchingData(selectedJob?.value ?? null);
+  }, [matches]);
+
   // Charger la liste des jobs
   const { data: jobsData = [], loading: loadingJobs } = useAPIQuery<Job[]>(
     `${API_URL}/api/v1/jobs/list`,
@@ -55,10 +60,9 @@ const Matches = () => {
         <>
           {matchingData.map((m) => (
             <tr key={m.id}>
-              <td>{m.candidate?.firstName ?? 'N/A'} {m.candidate?.lastName ?? 'N/A'}</td>
               <td>{m.job?.name ?? 'N/A'}</td>
               <td>{m.job?.customer?.name ?? 'N/A'}</td>
-              <td><span>{(m.score * 130).toFixed(2)} %</span></td>
+              <td><span>{(m.score * 100).toFixed(2)}%</span></td>
             </tr>
           ))}
         </>
@@ -70,7 +74,7 @@ const Matches = () => {
     let filtered = matches;
 
     if (jobId !== null) {
-      filtered = filtered.filter((m) => m.job.id === jobId);
+      filtered = filtered.filter((m) => m.job?.id === jobId);
     }
 
     setFilteredData(filtered);
@@ -102,13 +106,13 @@ const Matches = () => {
           value={selectedJob}
           onChange={handleJobChange}
           options={jobOptions}
+          isLoading={loadingJobs}
         />
       </div>
 
       <table id="Applies">
         <thead>
           <tr>
-            <td>Candidate</td>
             <td>Job</td>
             <td>Employer</td>
             <td>Score matching</td>
@@ -119,7 +123,7 @@ const Matches = () => {
             <ListMatching n={filteredData.length} matchingData={filteredData} />
           ) : (
             <tr>
-              <td colSpan={4}>No matching data available</td>
+              <td colSpan={3}>No matching data available</td>
             </tr>
           )}
         </tbody>

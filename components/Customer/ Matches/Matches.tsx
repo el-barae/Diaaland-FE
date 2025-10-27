@@ -48,37 +48,57 @@ const Matches = () => {
   const [selectedCandidate, setSelectedCandidate] = useState<SingleValue<OptionType>>(null);
   const [selectedJob, setSelectedJob] = useState<SingleValue<OptionType>>(null);
 
-  // Memoized filtered data - recalculated only when dependencies change
+  // Memoized filtered data
   const filteredData = useMemo(() => {
     let filtered = matchingData;
 
     if (selectedCandidate?.value !== null && selectedCandidate?.value !== undefined) {
-      filtered = filtered.filter(m => m.candidate.id === selectedCandidate.value);
+      filtered = filtered.filter(m => m.candidate?.id === selectedCandidate.value);
     }
 
     if (selectedJob?.value !== null && selectedJob?.value !== undefined) {
-      filtered = filtered.filter(m => m.job.id === selectedJob.value);
+      filtered = filtered.filter(m => m.job?.id === selectedJob.value);
     }
 
     return filtered;
   }, [matchingData, selectedCandidate, selectedJob]);
 
-  // Memoized options
-  const candidateOptions = useMemo(() => [
-    { value: null, label: 'All Candidates' },
-    ...candidatesData.map(candidate => ({
-      value: candidate.id,
-      label: `${candidate.firstName} ${candidate.lastName}`
-    }))
-  ], [candidatesData]);
+  // Memoized options - extract from matching data directly
+  const candidateOptions = useMemo(() => {
+    const uniqueCandidates = Array.from(
+      new Map(
+        matchingData
+          .filter(m => m.candidate)
+          .map(m => [m.candidate.id, m.candidate])
+      ).values()
+    );
 
-  const jobOptions = useMemo(() => [
-    { value: null, label: 'All Jobs' },
-    ...jobsData.map(job => ({
-      value: job.id,
-      label: job.name
-    }))
-  ], [jobsData]);
+    return [
+      { value: null, label: 'All Candidates' },
+      ...uniqueCandidates.map(candidate => ({
+        value: candidate.id,
+        label: `${candidate.firstName} ${candidate.lastName}`
+      }))
+    ];
+  }, [matchingData]);
+
+  const jobOptions = useMemo(() => {
+    const uniqueJobs = Array.from(
+      new Map(
+        matchingData
+          .filter(m => m.job)
+          .map(m => [m.job.id, m.job])
+      ).values()
+    );
+
+    return [
+      { value: null, label: 'All Jobs' },
+      ...uniqueJobs.map(job => ({
+        value: job.id,
+        label: job.name
+      }))
+    ];
+  }, [matchingData]);
 
   // Optimized handlers
   const handleCandidateChange = useCallback((newValue: SingleValue<OptionType>) => {
@@ -89,41 +109,34 @@ const Matches = () => {
     setSelectedJob(newValue);
   }, []);
 
-  // Fetch all data in parallel - only once
+  // Fetch matching data with enriched candidate/job details
   useEffect(() => {
-    if (!token || !customerId || matchingData.length > 0) return;
+    if (!token || !customerId) return;
 
-    const fetchAllData = async () => {
+    const fetchMatchingData = async () => {
       setIsLoading(true);
       setError(null);
 
       try {
-        // Parallel requests for better performance
-        const [candidatesRes, jobsRes, matchingRes] = await Promise.all([
-          axios.get(`${API_URL}/api/v1/profiles/candidates`, {
+        // Use the new endpoint that returns enriched data
+        const response = await axios.get(
+          `${API_URL}/api/v1/jobs/matching/customer/${customerId}/details`,
+          {
             headers: { 'Authorization': `Bearer ${token}` }
-          }),
-          axios.get(`${API_URL}/api/v1/jobs/byCustomer/${customerId}`, {
-            headers: { 'Authorization': `Bearer ${token}` }
-          }),
-          axios.get(`${API_URL}/api/v1/jobs/matching/customer/${customerId}`, {
-            headers: { 'Authorization': `Bearer ${token}` }
-          })
-        ]);
+          }
+        );
 
-        setCandidatesData(candidatesRes.data || []);
-        setJobsData(jobsRes.data || []);
-        setMatchingData(matchingRes.data || []);
+        setMatchingData(response.data || []);
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error('Error fetching matching data:', error);
         setError('Failed to load matching data');
       } finally {
         setIsLoading(false);
       }
     };
 
-    fetchAllData();
-  }, [token, customerId]); // Removed matchingData from dependencies
+    fetchMatchingData();
+  }, [token, customerId]);
 
   // Loading state
   if (isLoading) {
@@ -180,7 +193,6 @@ const Matches = () => {
           <tr>
             <td>Candidate</td>
             <td>Job</td>
-            <td>Employer</td>
             <td>Score matching</td>
           </tr>
         </thead>
@@ -188,15 +200,18 @@ const Matches = () => {
           {filteredData.length > 0 ? (
             filteredData.map((m) => (
               <tr key={m.id}>
-                <td>{m.candidate?.firstName ?? 'N/A'} {m.candidate?.lastName ?? 'N/A'}</td>
+                <td>
+                  {m.candidate 
+                    ? `${m.candidate.firstName} ${m.candidate.lastName}` 
+                    : 'N/A'}
+                </td>
                 <td>{m.job?.name ?? 'N/A'}</td>
-                <td>{m.job?.customer?.name ?? 'N/A'}</td>
-                <td><span>{(m.score * 130).toFixed(2)}%</span></td>
+                <td><span>{(m.score * 100).toFixed(2)}%</span></td>
               </tr>
             ))
           ) : (
             <tr>
-              <td colSpan={4}>
+              <td colSpan={3}>
                 {matchingData.length === 0 ? 'No matches available' : 'No matches found for selected filters'}
               </td>
             </tr>

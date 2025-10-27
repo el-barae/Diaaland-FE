@@ -179,33 +179,34 @@ export const CandidateProvider: React.FC<{ children: ReactNode }> = ({ children 
     }
   };
 
-  const refreshExperiences = async () => {
-    if (!candidateId) return;
-    try {
-      const token = localStorage.getItem("token");
-      const response = await axios.get(
-        `${API_URL}/api/v1/profiles/experiences/byCandidate/${candidateId}`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      setExperiences(response.data);
-    } catch (error) {
-      console.error("Error fetching experiences:", error);
-    }
-  };
+    const refreshExperiences = async () => {
+        if (!candidateId) return;
+        try {
+        const token = localStorage.getItem("token");
+        const response = await axios.get(
+            `${API_URL}/api/v1/profiles/experiences/byCandidate/${candidateId}`,
+            { headers: { Authorization: `Bearer ${token}` } }
+        );
+        setExperiences(response.data);
+        } catch (error) {
+        console.error("Error fetching experiences:", error);
+        }
+    };
 
-  const refreshMatches = async () => {
+    const refreshMatches = async () => {
     if (!candidateId) return;
     try {
-      const token = localStorage.getItem("token");
-      const response = await axios.get(
-        `${API_URL}/api/v1/jobs/matching/candidate/${candidateId}`,
+        const token = localStorage.getItem("token");
+        // Use the new endpoint with /details
+        const response = await axios.get(
+        `${API_URL}/api/v1/jobs/matching/candidate/${candidateId}/details`,
         { headers: { Authorization: `Bearer ${token}` } }
-      );
-      setMatches(response.data);
+        );
+        setMatches(response.data);
     } catch (error) {
-      console.error("Error fetching matches:", error);
+        console.error("Error fetching matches:", error);
     }
-  };
+    };
 
   const refreshProfile = async () => {
     if (!candidateId) return;
