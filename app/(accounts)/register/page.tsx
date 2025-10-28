@@ -75,44 +75,61 @@ export default function Register() {
 		  const wait = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 	
 		  const handleSubmit = async (e: React.FormEvent) => {
-			e.preventDefault();
-			try {
-			  // Register user
-			  const registerResponse = await axios.post(`${API_URL}/api/v1/users/auth/register/candidate`, {
-				firstName: firstName,
-				lastName: lastName,
-				email: email,
-				resumeLink: " ",
-				password: password,
-				role: "CANDIDAT"
-			  });
-			  const ID = registerResponse.data.id;
-			  const token = registerResponse.data.token
-			  localStorage.setItem('token', token);
-			  localStorage.setItem('matching', 'true');
-			  await wait(1500);
+				e.preventDefault();
+				try {
+					// Register user
+					const registerResponse = await axios.post(`${API_URL}/api/v1/users/auth/register/candidate`, {
+					firstName: firstName,
+					lastName: lastName,
+					email: email,
+					resumeLink: " ",
+					password: password,
+					role: "CANDIDAT"
+					});
+					
+					const ID = registerResponse.data.id;
+					const token = registerResponse.data.token;
+					localStorage.setItem('token', token);
+					
+					// Pas besoin de flag "matching" - Kafka le gère automatiquement
+					await wait(1500);
 
+					const formData = new FormData();
+					formData.append('file', resume);
 
-			  const formData = new FormData();
-			  formData.append('file', resume);
-		  
-			  // Upload the resume
-			  const uploadResponse = await axios.post(`${API_URL}/api/v1/profiles/files/uploadCV/${ID}`, formData, {
-				headers: {
-				  'Content-Type': 'multipart/form-data'
-				//   'Authorization': 'Bearer ' + token
+					// Upload the resume - Kafka déclenchera automatiquement le matching
+					const uploadResponse = await axios.post(
+					`${API_URL}/api/v1/profiles/files/uploadCV/${ID}`, 
+					formData, 
+					{
+						headers: {
+						'Content-Type': 'multipart/form-data',
+						'Authorization': `Bearer ${token}`
+						}
+					}
+					);
+
+					if (uploadResponse.status === 200) {
+					// Afficher un message indiquant que le matching est en cours
+					swal({
+						title: "Registration Successful!",
+						text: "Your CV is being analyzed. Matching will be ready shortly.",
+						icon: "success",
+					});
+					
+					router.push('Dashboards/Candidate');
+					} else {
+					console.error('File upload failed with status:', uploadResponse.status);
+					}
+				} catch (error) {
+					console.error('Error in handleSubmit:', error);
+					swal({
+					title: "Error",
+					text: "Registration failed. Please try again.",
+					icon: "error",
+					});
 				}
-			  });
-		  
-			  if (registerResponse.status === 200) {
-				router.push('Dashboards/Candidate');
-			  } else {
-				console.error('File upload failed with status:', uploadResponse.status);
-			  }
-			} catch (error) {
-			  console.error('Error in handleSubmit:', error);
-			}
-		  };
+				};
 		  
 		
 	const handleIconClick = () => {

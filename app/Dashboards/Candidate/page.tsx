@@ -20,6 +20,7 @@ import swal from 'sweetalert';
 import API_URL from '@/config';
 import { jwtDecode } from "jwt-decode";
 import { CandidateProvider, useCandidateContext } from '@/contexts/CandidateContext'
+import { MatchingStatusBanner } from './MatchingStatusBanner';
 
 interface Message {
   id: number;
@@ -170,14 +171,14 @@ const CandidateContent = () => {
       setNotif(resNotif.data);
 
       // Vérifier le matching en cours
-      const matching = localStorage.getItem("matching");
-      if (matching) {
-                localStorage.removeItem("matching");
-        await axios.get(`${API_URL}/api/v1/jobs/matching/byCandidate/${candidateId}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        swal("The matching process is currently running.");
-      }
+      // const matching = localStorage.getItem("matching");
+      // if (matching) {
+      //           localStorage.removeItem("matching");
+      //   await axios.get(`${API_URL}/api/v1/jobs/matching/byCandidate/${candidateId}`, {
+      //     headers: { Authorization: `Bearer ${token}` },
+      //   });
+      //   swal("The matching process is currently running.");
+      // }
 
       setTimeout(() => setLoading(false), 500);
     } catch (error) {
@@ -189,12 +190,29 @@ const CandidateContent = () => {
   fetchData();
 }, [candidateEmail, candidateId, router]);
 
+const handleMatchingComplete = async () => {
+    // Rafraîchir les données de matching
+    swal({
+      title: "Matching Complete!",
+      text: "Your job matches are ready to view.",
+      icon: "success",
+      timer: 3000
+    });
+    
+    // Optionnel: forcer le rechargement des matches
+    window.location.reload();
+  };
+
 
   return (
     <ThemeProvider enableSystem={true} attribute="class">
       <Navbar />
       {!loading && (
         <div className='Candidate'>
+          <MatchingStatusBanner 
+        candidateId={candidateId} 
+        onMatchingComplete={handleMatchingComplete}
+      />
           <div className='header'>
             {candidateName}
             <button type="button" className="button" onClick={handleFindClick}>Find job</button>
