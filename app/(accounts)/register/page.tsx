@@ -49,7 +49,7 @@ export default function Register() {
 	const [firstName, setFirstName] = useState('')
 	const [lastName, setLastName] = useState('')
 	const [resume, setResume] = useState('');
-
+	const [isSubmitting, setIsSubmitting] = useState(false);
 	const firstnameErrorRef = useRef<HTMLParagraphElement>(null);
 	const lastnameErrorRef = useRef<HTMLParagraphElement>(null);
 	const emailErrorRef = useRef<HTMLParagraphElement>(null);
@@ -74,62 +74,60 @@ export default function Register() {
 
 		  const wait = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 	
-		  const handleSubmit = async (e: React.FormEvent) => {
-				e.preventDefault();
-				try {
-					// Register user
-					const registerResponse = await axios.post(`${API_URL}/api/v1/users/auth/register/candidate`, {
-					firstName: firstName,
-					lastName: lastName,
-					email: email,
+		const handleSubmit = async (e: React.FormEvent) => {
+			e.preventDefault();
+			
+			// Disable the button
+			setIsSubmitting(true);
+
+			try {
+				// Your existing registration logic
+				const registerResponse = await axios.post(`${API_URL}/api/v1/users/auth/register/candidate`, {
+					firstName,
+					lastName,
+					email,
 					resumeLink: " ",
-					password: password,
+					password,
 					role: "CANDIDAT"
-					});
-					
-					const ID = registerResponse.data.id;
-					const token = registerResponse.data.token;
-					localStorage.setItem('token', token);
-					
-					// Pas besoin de flag "matching" - Kafka le gère automatiquement
-					await wait(1500);
+				});
 
-					const formData = new FormData();
-					formData.append('file', resume);
+				const ID = registerResponse.data.id;
+				const token = registerResponse.data.token;
+				localStorage.setItem('token', token);
 
-					// Upload the resume - Kafka déclenchera automatiquement le matching
-					const uploadResponse = await axios.post(
+				await wait(1500);
+
+				const formData = new FormData();
+				formData.append('file', resume);
+
+				const uploadResponse = await axios.post(
 					`${API_URL}/api/v1/profiles/files/uploadCV/${ID}`, 
 					formData, 
-					{
-						headers: {
-						'Content-Type': 'multipart/form-data',
-						'Authorization': `Bearer ${token}`
-						}
-					}
-					);
+					{ headers: { 'Content-Type': 'multipart/form-data', 'Authorization': `Bearer ${token}` } }
+				);
 
-					if (uploadResponse.status === 200) {
-					// Afficher un message indiquant que le matching est en cours
+				if (uploadResponse.status === 200) {
 					swal({
 						title: "Registration Successful!",
 						text: "Your CV is being analyzed. Matching will be ready shortly.",
 						icon: "success",
 					});
-					
 					router.push('Dashboards/Candidate');
-					} else {
+				} else {
 					console.error('File upload failed with status:', uploadResponse.status);
-					}
-				} catch (error) {
-					console.error('Error in handleSubmit:', error);
-					swal({
+				}
+			} catch (error) {
+				console.error('Error in handleSubmit:', error);
+				swal({
 					title: "Error",
 					text: "Registration failed. Please try again.",
 					icon: "error",
-					});
-				}
-				};
+				});
+				// Re-enable the button if there's an error
+				setIsSubmitting(false);
+			}
+		};
+
 		  
 		
 	const handleIconClick = () => {
@@ -290,7 +288,7 @@ export default function Register() {
 									*/}
 										<input className='inline checkbox' type="checkbox" name="term-of-use" id="term-of-use" required onInvalid={invalidTerms} />
 										<p ref={termsErrorRef} className='error terms-error'></p>
-										<button className='block' type="submit" onClick={handleSubmit}>Register</button>
+										<button className='block' type="submit" onClick={handleSubmit} disabled={isSubmitting}> {isSubmitting ? 'Registering...' : 'Register'} </button>
 										<p className='have-account'>
 											Already have an account? <Link href="/login">Login</Link>Or <Link href='/user'>Register as a employer</Link>
 										</p>
