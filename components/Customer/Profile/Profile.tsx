@@ -7,7 +7,7 @@ import RegisterImg from '@/public/images/registeration.png'
 import axios from 'axios';
 import swal from 'sweetalert';
 import API_URL from '@/config';
-import { CustomerContext } from '../../../app/Dashboards/Customer/page';
+import { CustomerContext } from '../../../app/Dashboards/Customer/CustomerContexts';
 
 type Customer = {
     id: number,

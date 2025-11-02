@@ -4,7 +4,7 @@ import axios from 'axios'
 import React from 'react';
 import API_URL from '@/config';
 import Modal from './ModalJobs/ModalJobs';
-import { CustomerContext } from '../../../app/Dashboards/Customer/page';
+import { CustomerContext } from '../../../app/Dashboards/Customer/CustomerContexts';
 
 interface Job {
   id: number;

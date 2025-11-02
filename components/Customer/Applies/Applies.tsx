@@ -2,7 +2,8 @@
 import { useState, useEffect, useContext, useCallback, useMemo } from "react";
 import axios from "axios";
 import API_URL from "@/config";
-import { CustomerContext } from '../../../app/Dashboards/Customer/page';
+import { CustomerContext } from '../../../app/Dashboards/Customer/CustomerContexts';
+import swal from 'sweetalert'
 import './Applies.scss'
 
 interface CandidateJobs {

@@ -4,7 +4,7 @@ import axios from "axios"
 import { useState, useEffect, useContext, useMemo, useCallback } from "react"
 import Select, { SingleValue } from "react-select"
 import './Matches.scss'
-import { CustomerContext } from '../../../app/Dashboards/Customer/page';
+import { CustomerContext } from '../../../app/Dashboards/Customer/CustomerContexts';
 
 interface Matching {
   id: number;

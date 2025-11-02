@@ -16,6 +16,7 @@ import Navbar from '@/components/HomePage/Navbar/Navbar'
 import Notif from '@/public/images/notif.png'
 import API_URL from '@/config';
 import {jwtDecode} from "jwt-decode";
+import { CustomerContext } from './CustomerContexts'
 
 interface MyToken {
   sub: string;
@@ -32,17 +33,6 @@ interface Message {
   message: string;
 }
 
-// Context pour partager les données entre composants enfants
-export const CustomerContext = createContext<{
-  token: string | null;
-  customerId: number | null;
-  customerEmail: string | null;
-}>({
-  token: null,
-  customerId: null,
-  customerEmail: null
-});
-
 const Customer = () => {
   const [loading, setLoading] = useState(true);
   const [customerData, setCustomer] = useState('');
@@ -54,21 +44,26 @@ const Customer = () => {
 
   // Mémorisation du token et des infos utilisateur
   const userContext = useMemo(() => {
-    const token = localStorage.getItem("token");
-    if (!token) return { token: null, customerId: null, customerEmail: null };
-    
-    try {
-      const decoded = jwtDecode<MyToken>(token);
-      return {
-        token,
-        customerId: decoded.id,
-        customerEmail: decoded.sub
-      };
-    } catch (error) {
-      console.error("Erreur de décodage du token:", error);
-      return { token: null, customerId: null, customerEmail: null };
-    }
-  }, []);
+  if (typeof window === "undefined") {
+    return { token: null, customerId: null, customerEmail: null };
+  }
+
+  const token = localStorage.getItem("token");
+  if (!token) return { token: null, customerId: null, customerEmail: null };
+  
+  try {
+    const decoded = jwtDecode<MyToken>(token);
+    return {
+      token,
+      customerId: decoded.id,
+      customerEmail: decoded.sub
+    };
+  } catch (error) {
+    console.error("Erreur de décodage du token:", error);
+    return { token: null, customerId: null, customerEmail: null };
+  }
+}, []);
+
 
   // Charger les messages seulement quand le dropdown s'ouvre
   const handleToggle = async () => {

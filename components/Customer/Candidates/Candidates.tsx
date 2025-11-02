@@ -4,7 +4,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import './Candidates.scss'
 import API_URL from "@/config";
-import { CustomerContext } from '../../../app/Dashboards/Customer/page';
+import { CustomerContext } from '../../../app/Dashboards/Customer/CustomerContexts';
 
 interface Candidate {
     id: number;
