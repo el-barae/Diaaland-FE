@@ -32,6 +32,7 @@ export default function AddPost() {
   const [Experience, setExperience] = useState('Intership');
   const [jobType, setJobType] = useState('remote');
   const [loading, setLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
   
   const degreesList = [
@@ -76,6 +77,7 @@ export default function AddPost() {
  
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    setIsSubmitting(true);
     const token = localStorage.getItem("token");
                 if (!token) return alert("Please log in again.");
           
@@ -101,9 +103,11 @@ export default function AddPost() {
     .then(function (response) {
       localStorage.setItem('matching', 'true');
       swal('Your post had been sent to admin', '', 'success');
+      setIsSubmitting(false);
     })
     .catch(function (error) {
       swal(error.message, '', 'error');
+      setIsSubmitting(false);
     });
   }
 
@@ -323,8 +327,8 @@ export default function AddPost() {
                     )}
 
                     {/* Submit Button */}
-                    <button type="submit" className="submit-btn">
-                      Submit Job Post
+                    <button type="submit" className="submit-btn" disabled={isSubmitting}> 
+                      {isSubmitting ? 'Submitting...' : 'Submit Job Post'}
                     </button>
                     
                   </form>

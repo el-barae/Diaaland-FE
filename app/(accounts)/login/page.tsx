@@ -33,7 +33,7 @@ const Login = () =>  {
 	const iconRef = useRef<HTMLDivElement>(null);
 	const [passState, setPassState] = useState('hide');
 	const router = useRouter();
-
+	const [isSubmitting, setIsSubmitting] = useState(false);
 	// const fetchID = async () => {
 	// 	try {
 	// 		const token = localStorage.getItem("token");
@@ -48,6 +48,7 @@ const Login = () =>  {
 
 	const handleSubmit = async (e:any)  =>{
 		e.preventDefault()
+		setIsSubmitting(true);
 		axios.post(API_URL+'/api/v1/users/auth', {
 			"email": email,
 			"password": password
@@ -65,6 +66,7 @@ const Login = () =>  {
 		  .catch(function (error) {
 			console.log(error);
 			invalidSubmit(e);
+			setIsSubmitting(false);
 		  });
 	}
 	const handleIconClick = () => {
@@ -140,7 +142,7 @@ const Login = () =>  {
 										<input className='inline checkbox' type="checkbox" name="remember-me" id="remember-me" />
 										<label className='inline-block checkbox-label mt-6 mb-2' htmlFor="remember-me">remember me</label>
 										<div className="submit-btn">
-											<button type="submit" onClick={handleSubmit}>Sign in</button>
+											<button type="submit" onClick={handleSubmit} disabled={isSubmitting}> {isSubmitting ? 'Sign in...' : 'Sign In'}</button>
 											{/*<button onClick={()=>signIn("google" , {callbackUrl:'/#home-section'})}>
 												Login with Google
 											</button>*/}

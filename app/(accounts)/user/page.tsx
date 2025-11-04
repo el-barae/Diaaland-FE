@@ -51,7 +51,7 @@ export default function Register() {
 	const passwordErrorRef = useRef<HTMLParagraphElement>(null);
 	const termsErrorRef = useRef<HTMLParagraphElement>(null);
 	const router = useRouter();
-
+	const [isSubmitting, setIsSubmitting] = useState(false);
 	const passwordMessageRef = useRef<HTMLDivElement>(null);
 
 	const [name, setName] = useState('')
@@ -68,6 +68,7 @@ export default function Register() {
 	
 	const handleSubmit = async (e:any)  =>{
 		e.preventDefault()
+		setIsSubmitting(true);
 			const response = axios.post(API_URL+'/api/v1/users/auth/register/customer', {
 				"name": name,
 				"email":email,
@@ -81,6 +82,7 @@ export default function Register() {
 		}). catch(function (error) {
 			swal('Error in registration', '', 'error');
 			console.log(error);
+			setIsSubmitting(false);
 		  });
 	}
 
@@ -213,7 +215,7 @@ export default function Register() {
 										<input className='inline checkbox' type="checkbox" name="term-of-use" id="term-of-use" required onInvalid={invalidTerms} />
 										<label className='inline-block checkbox-label mb-4' htmlFor="term-of-use">i accept the term of use</label>
 										<p ref={termsErrorRef} className='error terms-error'></p>
-										<button className='block' type="submit" onClick={handleSubmit}>Register</button>
+										<button className='block' type="submit" onClick={handleSubmit} disabled={isSubmitting}> {isSubmitting ? 'Registering...' : 'Register'}</button>
 										<p className='have-account'>
 											Already have an account? <Link href="/login">Login</Link> OR <Link href="/register">Register as a candidate</Link>
 										</p>
