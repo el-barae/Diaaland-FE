@@ -290,7 +290,7 @@ export default function Register() {
 										<p ref={termsErrorRef} className='error terms-error'></p>
 										<button className='block' type="submit" onClick={handleSubmit} disabled={isSubmitting}> {isSubmitting ? 'Registering...' : 'Register'} </button>
 										<p className='have-account'>
-											Already have an account? <Link href="/login">Login</Link>Or <Link href='/user'>Register as a employer</Link>
+											Already have an account? <Link href="/login">Login</Link>Or <Link href='/register/employer'>Register as a employer</Link>
 										</p>
 										</div>
 									</div>
