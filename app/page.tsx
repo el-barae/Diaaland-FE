@@ -8,7 +8,7 @@ import {ThemeProvider} from 'next-themes'
 import Navbar from '@/components/HomePage/Navbar/Navbar'
 import HeadlineContent from "@/components/HomePage/HeadlineContent/HeadlineContent";
 import Companies from "@/components/HomePage/Companies/Companies";
-import Services from "@/components/Services/Services";
+import Services from "@/components/HomePage/Services/Services";
 import Goals from "@/components/HomePage/Goals/Goals"
 import ContactUs from "@/components/HomePage/ContactUs/ContactUs"
 import VisitBlog from "@/components/HomePage/VisitBlog/VisitBlog";
