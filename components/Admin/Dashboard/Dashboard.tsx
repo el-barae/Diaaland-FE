@@ -59,13 +59,13 @@ const Dashboard = ({ handleClick }: { handleClick: (value: string) => void }) =>
                 }
               });
             setJobsData(response.data);
-            const countJ = await axios.get(API_URL+'/api/v1/users/admin/jobs', {
+            const countJ = await axios.get(API_URL+'/api/v1/jobs/count', {
                 headers: {
                   'Authorization': 'Bearer ' + token
                 }
               });
             setCountJobs(countJ.data);
-            const countCa = await axios.get(API_URL+'/api/v1/users/admin/candidates', {
+            const countCa = await axios.get(API_URL+'/api/v1/candidates/count', {
                 headers: {
                   'Authorization': 'Bearer ' + token
                 }
